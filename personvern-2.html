@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personvernerklæring – Walde Automation</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap');
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  color: #E7F0EA;
+  background: #070F0A;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: #6FE0A0; text-decoration: none; }
+a:hover { color: #9BF0BE; }
+.bg {
+  position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
+  background: radial-gradient(ellipse at 50% -10%, #103322 0%, #0A1A11 45%, #060D09 100%);
+}
+header { position: sticky; top: 0; z-index: 100; padding: 18px 20px 0; }
+.header-inner {
+  max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 22px; background: rgba(16,30,22,0.55);
+  backdrop-filter: blur(22px) saturate(1.5); -webkit-backdrop-filter: blur(22px) saturate(1.5);
+  border: 1px solid rgba(255,255,255,0.14); border-radius: 100px;
+  box-shadow: 0 8px 34px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.22);
+}
+.logo { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 18px; color: #fff; }
+main { position: relative; z-index: 1; }
+.wrap { max-width: 900px; margin: 0 auto; padding: 50px 32px 100px; }
+.glass {
+  background: rgba(255,255,255,0.055);
+  backdrop-filter: blur(22px) saturate(1.4);
+  -webkit-backdrop-filter: blur(22px) saturate(1.4);
+  border: 1px solid rgba(255,255,255,0.13);
+  border-radius: 22px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.22);
+  padding: 44px;
+}
+h1 { margin: 0 0 8px; font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 700; color: #fff; }
+h2 { margin: 32px 0 12px; font-family: 'Space Grotesk', sans-serif; font-size: 19px; font-weight: 600; color: #fff; }
+p { margin: 0 0 14px; font-size: 16px; line-height: 1.65; color: #C2D0C7; }
+em { color: #8FA096; }
+footer { border-top: 1px solid rgba(255,255,255,0.1); position: relative; z-index: 1; }
+.footer-inner { max-width: 900px; margin: 0 auto; padding: 30px 32px; font-size: 14px; color: #8FA096; }
+</style>
+</head>
+<body>
+
+<div class="bg" aria-hidden="true"></div>
+
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo">Walde Automation</a>
+    <a href="index.html" style="color:#C7D6CC;font-size:15px;font-weight:500;">Til forsiden</a>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="glass">
+      <h1>Personvernerklæring</h1>
+      <p><em>Sist oppdatert: [dato]</em></p>
+
+      <h2>Behandlingsansvarlig</h2>
+      <p>Walde Automation (org.nr 935 669 219) er behandlingsansvarlig for personopplysninger som samles inn via denne nettsiden.</p>
+
+      <h2>Hvilke opplysninger vi samler inn</h2>
+      <p>Når du bruker kontaktskjemaet på nettsiden, samler vi inn navn, e-postadresse og innholdet i meldingen din. Disse opplysningene brukes utelukkende til å besvare henvendelsen din.</p>
+
+      <h2>Hvor lenge vi lagrer opplysningene</h2>
+      <p>Opplysninger fra kontaktskjemaet lagres kun så lenge det er nødvendig for å besvare henvendelsen, og slettes deretter.</p>
+
+      <h2>Deling av opplysninger</h2>
+      <p>Vi deler ikke opplysningene dine med tredjeparter, med unntak av eventuell tjeneste som benyttes for å sende kontaktskjemaet (f.eks. [navn på sendetjeneste]), som behandler opplysningene på våre vegne.</p>
+
+      <h2>Informasjonskapsler (cookies)</h2>
+      <p>Denne nettsiden bruker ikke informasjonskapsler utover det som er strengt nødvendig for at siden skal fungere (bl.a. for å huske ditt språkvalg NO/EN). [Oppdater denne seksjonen dersom du legger til analyseverktøy som Google Analytics e.l.]</p>
+
+      <h2>Dine rettigheter</h2>
+      <p>Du har rett til innsyn i, retting av og sletting av dine personopplysninger. Ta kontakt på <a href="mailto:mi.walde98@gmail.com">mi.walde98@gmail.com</a> for å benytte deg av disse rettighetene, eller ved spørsmål om denne personvernerklæringen.</p>
+
+      <h2>Klage</h2>
+      <p>Dersom du mener vi behandler personopplysninger dine i strid med regelverket, kan du klage til Datatilsynet.</p>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <p style="margin:0;">&copy; <span id="year"></span> Walde Automation</p>
+  </div>
+</footer>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
