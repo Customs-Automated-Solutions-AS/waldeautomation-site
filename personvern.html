@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personvernerklæring – Walde Automation</title>
+  <style>
+/* =========================================
+   RESET & BASE
+   ========================================= */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  color: #1a1a1a;
+  background: #ffffff;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1, h2, h3, h4 {
+  margin: 0 0 0.5em 0;
+  line-height: 1.2;
+}
+
+p {
+  margin: 0 0 1em 0;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* =========================================
+   HEADER / NAV
+   ========================================= */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.nav-toggle span {
+  width: 24px;
+  height: 2px;
+  background: currentColor;
+}
+
+/* Mobile nav */
+@media (max-width: 768px) {
+  .nav-toggle {
+    display: flex;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e5e5;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  .nav-links.open {
+    max-height: 300px;
+  }
+
+  .nav-links li {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #eee;
+  }
+}
+
+/* =========================================
+   SECTIONS
+   ========================================= */
+.section {
+  padding: 4rem 0;
+}
+
+.section-alt {
+  background: #f7f7f7;
+}
+
+.hero {
+  padding: 6rem 0;
+  text-align: center;
+}
+
+.hero-lead {
+  font-size: 1.15rem;
+  max-width: 40em;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0.8;
+}
+
+/* =========================================
+   BUTTONS
+   ========================================= */
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.75rem;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  font-size: 1rem;
+}
+
+.btn-primary {
+  background: #1a1a1a;
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  opacity: 0.85;
+}
+
+/* =========================================
+   SERVICE GRID
+   ========================================= */
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.service-card {
+  padding: 1.5rem;
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+}
+
+/* =========================================
+   PROJECT LIST
+   ========================================= */
+.project-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.project-item {
+  padding: 1.5rem;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+}
+
+.project-meta {
+  font-size: 0.85rem;
+  opacity: 0.6;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* =========================================
+   CONTACT FORM
+   ========================================= */
+.contact-form {
+  max-width: 500px;
+  margin-top: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: 2px solid #1a1a1a;
+  outline-offset: 1px;
+}
+
+.form-status {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.form-status.success {
+  color: #2e7d32;
+}
+
+.form-status.error {
+  color: #c62828;
+}
+
+.form-privacy-note {
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  opacity: 0.65;
+}
+
+.contact-details {
+  margin-top: 2.5rem;
+  font-size: 0.95rem;
+}
+
+/* =========================================
+   FOOTER
+   ========================================= */
+.site-footer {
+  padding: 2rem 0;
+  border-top: 1px solid #e5e5e5;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+/* =========================================
+   ACCESSIBILITY
+   ========================================= */
+:focus-visible {
+  outline: 2px solid #1a1a1a;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">Walde Automation</a>
+      <nav class="main-nav">
+        <ul class="nav-links">
+          <li><a href="index.html">Til forsiden</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <h1>Personvernerklæring</h1>
+        <p><em>Sist oppdatert: [dato]</em></p>
+
+        <h2>Behandlingsansvarlig</h2>
+        <p>
+          Walde Automation (org.nr [org.nr]) er behandlingsansvarlig for personopplysninger
+          som samles inn via denne nettsiden.
+        </p>
+
+        <h2>Hvilke opplysninger vi samler inn</h2>
+        <p>
+          Når du bruker kontaktskjemaet på nettsiden, samler vi inn navn, e-postadresse og
+          innholdet i meldingen din. Disse opplysningene brukes utelukkende til å besvare
+          henvendelsen din.
+        </p>
+
+        <h2>Hvor lenge vi lagrer opplysningene</h2>
+        <p>
+          Opplysninger fra kontaktskjemaet lagres kun så lenge det er nødvendig for å
+          besvare henvendelsen, og slettes deretter.
+        </p>
+
+        <h2>Deling av opplysninger</h2>
+        <p>
+          Vi deler ikke opplysningene dine med tredjeparter, med unntak av eventuell
+          tjeneste som benyttes for å sende kontaktskjemaet (f.eks. [navn på sendetjeneste]),
+          som behandler opplysningene på våre vegne.
+        </p>
+
+        <h2>Informasjonskapsler (cookies)</h2>
+        <p>
+          Denne nettsiden bruker ikke informasjonskapsler utover det som er strengt
+          nødvendig for at siden skal fungere. [Oppdater denne seksjonen dersom du legger
+          til analyseverktøy som Google Analytics e.l.]
+        </p>
+
+        <h2>Dine rettigheter</h2>
+        <p>
+          Du har rett til innsyn i, retting av og sletting av dine personopplysninger.
+          Ta kontakt på <a href="mailto:post@waldeautomation.no">post@waldeautomation.no</a>
+          for å benytte deg av disse rettighetene, eller ved spørsmål om denne
+          personvernerklæringen.
+        </p>
+
+        <h2>Klage</h2>
+        <p>
+          Dersom du mener vi behandler personopplysninger dine i strid med regelverket,
+          kan du klage til Datatilsynet.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; <span id="year"></span> Walde Automation</p>
+    </div>
+  </footer>
+
+  <script>
+// =========================================
+// Mobil-meny toggle
+// =========================================
+const navToggle = document.querySelector('.nav-toggle');
+const navLinks = document.querySelector('.nav-links');
+
+if (navToggle && navLinks) {
+  navToggle.addEventListener('click', () => {
+    const isOpen = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', isOpen);
+  });
+
+  // Lukk meny når man klikker en lenke (mobil)
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+}
+
+// =========================================
+// Footer årstall
+// =========================================
+const yearEl = document.getElementById('year');
+if (yearEl) {
+  yearEl.textContent = new Date().getFullYear();
+}
+
+// =========================================
+// Kontaktskjema - enkel klientvalidering
+// NB: dette sender IKKE meldingen noe sted ennå.
+// Du må koble til en backend/tjeneste (f.eks. Formspree,
+// Cloudflare Pages Functions, eller egen e-post-API) for
+// at skjemaet faktisk skal sende noe.
+// =========================================
+const form = document.getElementById('contact-form');
+const status = document.getElementById('form-status');
+
+if (form) {
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const name = form.name.value.trim();
+    const email = form.email.value.trim();
+    const message = form.message.value.trim();
+
+    if (!name || !email || !message) {
+      showStatus('Vennligst fyll ut alle feltene.', 'error');
+      return;
+    }
+
+    if (!isValidEmail(email)) {
+      showStatus('Vennligst oppgi en gyldig e-postadresse.', 'error');
+      return;
+    }
+
+    // TODO: koble til faktisk sendetjeneste
+    showStatus('Skjemaet er ikke koblet til en sendetjeneste ennå.', 'error');
+  });
+}
+
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function showStatus(msg, type) {
+  if (!status) return;
+  status.textContent = msg;
+  status.className = 'form-status ' + type;
+}
+
+  </script>
+</body>
+</html>
