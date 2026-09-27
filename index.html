@@ -1204,10 +1204,40 @@ document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click
   const target = id && document.getElementById(id);
   if (!target) return;
   e.preventDefault();
-  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  glideTo(target);
   try { history.pushState(null, '', '#' + id); } catch (err) {}
 }));
+
+// Slow, eased scroll (the browser's own smooth scroll is quite fast).
+// Stops as soon as the visitor scrolls themselves.
+function glideTo(target) {
+  const root = document.documentElement;
+  const offset = parseFloat(getComputedStyle(root).scrollPaddingTop) || 0;
+  const startY = window.scrollY;
+  const endY = Math.min(target.getBoundingClientRect().top + startY - offset, root.scrollHeight - window.innerHeight);
+  const distance = endY - startY;
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce || Math.abs(distance) < 2) { window.scrollTo(0, endY); return; }
+  const duration = Math.min(1800, Math.max(1000, 700 + Math.abs(distance) * 0.35));
+  const ease = k => (k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2);
+  const prevBehavior = root.style.scrollBehavior;
+  root.style.scrollBehavior = 'auto';
+  let start = null, cancelled = false;
+  const cancel = () => { cancelled = true; };
+  const events = ['wheel', 'touchstart', 'keydown', 'mousedown'];
+  events.forEach(ev => window.addEventListener(ev, cancel, { passive: true, once: true }));
+  const finish = () => {
+    events.forEach(ev => window.removeEventListener(ev, cancel));
+    root.style.scrollBehavior = prevBehavior;
+  };
+  requestAnimationFrame(function step(now) {
+    if (cancelled) { finish(); return; }
+    if (start === null) start = now;
+    const k = Math.min(1, (now - start) / duration);
+    window.scrollTo(0, startY + distance * ease(k));
+    if (k < 1) requestAnimationFrame(step); else finish();
+  });
+}
 
 // Electrical drawing: draw the schematic each time it scrolls into view
 (function setupSchematic() {
