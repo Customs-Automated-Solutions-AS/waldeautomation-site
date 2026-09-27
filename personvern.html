@@ -2,50 +2,87 @@
 <html lang="no">
 <head>
 <meta charset="UTF-8">
+<script>try { if (localStorage.getItem('walde-theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch (e) {}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Personvernerklæring – Walde Automation</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap');
+:root {
+  --bg: #F6F8F6;
+  --surface: #FFFFFF;
+  --line: rgba(12,28,18,0.09);
+  --line-2: rgba(12,28,18,0.16);
+  --text: #0C1410;
+  --muted: #4A5550;
+  --dim: #7B8680;
+  --brand: #4CA968;
+  --accent: #277D45;
+  --accent-hover: #1E6838;
+  --glow: rgba(76,169,104,0.16);
+  --header-bg: rgba(255,255,255,0.7);
+  --hover-bg: rgba(12,28,18,0.05);
+  --card-shadow: 0 1px 2px rgba(12,28,18,0.04), 0 12px 32px -18px rgba(12,28,18,0.18);
+  --mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+}
+[data-theme="dark"] {
+  --bg: #0B0D0C;
+  --surface: #121514;
+  --line: rgba(255,255,255,0.08);
+  --line-2: rgba(255,255,255,0.14);
+  --text: #F2F5F3;
+  --muted: #A1A8A4;
+  --dim: #6F7873;
+  --accent: #62C27F;
+  --accent-hover: #86D69F;
+  --glow: rgba(76,169,104,0.14);
+  --header-bg: rgba(14,17,16,0.6);
+  --hover-bg: rgba(255,255,255,0.06);
+  --card-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 24px 60px -32px rgba(0,0,0,0.9);
+}
 * { box-sizing: border-box; }
 body {
   margin: 0;
-  font-family: 'IBM Plex Sans', system-ui, sans-serif;
-  color: #E7F0EA;
-  background: #070F0A;
+  font-family: 'Geist', system-ui, -apple-system, sans-serif;
+  color: var(--text);
+  background: var(--bg);
   -webkit-font-smoothing: antialiased;
 }
-a { color: #6FE0A0; text-decoration: none; }
-a:hover { color: #9BF0BE; }
+::selection { background: color-mix(in srgb, var(--brand) 30%, transparent); }
+a { color: var(--accent); text-decoration: none; transition: color .2s; }
+a:hover { color: var(--accent-hover); }
 .bg {
   position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
-  background: radial-gradient(ellipse at 50% -10%, #103322 0%, #0A1A11 45%, #060D09 100%);
+  background: radial-gradient(ellipse 60% 42% at 50% -8%, var(--glow), transparent 70%), var(--bg);
 }
-header { position: sticky; top: 0; z-index: 100; padding: 18px 20px 0; }
+header { position: sticky; top: 0; z-index: 100; padding: 14px 20px 0; }
 .header-inner {
   max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 22px; background: rgba(16,30,22,0.55);
-  backdrop-filter: blur(22px) saturate(1.5); -webkit-backdrop-filter: blur(22px) saturate(1.5);
-  border: 1px solid rgba(255,255,255,0.14); border-radius: 100px;
-  box-shadow: 0 8px 34px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.22);
+  padding: 10px 10px 10px 22px; height: 62px; background: var(--header-bg);
+  backdrop-filter: blur(18px) saturate(1.6); -webkit-backdrop-filter: blur(18px) saturate(1.6);
+  border: 1px solid var(--line); border-radius: 999px;
 }
-.logo { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 18px; color: #fff; }
+.logo { font-weight: 700; font-size: 17px; letter-spacing: -0.02em; color: var(--text); }
+.back { color: var(--muted); font-size: 14px; font-weight: 500; padding: 9px 15px; border-radius: 999px; border: 1px solid var(--line-2); background: var(--surface); }
+.back:hover { color: var(--text); background: var(--hover-bg); }
 main { position: relative; z-index: 1; }
-.wrap { max-width: 900px; margin: 0 auto; padding: 50px 32px 100px; }
+.wrap { max-width: 900px; margin: 0 auto; padding: 56px 32px 100px; }
 .glass {
-  background: rgba(255,255,255,0.055);
-  backdrop-filter: blur(22px) saturate(1.4);
-  -webkit-backdrop-filter: blur(22px) saturate(1.4);
-  border: 1px solid rgba(255,255,255,0.13);
-  border-radius: 22px;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.22);
-  padding: 44px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: var(--card-shadow);
+  padding: 48px;
 }
-h1 { margin: 0 0 8px; font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 700; color: #fff; }
-h2 { margin: 32px 0 12px; font-family: 'Space Grotesk', sans-serif; font-size: 19px; font-weight: 600; color: #fff; }
-p { margin: 0 0 14px; font-size: 16px; line-height: 1.65; color: #C2D0C7; }
-em { color: #8FA096; }
-footer { border-top: 1px solid rgba(255,255,255,0.1); position: relative; z-index: 1; }
-.footer-inner { max-width: 900px; margin: 0 auto; padding: 30px 32px; font-size: 14px; color: #8FA096; }
+h1 { margin: 0 0 10px; font-size: clamp(32px, 5vw, 46px); font-weight: 600; letter-spacing: -0.04em; line-height: 1.05; color: var(--text); }
+h2 { margin: 36px 0 10px; padding-top: 28px; border-top: 1px solid var(--line); font-size: 19px; font-weight: 600; letter-spacing: -0.015em; color: var(--text); }
+p { margin: 0 0 14px; font-size: 16px; line-height: 1.7; color: var(--muted); }
+em { font-style: normal; font-family: var(--mono); font-size: 13px; color: var(--dim); }
+footer { border-top: 1px solid var(--line); position: relative; z-index: 1; }
+.footer-inner { max-width: 900px; margin: 0 auto; padding: 28px 32px; font-size: 13px; color: var(--dim); }
+@media (max-width: 700px) {
+  .wrap { padding: 32px 20px 64px; }
+  .glass { padding: 26px; }
+}
 </style>
 </head>
 <body>
@@ -55,7 +92,7 @@ footer { border-top: 1px solid rgba(255,255,255,0.1); position: relative; z-inde
 <header>
   <div class="header-inner">
     <a href="index.html" class="logo">Walde Automation</a>
-    <a href="index.html" style="color:#C7D6CC;font-size:15px;font-weight:500;">Til forsiden</a>
+    <a href="index.html" class="back">← Til forsiden</a>
   </div>
 </header>
 

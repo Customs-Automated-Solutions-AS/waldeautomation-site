@@ -2,213 +2,517 @@
 <html lang="no">
 <head>
 <meta charset="UTF-8">
+<script>try { if (localStorage.getItem('walde-theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch (e) {}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Walde Automation</title>
+<meta name="theme-color" content="#F6F8F6">
 <meta name="description" content="Walde Automation – automasjon, systemintegrasjon og elektroteknisk rådgivning.">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
 
-html { scroll-behavior: smooth; }
+:root {
+  --bg: #F6F8F6;
+  --surface: #FFFFFF;
+  --surface-soft: #F1F4F1;
+  --line: rgba(12,28,18,0.09);
+  --line-2: rgba(12,28,18,0.16);
+  --text: #0C1410;
+  --muted: #4A5550;
+  --dim: #7B8680;
+  --brand: #4CA968;          /* logo green */
+  --accent: #277D45;         /* logo green, darkened for readable text */
+  --accent-hover: #1E6838;
+  --on-accent: #FFFFFF;
+  --panel: #0F1411;          /* dark "screens" for diagrams and code */
+  --panel-shadow: 0 20px 40px -26px rgba(12,28,18,0.5);
+  --card-shadow: 0 1px 2px rgba(12,28,18,0.04), 0 12px 32px -18px rgba(12,28,18,0.18);
+  --card-shadow-hover: 0 1px 2px rgba(12,28,18,0.05), 0 20px 40px -22px rgba(12,28,18,0.24);
+  --glow: rgba(76,169,104,0.16);
+  --grid-line: rgba(12,28,18,0.06);
+  --dots: rgba(12,28,18,0.1);
+  --header-bg: rgba(255,255,255,0.65);
+  --header-bg-2: rgba(255,255,255,0.9);
+  --hover-bg: rgba(12,28,18,0.05);
+  --active-bg: rgba(12,28,18,0.07);
+  --input-bg: #F7F9F7;
+  --menu-shadow: 0 20px 44px rgba(12,28,18,0.16);
+  --error: #C0392B;
+  --radius: 18px;
+  --ease: cubic-bezier(.2,.7,.2,1);
+  --sans: 'Geist', system-ui, -apple-system, sans-serif;
+  --mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+}
+
+/* Dark theme */
+[data-theme="dark"] {
+  --bg: #0B0D0C;
+  --surface: #121514;
+  --surface-soft: rgba(255,255,255,0.04);
+  --line: rgba(255,255,255,0.08);
+  --line-2: rgba(255,255,255,0.14);
+  --text: #F2F5F3;
+  --muted: #A1A8A4;
+  --dim: #6F7873;
+  --accent: #62C27F;
+  --accent-hover: #86D69F;
+  --on-accent: #0A0C0B;
+  --panel: #080A09;
+  --panel-shadow: 0 30px 60px -30px rgba(0,0,0,0.9);
+  --card-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 24px 60px -32px rgba(0,0,0,0.9);
+  --card-shadow-hover: inset 0 1px 0 rgba(255,255,255,0.05), 0 28px 64px -32px rgba(0,0,0,0.95);
+  --glow: rgba(76,169,104,0.14);
+  --grid-line: rgba(255,255,255,0.05);
+  --dots: rgba(255,255,255,0.07);
+  --header-bg: rgba(14,17,16,0.55);
+  --header-bg-2: rgba(14,17,16,0.88);
+  --hover-bg: rgba(255,255,255,0.05);
+  --active-bg: rgba(255,255,255,0.08);
+  --input-bg: rgba(0,0,0,0.3);
+  --menu-shadow: 0 20px 44px rgba(0,0,0,0.6);
+  --error: #FCA5A5;
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: 96px; }
 * { box-sizing: border-box; }
 body {
   margin: 0;
-  font-family: 'IBM Plex Sans', system-ui, sans-serif;
-  color: #E7F0EA;
-  background: #070F0A;
+  font-family: var(--sans);
+  color: var(--text);
+  background: var(--bg);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
-a { color: #6FE0A0; text-decoration: none; }
-a:hover { color: #9BF0BE; }
-input::placeholder, textarea::placeholder { color: #7E9187; }
+::selection { background: color-mix(in srgb, var(--brand) 30%, transparent); }
+a { color: var(--accent); text-decoration: none; transition: color .2s; }
+a:hover { color: var(--accent-hover); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+input::placeholder, textarea::placeholder { color: var(--dim); }
+/* Smooth colour change when switching theme */
+.theme-anim, .theme-anim * { transition: background-color .4s, border-color .4s, color .4s, box-shadow .4s !important; }
 
 @keyframes drift1 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(6vw,4vw) scale(1.12); } }
 @keyframes drift2 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-5vw,3vw) scale(1.08); } }
 @keyframes drift3 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(4vw,-4vw) scale(1.1); } }
 @keyframes caretBlink { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
-@keyframes waldeWalk { 0% { left: 6%; } 50% { left: 68%; } 100% { left: 6%; } }
-@keyframes waldeFace { 0%,49.9% { transform: scaleX(1); } 50%,100% { transform: scaleX(-1); } }
-@keyframes waldeShuffle { 0%,100% { transform: translateY(0); } 50% { transform: translateY(1.5px); } }
-@keyframes waldeLook { 0%,22% { transform: translateX(0); } 32%,46% { transform: translateX(2.5px); } 56%,70% { transform: translateX(-2.5px); } 82%,100% { transform: translateX(0); } }
-@keyframes waldeQmark { 0%,6% { opacity: 1; transform: translateX(-50%) translateY(0); } 12%,44% { opacity: 0; } 50%,56% { opacity: 1; transform: translateX(-50%) translateY(-2px); } 62%,94% { opacity: 0; } 100% { opacity: 1; } }
-@keyframes waldeEyeLook { 0%,8% { transform: translateX(3px); } 16%,44% { transform: translateX(0); } 50%,58% { transform: translateX(3px); } 66%,94% { transform: translateX(0); } 100% { transform: translateX(3px); } }
-@keyframes qmarkBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
-@keyframes waldeJump { 0%,20%,100% { transform: translateY(0); } 10% { transform: translateY(-13px); } }
 @keyframes busTrunk { 0% { transform: translateY(0); opacity: 1; } 22% { transform: translateY(20px); opacity: 1; } 24%,100% { opacity: 0; } }
 @keyframes branchFlow { 0%,24% { transform: translateY(0); opacity: 0; } 30% { opacity: 1; } 92% { opacity: 1; } 100% { transform: translateY(28px); opacity: 0; } }
 @keyframes devGlow { 0%,60% { opacity: 0.45; box-shadow: none; } 90% { opacity: 1; box-shadow: 0 0 12px currentColor; } 100% { opacity: 0.5; box-shadow: none; } }
-@keyframes vpnDash { from { background-position: 0 0; } to { background-position: 14px 0; } }
-@keyframes vpnPacket { 0% { left: 0%; opacity: 0; } 12% { opacity: 1; } 88% { opacity: 1; } 100% { left: 100%; opacity: 0; } }
-@keyframes vpnLock { 0%,100% { opacity: 0.7; } 50% { opacity: 1; } }
-@keyframes k04test { 0%,88% { opacity: 0.45; } 3%,9% { opacity: 1; } }
-@keyframes k04flow { 0% { transform: translateX(0); opacity: 0; } 5% { opacity: 1; } 28% { transform: translateX(84px); opacity: 1; } 34%,100% { opacity: 0; } }
-@keyframes k04coil { 0%,28% { opacity: 0.35; box-shadow: none; } 34%,72% { opacity: 1; box-shadow: 0 0 12px rgba(111,224,160,0.7); } 80%,100% { opacity: 0.35; box-shadow: none; } }
-@keyframes k04contact { 0%,34% { transform: rotate(-24deg); } 42%,74% { transform: rotate(0deg); } 82%,100% { transform: rotate(-24deg); } }
-@keyframes k04lamp { 0%,42% { opacity: 0.22; box-shadow: none; } 50%,72% { opacity: 1; box-shadow: 0 0 16px rgba(242,183,5,0.85); } 80%,100% { opacity: 0.22; box-shadow: none; } }
-@media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes fadeUp { from { opacity: 0; translate: 0 14px; } to { opacity: 1; translate: 0 0; } }
+@keyframes menuIn { from { opacity: 0; translate: 0 -6px; } }
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; }
+  html { scroll-behavior: auto; }
+}
 
+/* Background */
 .bg {
-  position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
-  background: radial-gradient(ellipse at 50% -10%, #103322 0%, #0A1A11 45%, #060D09 100%);
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(ellipse 60% 40% at 50% -8%, var(--glow), transparent 70%), var(--bg);
 }
-.bg span { position: absolute; border-radius: 50%; filter: blur(32px); }
-.bg .b1 { width: 60vw; height: 60vw; left: -12vw; top: -18vw; background: radial-gradient(circle, rgba(76,200,140,0.34), transparent 62%); animation: drift1 22s ease-in-out infinite; }
-.bg .b2 { width: 48vw; height: 48vw; right: -10vw; top: 22vh; background: radial-gradient(circle, rgba(58,150,220,0.24), transparent 64%); animation: drift2 26s ease-in-out infinite; }
-.bg .b3 { width: 52vw; height: 52vw; left: 18vw; bottom: -24vh; background: radial-gradient(circle, rgba(120,224,168,0.22), transparent 64%); animation: drift3 30s ease-in-out infinite; }
+.bg span { display: none; }
 
+/* Cards */
 .glass {
-  background: rgba(255,255,255,0.055);
-  backdrop-filter: blur(22px) saturate(1.4);
-  -webkit-backdrop-filter: blur(22px) saturate(1.4);
-  border: 1px solid rgba(255,255,255,0.13);
-  border-radius: 22px;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.22);
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--card-shadow);
+  transition: border-color .3s, box-shadow .3s;
 }
+.glass:hover { border-color: var(--line-2); box-shadow: var(--card-shadow-hover); }
 
-header {
-  position: sticky; top: 0; z-index: 100; padding: 18px 20px 0;
-}
+/* Header */
+header { position: sticky; top: 0; z-index: 100; padding: 14px 20px 0; }
 .header-inner {
+  position: relative;
   max-width: 1140px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between;
-  gap: 20px; padding: 14px 22px; height: 68px; background: rgba(16,30,22,0.55);
-  backdrop-filter: blur(22px) saturate(1.5); -webkit-backdrop-filter: blur(22px) saturate(1.5);
-  border: 1px solid rgba(255,255,255,0.14); border-radius: 100px;
-  box-shadow: 0 8px 34px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.22);
+  gap: 20px; padding: 10px 10px 10px 20px; height: 62px;
+  background: var(--header-bg);
+  backdrop-filter: blur(18px) saturate(1.4); -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  border: 1px solid var(--line); border-radius: 999px;
+  transition: background .3s, border-color .3s, box-shadow .3s;
 }
-.logo { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 18px; color: #fff; display: flex; align-items: center; }
+header.scrolled .header-inner { background: var(--header-bg-2); border-color: var(--line-2); box-shadow: var(--card-shadow); }
+.logo { font-weight: 700; font-size: 18px; display: flex; align-items: center; }
 .logo img { max-height: 190px; margin-top: -55px; margin-bottom: -55px; }
-nav.main-nav { display: flex; align-items: center; gap: 26px; }
-nav.main-nav .nav-links { display: flex; align-items: center; gap: 26px; }
-nav.main-nav a { color: #C7D6CC; font-size: 15px; font-weight: 500; white-space: nowrap; }
-nav.main-nav a:hover { color: #6FE0A0; }
-.lang-toggle { display: flex; gap: 2px; padding: 3px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); border-radius: 100px; }
-.lang-toggle button { border: none; cursor: pointer; font-family: inherit; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; padding: 6px 11px; border-radius: 100px; background: transparent; color: #C7D6CC; }
-.lang-toggle button.active { background: rgba(95,208,138,0.92); color: #062013; }
-.btn-cta { display: inline-block; white-space: nowrap; background: rgba(95,208,138,0.92); color: #062013; font-size: 15px; font-weight: 600; padding: 11px 22px; border-radius: 100px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 4px 16px rgba(76,175,109,0.35); }
-.btn-cta:hover { background: #7CE6A8; color: #062013; }
-.nav-toggle { display: none; align-items: center; justify-content: center; flex-direction: column; width: 40px; height: 40px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 11px; cursor: pointer; padding: 0; gap: 4px; }
-.nav-toggle span { display: block; width: 18px; height: 2px; background: #E7F0EA; margin: 0; }
-
-section { position: relative; z-index: 1; }
-.wrap { max-width: 1140px; margin: 0 auto; padding: 20px 32px 90px; }
-.eyebrow { margin: 0 0 14px; color: #6FE0A0; font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; }
-h2.section-title { margin: 0 0 40px; font-family: 'Space Grotesk', sans-serif; font-size: 34px; font-weight: 700; letter-spacing: -0.01em; color: #fff; }
-
-.hero { padding-top: 40px; }
-.hero-grid { display: grid; grid-template-columns: 1fr; gap: 30px; align-items: center; padding: 60px 32px 40px; max-width: 1140px; margin: 0 auto; }
-.hero h1 { margin: 0 0 24px; font-family: 'Space Grotesk', sans-serif; font-size: 44px; line-height: 1.08; font-weight: 700; letter-spacing: -0.02em; color: #fff; }
-.hero p.lead { margin: 0 0 32px; max-width: 34em; font-size: 18px; line-height: 1.62; color: #B4C4B9; }
-.hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
-.btn-secondary { display: inline-block; color: #EAF2EC; font-weight: 600; font-size: 16px; padding: 15px 30px; border-radius: 100px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.16); }
-.btn-secondary:hover { border-color: rgba(111,224,160,0.6); color: #6FE0A0; }
-.btn-primary-lg { display: inline-block; background: rgba(95,208,138,0.94); color: #062013; font-weight: 600; font-size: 16px; padding: 15px 32px; border-radius: 100px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.45), 0 8px 26px rgba(76,175,109,0.4); }
-.btn-primary-lg:hover { background: #7CE6A8; color: #062013; }
-
-.om-card { padding: 40px; display: grid; grid-template-columns: 1fr; gap: 30px; }
-.om-card p { margin: 0 0 22px; font-size: 17px; line-height: 1.7; color: #C2D0C7; }
-
-.komp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 22px; }
-.komp-card { padding: 26px; }
-.komp-card h3 { margin: 0 0 16px; font-family: 'Space Grotesk', sans-serif; font-size: 19px; font-weight: 600; color: #fff; }
-.chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
-.chip { padding: 6px 13px; border: 1px solid rgba(255,255,255,0.16); border-radius: 100px; font-size: 13px; color: #C7D6CC; }
-
-.tj-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px; }
-.tj-grid .wide { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr; gap: 24px; align-items: center; padding: 26px; }
-.tj-card { padding: 26px; }
-.tj-num { margin: 0 0 14px; font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 600; color: #6FE0A0; }
-.tj-title { margin: 0 0 10px; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600; color: #fff; }
-.tj-desc { margin: 0; font-size: 14px; line-height: 1.6; color: #AFC0B5; }
-
-.diag-grid { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr; gap: 22px; }
-.diag-card { display: flex; flex-direction: column; overflow: hidden; }
-.diag-visual { position: relative; height: 170px; background: linear-gradient(160deg, rgba(18,34,24,0.55), rgba(8,16,11,0.72)); border-bottom: 1px solid rgba(255,255,255,0.08); overflow: hidden; }
-.diag-body { padding: 22px 26px 26px; }
-@media (min-width: 700px) { .diag-grid { grid-template-columns: 1fr 1fr; } }
-
-.code-panel { background: rgba(10,20,14,0.66); border: 1px solid rgba(255,255,255,0.16); border-radius: 12px; box-shadow: 0 12px 30px rgba(0,0,0,0.42), inset 0 1px 0 rgba(255,255,255,0.2); overflow: hidden; }
-.code-topbar { display: flex; align-items: center; gap: 7px; padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); }
-.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
-.dot.r { background: #FF6058; } .dot.y { background: #FFBD2E; } .dot.g { background: #28C840; }
-.code-label { margin-left: 5px; font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 10.5px; color: #8FA096; letter-spacing: 0.02em; }
-.code-body { padding: 14px 16px; font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 12px; line-height: 1.55; white-space: pre; color: #C7D6CC; height: 214px; overflow: hidden; }
-.ai-body { padding: 16px 18px; font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 13px; line-height: 1.6; min-height: 40px; display: flex; align-items: center; }
-.caret { display: inline-block; width: 7px; height: 15px; margin-left: 2px; vertical-align: -3px; background: #6FE0A0; animation: caretBlink 1s step-end infinite; }
-
-.prosj-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 22px; }
-.prosj-card { padding: 24px 26px 28px; }
-.prosj-meta { margin: 0 0 10px; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #6FE0A0; }
-.prosj-title { margin: 0 0 10px; font-family: 'Space Grotesk', sans-serif; font-size: 19px; font-weight: 600; color: #fff; }
-.prosj-desc { margin: 0; font-size: 15px; line-height: 1.6; color: #AFC0B5; }
-.prosj-thumb { height: 140px; border-radius: 14px; margin-bottom: 16px; background: repeating-linear-gradient(45deg, rgba(255,255,255,0.04), rgba(255,255,255,0.04) 10px, rgba(255,255,255,0.02) 10px, rgba(255,255,255,0.02) 20px); display: flex; align-items: center; justify-content: center; color: #7E9187; font-size: 13px; }
-
-.kontakt-grid { display: grid; grid-template-columns: 1fr; gap: 32px; align-items: start; }
-.kontakt-form-card { padding: 40px; }
-.kontakt-form-card h2 { margin: 0 0 12px; font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700; color: #fff; }
-.kontakt-form-card > p { margin: 0 0 32px; font-size: 16px; line-height: 1.6; color: #AFC0B5; }
-.form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
-.form-group label { font-weight: 600; font-size: 14px; color: #D6E2DA; }
-.form-group input, .form-group textarea {
-  padding: 13px 15px; border: 1px solid rgba(255,255,255,0.18); border-radius: 12px;
-  font-family: inherit; font-size: 16px; background: rgba(255,255,255,0.06); color: #EAF2EC; outline: none;
+nav.main-nav { display: flex; align-items: center; }
+nav.main-nav .nav-links { display: flex; align-items: center; gap: 2px; }
+nav.main-nav a { color: var(--muted); font-size: 14px; font-weight: 500; white-space: nowrap; padding: 8px 13px; border-radius: 999px; transition: color .2s, background .2s; }
+nav.main-nav a:hover { color: var(--text); background: var(--hover-bg); }
+nav.main-nav a.active { color: var(--text); background: var(--active-bg); }
+.nav-tools { display: flex; align-items: center; }
+.theme-toggle {
+  display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; margin-left: 8px;
+  border: 1px solid var(--line); border-radius: 999px; background: transparent; color: var(--muted); cursor: pointer; padding: 0;
+  transition: color .2s, background .2s;
 }
-.form-group input:focus, .form-group textarea:focus { border-color: rgba(111,224,160,0.7); box-shadow: 0 0 0 3px rgba(95,208,138,0.22); }
-.form-submit { background: rgba(95,208,138,0.94); color: #062013; border: none; font-family: inherit; font-weight: 600; font-size: 16px; padding: 14px 32px; border-radius: 100px; cursor: pointer; box-shadow: inset 0 1px 0 rgba(255,255,255,0.45), 0 8px 22px rgba(76,175,109,0.36); }
-.form-submit:hover { background: #7CE6A8; }
+.theme-toggle:hover { color: var(--text); background: var(--hover-bg); }
+.theme-toggle svg { width: 16px; height: 16px; }
+.theme-toggle .i-sun { display: none; }
+[data-theme="dark"] .theme-toggle .i-sun { display: block; }
+[data-theme="dark"] .theme-toggle .i-moon { display: none; }
+.lang-toggle { display: flex; gap: 2px; margin: 0 10px 0 6px; padding: 3px; background: var(--surface-soft); border: 1px solid var(--line); border-radius: 999px; }
+.lang-toggle button { border: none; cursor: pointer; font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.06em; padding: 5px 10px; border-radius: 999px; background: transparent; color: var(--muted); transition: color .2s, background .2s; }
+.lang-toggle button:hover { color: var(--text); }
+.lang-toggle button.active { background: var(--text); color: var(--bg); }
+nav.main-nav a.btn-cta { background: var(--accent); color: var(--on-accent); font-weight: 600; padding: 10px 18px; }
+nav.main-nav a.btn-cta:hover { background: var(--accent-hover); color: var(--on-accent); }
+.nav-toggle { display: none; align-items: center; justify-content: center; flex-direction: column; width: 42px; height: 42px; background: var(--surface); border: 1px solid var(--line-2); border-radius: 999px; cursor: pointer; padding: 0; gap: 4px; }
+.nav-toggle span { display: block; width: 16px; height: 1.5px; background: var(--text); margin: 0; border-radius: 2px; transition: transform .3s var(--ease), opacity .2s; }
+nav.main-nav.open .nav-toggle span:nth-child(1) { transform: translateY(5.5px) rotate(45deg); }
+nav.main-nav.open .nav-toggle span:nth-child(2) { opacity: 0; }
+nav.main-nav.open .nav-toggle span:nth-child(3) { transform: translateY(-5.5px) rotate(-45deg); }
+
+/* Buttons */
+.btn-primary-lg, .form-submit {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--accent); color: var(--on-accent); border: none; cursor: pointer;
+  font-family: inherit; font-weight: 600; font-size: 15px; padding: 14px 24px; border-radius: 999px;
+  transition: background .2s;
+}
+.btn-primary-lg:hover, .form-submit:hover { background: var(--accent-hover); color: var(--on-accent); }
+.btn-secondary {
+  display: inline-flex; align-items: center; color: var(--text); font-weight: 500; font-size: 15px;
+  padding: 14px 22px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line-2);
+  transition: background .2s, border-color .2s;
+}
+.btn-secondary:hover { color: var(--text); background: var(--surface-soft); }
+.arr { display: inline-block; transition: transform .2s var(--ease); }
+a:hover .arr, button:hover .arr { transform: translateX(3px); }
+
+/* Sections */
+section { position: relative; z-index: 1; }
+.wrap { max-width: 1140px; margin: 0 auto; padding: 56px 32px 88px; }
+#om .wrap { padding-top: 24px; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 10px; margin: 0 0 18px;
+  color: var(--accent); font-family: var(--mono); font-size: 12px; font-weight: 500;
+  letter-spacing: 0.14em; text-transform: uppercase;
+}
+.eyebrow::before { content: ''; width: 6px; height: 6px; border-radius: 2px; background: var(--brand); }
+h2.section-title {
+  margin: 0 0 44px; font-size: clamp(30px, 4.2vw, 48px); line-height: 1.06; font-weight: 600;
+  letter-spacing: -0.035em; color: var(--text); max-width: 18em; text-wrap: balance;
+}
+
+/* Hero */
+.hero::before {
+  content: ''; position: absolute; inset: -120px 0 0; z-index: -1; pointer-events: none;
+  background-image: linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 56px 56px; background-position: center top;
+  -webkit-mask-image: radial-gradient(ellipse 65% 60% at 50% 25%, #000 15%, transparent 75%);
+  mask-image: radial-gradient(ellipse 65% 60% at 50% 25%, #000 15%, transparent 75%);
+}
+.hero-grid { max-width: 1040px; margin: 0 auto; padding: 104px 32px 56px; text-align: center; }
+.hero-grid > div { display: flex; flex-direction: column; align-items: center; }
+.hero-grid > div > * { animation: fadeUp .8s var(--ease) both; }
+.hero-grid > div > :nth-child(2) { animation-delay: .08s; }
+.hero-grid > div > :nth-child(3) { animation-delay: .16s; }
+.hero-grid > div > :nth-child(4) { animation-delay: .24s; }
+.hero-grid > div > :nth-child(5) { animation-delay: .32s; }
+.pill {
+  display: inline-flex; align-items: center; gap: 10px; margin: 0 0 28px; padding: 7px 15px 7px 12px;
+  border: 1px solid var(--line-2); background: var(--surface); border-radius: 999px;
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted);
+}
+.pill-dot { flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--brand); }
+.hero h1 {
+  margin: 0 0 24px; font-size: clamp(40px, 6.6vw, 78px); line-height: 1.03; font-weight: 600;
+  letter-spacing: -0.045em; color: var(--text); text-wrap: balance;
+}
+.hero h1 > span { display: block; }
+.hero h1 .grad { color: var(--accent); }
+.hero p.lead { margin: 0 0 36px; max-width: 38em; font-size: clamp(16px, 1.6vw, 19px); line-height: 1.6; color: var(--muted); text-wrap: pretty; }
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+
+.marquee {
+  margin-top: 72px; width: 100%; max-width: 900px; overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
+}
+.marquee-track { display: flex; width: max-content; animation: marquee 60s linear infinite; }
+.marquee-track span { display: inline-flex; align-items: center; gap: 26px; padding-right: 26px; font-family: var(--mono); font-size: 13px; color: var(--dim); white-space: nowrap; }
+.marquee-track span::after { content: ''; width: 4px; height: 4px; background: var(--brand); opacity: 0.6; transform: rotate(45deg); }
+
+/* Om */
+.om-card { padding: 48px; display: grid; grid-template-columns: 1fr; gap: 30px; }
+.om-card h2.section-title { font-size: clamp(26px, 3vw, 36px); }
+.om-copy p { margin: 0 0 20px; font-size: 16px; line-height: 1.7; color: var(--muted); }
+.om-copy p:first-child { font-size: 18px; color: var(--text); }
+.om-copy p:last-child { margin-bottom: 0; }
+
+/* Teknologistack */
+.stack { display: grid; grid-template-columns: 1fr; padding: 6px 28px; }
+.stack-row { display: grid; grid-template-columns: 176px 1fr; gap: 18px; align-items: center; padding: 16px 0; border-top: 1px solid var(--line); }
+.stack-row:first-child { border-top: 0; }
+.stack-row h3 { display: flex; align-items: center; gap: 10px; margin: 0; font-size: 14px; font-weight: 600; line-height: 1.3; color: var(--text); }
+.stack-row h3::before { content: ''; flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--brand); }
+.chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { padding: 4px 9px; border: 1px solid var(--line); background: var(--surface-soft); border-radius: 7px; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+
+/* Tjenester */
+.tj-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.tj-grid .wide { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr; gap: 28px; align-items: center; padding: 32px; }
+.tj-num {
+  display: inline-block; margin: 0 0 16px; padding: 3px 8px; border: 1px solid var(--line-2);
+  border-radius: 6px; background: var(--surface-soft);
+  font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: 0.06em; color: var(--accent);
+}
+.tj-title { margin: 0 0 10px; font-size: 20px; font-weight: 600; letter-spacing: -0.02em; color: var(--text); }
+.tj-desc { margin: 0; font-size: 15px; line-height: 1.6; color: var(--muted); }
+
+/* Animated electrical drawing */
+.schem-wrap {
+  position: relative; border-radius: 14px; border: 1px solid var(--line-2); padding: 14px 12px 8px;
+  background:
+    radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1.5px) 0 0 / 16px 16px,
+    radial-gradient(ellipse at 50% 0%, rgba(76,169,104,0.12), transparent 70%),
+    var(--panel);
+  box-shadow: var(--panel-shadow);
+}
+.schem { display: block; width: 100%; height: auto; font-family: var(--mono); overflow: visible; }
+.schem text { fill: #8A948F; font-size: 10px; }
+.schem .ttl { fill: #C8F5A0; font-size: 11px; letter-spacing: 0.04em; }
+.schem .big { fill: #E4E9E6; font-size: 13px; font-weight: 600; }
+.schem .tag { fill: #9BE0B0; font-size: 10.5px; font-weight: 600; }
+.schem .on { fill: #62C27F; font-size: 10px; font-weight: 700; }
+.schem .t24 { fill: #F08A7E; } .schem .t0 { fill: #6FA8DC; }
+.schem .dot { fill: #E4E9E6; }
+/* lines draw themselves (pathLength=1), labels fade in, each with its own delay --t */
+.schem .w {
+  fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0.75;
+  transition: stroke-dashoffset var(--dur, .9s) cubic-bezier(.45,.05,.25,1) var(--t, 0s), opacity .6s ease 6.8s;
+}
+.schem.go .w { stroke-dashoffset: 0; opacity: 1; }
+.schem .ph { stroke: #C9D1CC; } .schem .n { stroke: #7FB3E0; } .schem .pe { stroke: #B5D96A; }
+.schem .p24 { stroke: #F08A7E; } .schem .m0 { stroke: #6FA8DC; } .schem .sym { stroke: #E4E9E6; } .schem .sig { stroke: #C9D1CC; }
+.schem .f { opacity: 0; transition: opacity .5s ease var(--t, 0s); }
+.schem.go .f { opacity: 1; }
+.schem .link { fill: none; stroke: #8A948F; stroke-width: 1; stroke-dasharray: 2 2; }
+.schem .qbox { fill: rgba(255,255,255,0.02); stroke: #6B756F; stroke-width: 1; stroke-dasharray: 4 3; }
+.schem .q-off { fill: #F08A7E; font-size: 10px; font-weight: 700; opacity: 0; }
+.schem.go .q-off { animation: schOff 6.7s linear both; }
+@keyframes schOff { 0%, 27% { opacity: 0; } 32%, 97% { opacity: 1; } 100% { opacity: 0; } }
+.schem .hot { transition: stroke-dashoffset var(--dur, .9s) cubic-bezier(.45,.05,.25,1) var(--t, 0s), opacity .6s ease 6.8s, stroke .5s ease 6.75s; }
+.schem.go .hot { stroke: #8CE3A8; }
+/* Q1 is drawn open and switches on when the drawing is complete */
+.schem .blade {
+  transform: rotate(-30deg);
+  transition: stroke-dashoffset var(--dur, .9s) cubic-bezier(.45,.05,.25,1) var(--t, 0s), opacity .6s ease 6.8s, transform .45s cubic-bezier(.5,0,.3,1.4) 6.5s, stroke .4s ease 6.6s;
+}
+.schem.go .blade { transform: none; }
+.schem .rotor { fill: none; stroke: #62C27F; stroke-width: 1.4; stroke-dasharray: 3 6; transform-origin: 90px 222px; }
+.schem .led { fill: #25352b; stroke: #3d5a47; stroke-width: 0.8; }
+.schem .target { fill: #9AA3AB; stroke: #C9D1CC; stroke-width: 0.8; }
+.schem .sig-on { fill: none; stroke: #7CF0A4; stroke-width: 2.4; stroke-linecap: round; opacity: 0; filter: drop-shadow(0 0 3px #62C27F); }
+.schem.go .rotor { animation: schSpin 2.4s linear 6.8s infinite; }
+.schem.go .target { animation: schTarget 4.5s ease-in-out 7s infinite both; }
+.schem.go .led { animation: schLed 4.5s ease-in-out 7s infinite both; }
+.schem.go .sig-on { animation: schSig 4.5s ease-in-out 7s infinite both; }
+@keyframes schSpin { to { transform: rotate(360deg); } }
+@keyframes schTarget { 0%, 25% { transform: translateX(24px); } 40%, 75% { transform: translateX(0); } 90%, 100% { transform: translateX(24px); } }
+@keyframes schLed { 0%, 38% { fill: #25352b; } 42%, 74% { fill: #7CF0A4; } 78%, 100% { fill: #25352b; } }
+@keyframes schSig { 0%, 38% { opacity: 0; } 42%, 74% { opacity: 1; } 78%, 100% { opacity: 0; } }
+.schem.reset, .schem.reset * { transition: none !important; animation: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .schem .w, .schem .f, .schem .blade { transition: none !important; }
+}
+.code-swift { height: 150px; }
+
+/* 3D view: industrial communication */
+.comm3d {
+  position: relative; min-height: 480px; overflow: hidden; border-radius: 14px; border: 1px solid var(--line-2);
+  background: radial-gradient(ellipse at 50% 35%, rgba(76,169,104,0.14), transparent 65%), var(--panel);
+  box-shadow: var(--panel-shadow); cursor: grab;
+  --accent: #62C27F; --accent-light: #9BE0B0;
+}
+.comm3d:active { cursor: grabbing; }
+.comm3d canvas { position: absolute; inset: 0; display: block; opacity: 0; transition: opacity .8s ease; }
+.comm3d.ready canvas { opacity: 1; }
+.comm3d-fallback { position: absolute; left: 0; right: 0; top: 50%; height: 170px; translate: 0 -50%; transition: opacity .4s; }
+.comm3d.ready .comm3d-fallback { opacity: 0; pointer-events: none; }
+.comm3d-labels { position: absolute; inset: 0; pointer-events: none; }
+.tag3d {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.04em; color: #E4EAE6; white-space: nowrap;
+  background: rgba(8,12,10,0.72); border: 1px solid rgba(255,255,255,0.14); padding: 2px 7px; border-radius: 5px;
+}
+.tag3d.plc { font-weight: 600; color: #fff; }
+.tag3d.pb { color: #9BE0B0; border-color: rgba(98,194,127,0.6); }
+.comm3d-hint {
+  position: absolute; right: 12px; bottom: 10px; z-index: 2; pointer-events: none;
+  font-family: var(--mono); font-size: 11px; color: #9AA59F;
+  background: rgba(8,12,10,0.6); border: 1px solid rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 999px;
+  opacity: 0; transition: opacity .4s;
+}
+.comm3d.ready .comm3d-hint { opacity: 1; }
+.comm3d.touched .comm3d-hint { opacity: 0; }
+.comm-legend { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 18px 0 0; padding: 0; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.comm-legend li { display: inline-flex; align-items: center; gap: 8px; }
+.comm-legend i { width: 18px; height: 3px; border-radius: 2px; }
+.comm-legend .lg-pb { background: #4CA968; box-shadow: 0 0 6px rgba(76,169,104,0.6); }
+.comm-legend .lg-field { background: #8E99A3; }
+.comm-legend .lg-motor { background: #E07B39; }
+.comm-legend .lg-eth { background: #3FA9E0; box-shadow: 0 0 6px rgba(63,169,224,0.5); }
+.comm-legend .lg-vpn { background: repeating-linear-gradient(90deg, #8FD66F 0 5px, transparent 5px 8px); }
+.tag3d.eth { color: #9CD8F5; border-color: rgba(63,169,224,0.6); }
+.tag3d.vpn { color: #C8F5A0; border-color: rgba(184,240,154,0.5); }
+.tag3d { transition: opacity .5s; }
+.comm3d:not(.view-ot) .tag3d.ot { opacity: 0; }
+.comm3d.view-ot .tag3d:not(.ot):not(.keep) { opacity: 0; }
+.comm3d-badge {
+  position: absolute; top: 12px; right: 12px; z-index: 3; pointer-events: none;
+  display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px 5px 8px; border-radius: 999px;
+  background: rgba(8,12,10,0.72); border: 1px solid rgba(98,194,127,0.5); color: #C8F5A0;
+  font-family: var(--mono); font-size: 12px; font-weight: 600; letter-spacing: 0.06em;
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+}
+.comm3d-badge svg { width: 17px; height: 17px; animation: badgeSpin 5s var(--ease) infinite; }
+@keyframes badgeSpin { 0%, 65% { transform: rotate(0deg); } 85%, 100% { transform: rotate(-360deg); } }
+.comm3d-views {
+  position: absolute; left: 12px; top: 12px; z-index: 3; display: flex; gap: 2px; padding: 3px;
+  background: rgba(8,12,10,0.72); border: 1px solid rgba(255,255,255,0.12); border-radius: 999px;
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+}
+.comm3d-views button {
+  display: inline-flex; align-items: center; gap: 6px; border: 0; cursor: pointer;
+  background: transparent; color: #9AA59F; font-family: var(--mono); font-size: 11.5px;
+  padding: 6px 12px; border-radius: 999px; transition: background .25s, color .25s;
+}
+.comm3d-views button svg { width: 14px; height: 14px; }
+.comm3d-views button:not(.on):hover { color: #fff; }
+.comm3d-views button.on { background: #62C27F; color: #07110B; }
+.comm-text { display: grid; }
+.comm-pane { grid-area: 1 / 1; transition: opacity .45s ease .12s, translate .45s var(--ease) .12s, visibility 0s; }
+.comm-pane:not(.on) { opacity: 0; translate: 0 10px; visibility: hidden; transition: opacity .25s ease, translate .25s ease, visibility 0s .25s; }
+
+.code-panel { background: var(--panel); border: 1px solid var(--line-2); border-radius: 14px; box-shadow: var(--panel-shadow); overflow: hidden; }
+.code-topbar { display: flex; align-items: center; gap: 7px; padding: 9px 12px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); }
+.dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; background: #3F3F46; }
+.code-label { margin-left: 6px; font-family: var(--mono); font-size: 11px; color: #71717A; letter-spacing: 0.02em; }
+.code-body { padding: 16px 18px; font-family: var(--mono); font-size: 12.5px; line-height: 1.6; white-space: pre; color: #D4D4D8; height: 220px; overflow: hidden; }
+.ai-body { padding: 16px 18px; font-family: var(--mono); font-size: 13px; line-height: 1.6; min-height: 40px; display: flex; align-items: center; }
+.caret { display: inline-block; width: 7px; height: 15px; margin-left: 2px; vertical-align: -3px; background: #62C27F; animation: caretBlink 1s step-end infinite; }
+/* Diagrams and code sit on a dark panel, so they use the brighter green */
+.code-panel { --accent: #62C27F; --accent-light: #9BE0B0; }
+
+/* Prosjekter */
+.prosj-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.prosj-card { padding: 8px 8px 26px; }
+.prosj-thumb {
+  height: 180px; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; color: var(--dim);
+  background:
+    radial-gradient(circle, var(--dots) 1px, transparent 1.5px) 0 0 / 14px 14px,
+    linear-gradient(135deg, var(--glow), transparent 60%),
+    var(--surface-soft);
+}
+.prosj-meta, .prosj-title, .prosj-desc { padding: 0 18px; }
+.prosj-meta { margin: 0 0 10px; font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+.prosj-title { margin: 0 0 8px; font-size: 20px; font-weight: 600; letter-spacing: -0.02em; color: var(--text); }
+.prosj-desc { margin: 0; font-size: 15px; line-height: 1.6; color: var(--muted); }
+
+/* Kontakt */
+.kontakt-grid { display: grid; grid-template-columns: 1fr; gap: 16px; align-items: stretch; }
+.kontakt-form-card { padding: 44px; }
+.kontakt-form-card h2 { margin: 0 0 12px; font-size: clamp(30px, 3.6vw, 44px); font-weight: 600; letter-spacing: -0.035em; line-height: 1.05; color: var(--text); }
+.kontakt-form-card > p { margin: 0 0 32px; font-size: 16px; line-height: 1.6; color: var(--muted); }
+.form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
+.form-group label { font-weight: 500; font-size: 13px; color: var(--muted); }
+.form-group input, .form-group textarea {
+  padding: 13px 14px; border: 1px solid var(--line-2); border-radius: 10px;
+  font-family: inherit; font-size: 16px; background: var(--input-bg); color: var(--text); outline: none;
+  transition: border-color .2s, box-shadow .2s, background .2s;
+}
+.form-group textarea { resize: vertical; }
+.form-group input:focus, .form-group textarea:focus { border-color: var(--brand); box-shadow: 0 0 0 4px rgba(76,169,104,0.18); background: var(--surface); }
+.form-submit:disabled { opacity: 0.6; cursor: progress; }
 .form-status { margin: 14px 0 0; font-size: 14px; font-weight: 500; }
-.form-status.error { color: #FF9B9B; }
-.form-status.success { color: #6FE0A0; }
-.form-status.pending { color: #AFC0B5; }
-.form-privacy { margin: 16px 0 0; font-size: 13px; line-height: 1.5; color: #8FA096; }
+.form-status:empty { display: none; }
+.form-status.error { color: var(--error); }
+.form-status.success { color: var(--accent); }
+.form-status.pending { color: var(--muted); }
+.form-privacy { margin: 18px 0 0; font-size: 13px; line-height: 1.55; color: var(--dim); }
 
-.kontakt-info { padding: 40px; }
-.kontakt-info .glass-logo { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 20px; color: #fff; margin-bottom: 24px; }
-.info-row { display: flex; flex-direction: column; gap: 3px; margin-bottom: 16px; }
-.info-row span.label { font-weight: 600; color: #D6E2DA; }
-.info-row span.value { color: #AFC0B5; }
+.kontakt-info { padding: 44px; }
+.kontakt-info .glass-logo { margin-bottom: 28px; }
+.info-row { display: flex; flex-direction: column; gap: 5px; padding: 16px 0; border-top: 1px solid var(--line); }
+.info-row span.label { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim); }
+.info-row span.value { font-size: 15px; color: var(--text); }
 
-footer { border-top: 1px solid rgba(255,255,255,0.1); position: relative; z-index: 1; }
-.footer-inner { max-width: 1140px; margin: 0 auto; padding: 30px 32px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-size: 14px; color: #8FA096; }
-.footer-inner a { color: #8FA096; }
-.footer-inner a:hover { color: #6FE0A0; }
+/* Footer */
+footer { border-top: 1px solid var(--line); position: relative; z-index: 1; }
+.footer-inner { max-width: 1140px; margin: 0 auto; padding: 28px 32px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-size: 13px; color: var(--dim); }
+.footer-inner a { color: var(--dim); }
+.footer-inner a:hover { color: var(--text); }
+
+/* Gentle fade-up as content scrolls into view (class added by JS) */
+.reveal {
+  opacity: 0; translate: 0 16px;
+  transition: opacity .7s ease var(--d, 0ms), translate .7s var(--ease) var(--d, 0ms), border-color .3s, box-shadow .3s;
+}
+.reveal.in { opacity: 1; translate: 0 0; }
+/* Pause decorative loops while off-screen */
+.offscreen, .offscreen * { animation-play-state: paused !important; }
 
 @media (min-width: 900px) {
-  .hero-grid { grid-template-columns: 1fr; }
-  .hero h1 { font-size: 56px; }
-  .om-card { grid-template-columns: 0.85fr 1.15fr; }
-  .tj-grid .wide { grid-template-columns: 1fr 1.02fr; }
-  .kontakt-grid { grid-template-columns: 1.1fr 0.9fr; }
+  .om-card { grid-template-columns: 0.85fr 1.15fr; gap: 56px; }
+  .stack { grid-template-columns: 1fr 1fr; column-gap: 48px; }
+  .stack-row:nth-child(2) { border-top: 0; }
+  .tj-grid .wide { grid-template-columns: 1fr 1.02fr; gap: 40px; }
+  .tj-grid .comm-card { grid-template-columns: 1fr; }
+  .comm-pane { display: grid; grid-template-columns: auto 1fr; column-gap: 40px; align-items: start; }
+  .comm-pane .tj-num { grid-column: 1; justify-self: start; }
+  .comm-pane .tj-title { grid-column: 1; margin: 0; }
+  .comm-pane .tj-desc, .comm-pane .comm-legend { grid-column: 2; }
+  .comm-pane .tj-desc { grid-row: 1 / span 2; }
+  .comm-pane .comm-legend { margin-top: 14px; }
+  .kontakt-grid { grid-template-columns: 1.15fr 0.85fr; }
 }
 
 @media (max-width: 768px) {
   nav.main-nav .nav-links { display: none; }
   .nav-toggle { display: inline-flex; }
   nav.main-nav.open .nav-links {
-    display: flex; flex-direction: column; gap: 2px; position: absolute; top: 100%; left: 20px; right: 20px; margin-top: 8px;
-    background: rgba(14,26,19,0.97); backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
-    border: 1px solid rgba(255,255,255,0.14); border-radius: 18px; padding: 10px;
-    box-shadow: 0 16px 40px rgba(0,0,0,0.45);
+    display: flex; flex-direction: column; align-items: stretch; gap: 2px; position: absolute; top: 100%; left: 0; right: 0; margin-top: 8px;
+    background: var(--surface);
+    border: 1px solid var(--line-2); border-radius: 20px; padding: 10px;
+    box-shadow: var(--menu-shadow);
+    animation: menuIn .3s var(--ease);
   }
-  nav.main-nav.open .nav-links a { padding: 13px 15px; font-size: 17px; border-radius: 12px; }
-  nav.main-nav.open .nav-links a:hover { background: rgba(255,255,255,0.06); color: #6FE0A0; }
+  nav.main-nav.open .nav-links a { padding: 13px 15px; font-size: 16px; border-radius: 12px; }
+  nav.main-nav.open .nav-links .nav-tools { margin: 8px 12px; gap: 8px; }
+  nav.main-nav.open .nav-links .nav-tools > * { margin: 0; }
+  nav.main-nav.open .nav-links a.btn-cta { text-align: center; margin-top: 4px; }
 }
 
 @media (max-width: 820px) {
-  .wrap { padding-left: 20px; padding-right: 20px; }
-  .hero-grid { padding-left: 20px; padding-right: 20px; }
-  .hero h1 { font-size: 36px !important; line-height: 1.1; }
-  .section-title { font-size: 26px !important; }
-  .om-card { grid-template-columns: 1fr !important; padding: 26px !important; }
-  .komp-grid { grid-template-columns: 1fr !important; }
-  .diag-grid { grid-template-columns: 1fr !important; }
-  .tj-grid { grid-template-columns: 1fr !important; }
-  .tj-grid .wide { grid-template-columns: 1fr !important; padding: 22px !important; }
-  .prosj-grid { grid-template-columns: 1fr !important; }
-  .kontakt-grid { grid-template-columns: 1fr !important; }
-  .kontakt-form-card, .kontakt-info { padding: 26px !important; }
-  .header-inner { padding: 12px 16px; }
+  .wrap { padding: 36px 20px 64px; }
+  .hero-grid { padding: 72px 20px 40px; }
+  .marquee { margin-top: 52px; }
+  .om-card, .kontakt-form-card, .kontakt-info { padding: 26px; }
+  .stack { padding: 4px 20px; }
+  .tj-grid .wide { padding: 24px; }
+  .comm3d { min-height: 330px; }
+  .tj-grid, .prosj-grid, .kontakt-grid { grid-template-columns: 1fr; }
+  .header-inner { padding: 8px 8px 8px 16px; }
+}
+@media (max-width: 560px) {
+  .schem .sm { display: none; }
+  .tag3d { font-size: 9px; padding: 1px 5px; }
+  .comm3d-views button { padding: 6px 10px; font-size: 11px; }
+  .comm3d-badge { top: auto; bottom: 10px; left: 12px; right: auto; }
+  .stack-row { grid-template-columns: 1fr; gap: 10px; }
 }
 </style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
 </head>
 <body>
 
@@ -224,9 +528,15 @@ footer { border-top: 1px solid rgba(255,255,255,0.1); position: relative; z-inde
         <a href="#kompetanse" data-i18n="navKompetanse">Kompetanse</a>
         <a href="#tjenester" data-i18n="navTjenester">Tjenester</a>
         <a href="#prosjekter" data-i18n="navProsjekter">Prosjekter</a>
-        <div class="lang-toggle">
-          <button id="langNo" class="active">NO</button>
-          <button id="langEn">EN</button>
+        <div class="nav-tools">
+          <button class="theme-toggle" id="themeToggle" type="button" aria-label="Lys / mørk modus" title="Lys / mørk modus">
+            <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+            <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          </button>
+          <div class="lang-toggle">
+            <button id="langNo" class="active">NO</button>
+            <button id="langEn">EN</button>
+          </div>
         </div>
         <a href="#kontakt" class="btn-cta" data-i18n="cta">Ta kontakt</a>
       </div>
@@ -239,46 +549,14 @@ footer { border-top: 1px solid rgba(255,255,255,0.1); position: relative; z-inde
   <section class="hero">
     <div class="hero-grid">
       <div>
-        <p class="eyebrow" data-i18n="heroEyebrow">Automasjon · Systemintegrasjon · Elektroteknikk</p>
-        <h1 data-i18n="heroTitle">Systemer som holder industrien i drift</h1>
+        <p class="pill"><span class="pill-dot"></span><span data-i18n="heroEyebrow">Automasjon · Systemintegrasjon · Elektroteknikk</span></p>
+        <h1><span data-i18n="heroTitleA">Automasjon tilpasset</span> <span class="grad" data-i18n="heroTitleB">dine behov</span></h1>
         <p class="lead" data-i18n="heroLead">Walde Automation leverer automasjon, systemintegrasjon og elektroteknisk rådgivning — fra PLC-programmering og industriell kommunikasjon til programvareutvikling.</p>
         <div class="hero-actions">
-          <a href="#kontakt" class="btn-primary-lg" data-i18n="cta">Ta kontakt</a>
+          <a href="#kontakt" class="btn-primary-lg"><span data-i18n="cta">Ta kontakt</span><span class="arr" aria-hidden="true">→</span></a>
           <a href="#tjenester" class="btn-secondary" data-i18n="ctaSecondary">Se tjenester</a>
         </div>
-      </div>
-    </div>
-
-    <div aria-hidden="true" style="position:relative;height:20px;margin-bottom:-14px;pointer-events:none;overflow:visible;z-index:6;max-width:1140px;margin-left:auto;margin-right:auto;">
-      <div style="position:absolute;bottom:2px;left:6%;width:56px;height:32px;animation:waldeWalk 14s ease-in-out infinite, waldeJump 1.5s ease-in-out infinite;">
-        <div style="position:absolute;bottom:100%;left:50%;margin-bottom:2px;display:flex;gap:4px;animation:waldeQmark 14s ease-in-out infinite;">
-          <svg viewBox="0 0 5 7" width="7" height="10" shape-rendering="crispEdges" style="animation:qmarkBob 1.1s ease-in-out infinite;"><g fill="#FFE08A"><rect x="1" y="0" width="3" height="1"></rect><rect x="0" y="1" width="1" height="1"></rect><rect x="4" y="1" width="1" height="1"></rect><rect x="4" y="2" width="1" height="1"></rect><rect x="2" y="3" width="2" height="1"></rect><rect x="2" y="4" width="1" height="1"></rect><rect x="2" y="6" width="1" height="1"></rect></g></svg>
-          <svg viewBox="0 0 5 7" width="8" height="11" shape-rendering="crispEdges" style="animation:qmarkBob 1.1s ease-in-out infinite;animation-delay:-0.55s;"><g fill="#FFE08A"><rect x="1" y="0" width="3" height="1"></rect><rect x="0" y="1" width="1" height="1"></rect><rect x="4" y="1" width="1" height="1"></rect><rect x="4" y="2" width="1" height="1"></rect><rect x="2" y="3" width="2" height="1"></rect><rect x="2" y="4" width="1" height="1"></rect><rect x="2" y="6" width="1" height="1"></rect></g></svg>
-        </div>
-        <div style="width:100%;height:100%;transform-origin:center bottom;animation:waldeFace 14s ease-in-out infinite;">
-          <div style="width:100%;height:100%;transform:rotate(-3deg);transform-origin:center bottom;">
-            <svg viewBox="-6 0 84 48" width="56" height="32" shape-rendering="crispEdges" style="display:block;filter:drop-shadow(0 4px 7px rgba(0,0,0,0.4));">
-              <g fill="#E07C4A">
-                <rect x="18" y="0" width="6" height="6"></rect><rect x="24" y="0" width="6" height="6"></rect><rect x="42" y="0" width="6" height="6"></rect><rect x="48" y="0" width="6" height="6"></rect>
-                <rect x="6" y="6" width="6" height="6"></rect><rect x="12" y="6" width="6" height="6"></rect><rect x="18" y="6" width="6" height="6"></rect><rect x="24" y="6" width="6" height="6"></rect><rect x="30" y="6" width="6" height="6"></rect><rect x="36" y="6" width="6" height="6"></rect><rect x="42" y="6" width="6" height="6"></rect><rect x="48" y="6" width="6" height="6"></rect><rect x="54" y="6" width="6" height="6"></rect><rect x="60" y="6" width="6" height="6"></rect>
-                <rect x="0" y="12" width="6" height="6"></rect><rect x="6" y="12" width="6" height="6"></rect><rect x="24" y="12" width="6" height="6"></rect><rect x="30" y="12" width="6" height="6"></rect><rect x="36" y="12" width="6" height="6"></rect><rect x="42" y="12" width="6" height="6"></rect><rect x="60" y="12" width="6" height="6"></rect><rect x="66" y="12" width="6" height="6"></rect>
-                <rect x="0" y="18" width="6" height="6"></rect><rect x="6" y="18" width="6" height="6"></rect><rect x="12" y="18" width="6" height="6"></rect><rect x="18" y="18" width="6" height="6"></rect><rect x="24" y="18" width="6" height="6"></rect><rect x="30" y="18" width="6" height="6"></rect><rect x="36" y="18" width="6" height="6"></rect><rect x="42" y="18" width="6" height="6"></rect><rect x="48" y="18" width="6" height="6"></rect><rect x="54" y="18" width="6" height="6"></rect><rect x="60" y="18" width="6" height="6"></rect><rect x="66" y="18" width="6" height="6"></rect>
-                <rect x="-6" y="24" width="6" height="6"></rect><rect x="0" y="24" width="6" height="6"></rect><rect x="6" y="24" width="6" height="6"></rect><rect x="12" y="24" width="6" height="6"></rect><rect x="18" y="24" width="6" height="6"></rect><rect x="24" y="24" width="6" height="6"></rect><rect x="30" y="24" width="6" height="6"></rect><rect x="36" y="24" width="6" height="6"></rect><rect x="42" y="24" width="6" height="6"></rect><rect x="48" y="24" width="6" height="6"></rect><rect x="54" y="24" width="6" height="6"></rect><rect x="60" y="24" width="6" height="6"></rect><rect x="66" y="24" width="6" height="6"></rect><rect x="72" y="24" width="6" height="6"></rect>
-                <rect x="0" y="30" width="6" height="6"></rect><rect x="6" y="30" width="6" height="6"></rect><rect x="12" y="30" width="6" height="6"></rect><rect x="18" y="30" width="6" height="6"></rect><rect x="24" y="30" width="6" height="6"></rect><rect x="30" y="30" width="6" height="6"></rect><rect x="36" y="30" width="6" height="6"></rect><rect x="42" y="30" width="6" height="6"></rect><rect x="48" y="30" width="6" height="6"></rect><rect x="54" y="30" width="6" height="6"></rect><rect x="60" y="30" width="6" height="6"></rect><rect x="66" y="30" width="6" height="6"></rect>
-              </g>
-              <g fill="#241611" style="transform-box:fill-box;transform-origin:center;animation:waldeEyeLook 14s ease-in-out infinite;">
-                <rect x="12" y="12" width="6" height="6"></rect><rect x="18" y="12" width="6" height="6"></rect>
-                <rect x="48" y="12" width="6" height="6"></rect><rect x="54" y="12" width="6" height="6"></rect>
-              </g>
-              <g fill="#B4502E">
-                <rect x="6" y="36" width="6" height="6" style="transform-box:fill-box;transform-origin:center top;animation:waldeShuffle 1.3s ease-in-out infinite;"></rect>
-                <rect x="24" y="36" width="6" height="6" style="transform-box:fill-box;transform-origin:center top;animation:waldeShuffle 1.3s ease-in-out infinite;animation-delay:-0.65s;"></rect>
-                <rect x="42" y="36" width="6" height="6" style="transform-box:fill-box;transform-origin:center top;animation:waldeShuffle 1.3s ease-in-out infinite;"></rect>
-                <rect x="60" y="36" width="6" height="6" style="transform-box:fill-box;transform-origin:center top;animation:waldeShuffle 1.3s ease-in-out infinite;animation-delay:-0.65s;"></rect>
-              </g>
-            </svg>
-          </div>
-        </div>
+        <div class="marquee" aria-hidden="true"><div class="marquee-track"><span>Siemens S7-1500</span><span>TIA Portal</span><span>Schneider Modicon</span><span>Danfoss PLUS+1</span><span>Modbus TCP/RTU</span><span>PROFINET</span><span>Profibus DP</span><span>OPC UA</span><span>CAN / J1939</span><span>IEC 61131-3</span><span>SwiftUI</span><span>AI / LLM</span><span>Siemens S7-1500</span><span>TIA Portal</span><span>Schneider Modicon</span><span>Danfoss PLUS+1</span><span>Modbus TCP/RTU</span><span>PROFINET</span><span>Profibus DP</span><span>OPC UA</span><span>CAN / J1939</span><span>IEC 61131-3</span><span>SwiftUI</span><span>AI / LLM</span></div></div>
       </div>
     </div>
   </section>
@@ -290,7 +568,7 @@ footer { border-top: 1px solid rgba(255,255,255,0.1); position: relative; z-inde
           <p class="eyebrow" data-i18n="omEyebrow">Om</p>
           <h2 class="section-title" style="margin:0;" data-i18n="omTitle">Ingeniørarbeid i grensesnittet mellom fagene</h2>
         </div>
-        <div>
+        <div class="om-copy">
           <p data-i18n="omP1">Walde Automation er et enkeltpersonforetak drevet av Mikael Walde, med spesialkompetanse innen industriell automasjon og systemintegrasjon. Arbeidet ligger i grensesnittene mellom mekanikk, elektro, programvare, kommunikasjon og styring — der de vanskeligste og mest verdifulle integrasjonsutfordringene løses.</p>
           <p data-i18n="omP2">Fokus på edge-cases, feilmodus og vedlikeholdbarhet gir systemer som ikke bare virker, men som oppfører seg forutsigbart og trygt under både normal drift og unormale forhold.</p>
         </div>
@@ -302,43 +580,31 @@ footer { border-top: 1px solid rgba(255,255,255,0.1); position: relative; z-inde
     <div class="wrap">
       <p class="eyebrow" data-i18n="kompEyebrow">Teknologistack</p>
       <h2 class="section-title" data-i18n="kompTitle">Verktøy, plattformer og språk</h2>
-      <div class="komp-grid">
-        <article class="glass komp-card">
+      <div class="glass stack">
+        <div class="stack-row">
           <h3>Schneider Electric</h3>
-          <div class="chip-row">
-            <span class="chip">Modicon M340</span><span class="chip">Control Expert</span><span class="chip">Modbus</span>
-          </div>
-        </article>
-        <article class="glass komp-card">
+          <div class="chip-row"><span class="chip">Modicon M340</span><span class="chip">Control Expert</span><span class="chip">Modbus</span></div>
+        </div>
+        <div class="stack-row">
           <h3>Siemens</h3>
-          <div class="chip-row">
-            <span class="chip">S7-1200 / 1500</span><span class="chip">TIA Portal</span><span class="chip">SCL</span><span class="chip">OPC UA</span>
-          </div>
-        </article>
-        <article class="glass komp-card">
+          <div class="chip-row"><span class="chip">S7-1200 / 1500</span><span class="chip">TIA Portal</span><span class="chip">SCL</span><span class="chip">OPC UA</span></div>
+        </div>
+        <div class="stack-row">
           <h3>Danfoss</h3>
-          <div class="chip-row">
-            <span class="chip">PLUS+1 GUIDE</span><span class="chip">Mobile controllers</span><span class="chip">CAN</span>
-          </div>
-        </article>
-        <article class="glass komp-card">
+          <div class="chip-row"><span class="chip">PLUS+1 GUIDE</span><span class="chip">Mobile controllers</span><span class="chip">CAN</span></div>
+        </div>
+        <div class="stack-row">
           <h3>EOTE</h3>
-          <div class="chip-row">
-            <span class="chip" data-i18n="chipHmi">HMI-paneler</span><span class="chip" data-i18n="chipOperatorPanel">Operatørgrensesnitt</span>
-          </div>
-        </article>
-        <article class="glass komp-card">
+          <div class="chip-row"><span class="chip" data-i18n="chipHmi">HMI-paneler</span><span class="chip" data-i18n="chipOperatorPanel">Operatørgrensesnitt</span></div>
+        </div>
+        <div class="stack-row">
           <h3 data-i18n="langCardTitle">Programmeringsspråk &amp; standarder</h3>
-          <div class="chip-row">
-            <span class="chip">Structured Text</span><span class="chip">IEC 61131-3</span><span class="chip">Ladder / FBD</span><span class="chip">SCL</span><span class="chip">Swift</span><span class="chip">JavaScript</span>
-          </div>
-        </article>
-        <article class="glass komp-card">
+          <div class="chip-row"><span class="chip">Structured Text</span><span class="chip">IEC 61131-3</span><span class="chip">Ladder / FBD</span><span class="chip">SCL</span><span class="chip">Swift</span><span class="chip">JavaScript</span></div>
+        </div>
+        <div class="stack-row">
           <h3 data-i18n="appCardTitle">App, web &amp; AI</h3>
-          <div class="chip-row">
-            <span class="chip">SwiftUI</span><span class="chip">SwiftData</span><span class="chip">CloudKit</span><span class="chip">Firebase</span><span class="chip">AI / LLM</span><span class="chip">HTML / CSS / JS</span>
-          </div>
-        </article>
+          <div class="chip-row"><span class="chip">SwiftUI</span><span class="chip">SwiftData</span><span class="chip">CloudKit</span><span class="chip">Firebase</span><span class="chip">AI / LLM</span><span class="chip">HTML / CSS / JS</span></div>
+        </div>
       </div>
     </div>
   </section>
@@ -364,106 +630,180 @@ footer { border-top: 1px solid rgba(255,255,255,0.1); position: relative; z-inde
           </div>
         </article>
 
-        <div class="diag-grid">
-
-          <article class="glass diag-card">
-            <div class="diag-visual">
-              <div style="position:absolute;top:12px;left:50%;transform:translateX(-50%);width:60px;height:30px;display:flex;align-items:center;justify-content:center;font-family:ui-monospace,monospace;font-size:12px;font-weight:600;color:#E7F0EA;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.4);border-radius:5px;">PLC</div>
-              <div style="position:absolute;top:42px;left:50%;transform:translateX(-50%);width:2px;height:20px;background:rgba(255,255,255,0.28);"></div>
-              <div style="position:absolute;top:42px;left:50%;margin-left:-3px;width:6px;height:6px;background:#E7F0EA;border-radius:1px;animation:busTrunk 2s linear infinite;"></div>
-              <div style="position:absolute;top:62px;left:16%;right:16%;height:2px;background:rgba(255,255,255,0.28);"></div>
-              <div style="position:absolute;top:62px;left:16%;width:0;color:#6FE0A0;">
-                <div style="position:absolute;top:0;left:-1px;width:2px;height:26px;background:#6FE0A0;"></div>
-                <div style="position:absolute;top:0;left:-3px;width:6px;height:6px;background:#6FE0A0;border-radius:1px;animation:branchFlow 2s linear infinite;"></div>
-                <div style="position:absolute;top:26px;left:-38px;width:76px;height:26px;display:flex;align-items:center;justify-content:center;font-family:ui-monospace,monospace;font-size:8.5px;letter-spacing:0.1em;background:rgba(111,224,160,0.08);border:1px solid #6FE0A0;border-radius:4px;animation:devGlow 2s ease-in-out infinite;">PROFIBUS</div>
-              </div>
-              <div style="position:absolute;top:62px;left:50%;width:0;color:#C9A6FF;">
-                <div style="position:absolute;top:0;left:-1px;width:2px;height:26px;background:#C9A6FF;"></div>
-                <div style="position:absolute;top:0;left:-3px;width:6px;height:6px;background:#C9A6FF;border-radius:1px;animation:branchFlow 2s linear infinite;"></div>
-                <div style="position:absolute;top:26px;left:-38px;width:76px;height:26px;display:flex;align-items:center;justify-content:center;font-family:ui-monospace,monospace;font-size:8.5px;letter-spacing:0.1em;background:rgba(201,166,255,0.08);border:1px solid #C9A6FF;border-radius:4px;animation:devGlow 2s ease-in-out infinite;">CAN&nbsp;BUS</div>
-              </div>
-              <div style="position:absolute;top:62px;left:84%;width:0;color:#9FB0A6;">
-                <div style="position:absolute;top:0;left:-1px;width:2px;height:26px;background:#9FB0A6;"></div>
-                <div style="position:absolute;top:0;left:-3px;width:6px;height:6px;background:#9FB0A6;border-radius:1px;animation:branchFlow 2s linear infinite;"></div>
-                <div style="position:absolute;top:26px;left:-38px;width:76px;height:26px;display:flex;align-items:center;justify-content:center;font-family:ui-monospace,monospace;font-size:8.5px;letter-spacing:0.1em;background:rgba(159,176,166,0.1);border:1px solid #9FB0A6;border-radius:4px;animation:devGlow 2s ease-in-out infinite;">MODBUS</div>
-              </div>
+        <article class="glass wide comm-card">
+          <div class="comm3d" id="comm3d" aria-label="3D-modell som kan roteres: PLC-er koblet til feltsensorer, PROFIBUS DP, og en frekvensomformer via Modbus TCP, med fjerntilgang via 4G-ruter og sky">
+            <div class="comm3d-fallback" aria-hidden="true">
+                <div style="position:absolute;top:12px;left:50%;transform:translateX(-50%);width:60px;height:30px;display:flex;align-items:center;justify-content:center;font-family:ui-monospace,monospace;font-size:12px;font-weight:600;color:#E4E4E7;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.4);border-radius:5px;">PLC</div>
+                <div style="position:absolute;top:42px;left:50%;transform:translateX(-50%);width:2px;height:20px;background:rgba(255,255,255,0.28);"></div>
+                <div style="position:absolute;top:42px;left:50%;margin-left:-3px;width:6px;height:6px;background:#E4E4E7;border-radius:1px;animation:busTrunk 2s linear infinite;"></div>
+                <div style="position:absolute;top:62px;left:16%;right:16%;height:2px;background:rgba(255,255,255,0.28);"></div>
+                <div style="position:absolute;top:62px;left:16%;width:0;color:var(--accent);">
+                  <div style="position:absolute;top:0;left:-1px;width:2px;height:26px;background:var(--accent);"></div>
+                  <div style="position:absolute;top:0;left:-3px;width:6px;height:6px;background:var(--accent);border-radius:1px;animation:branchFlow 2s linear infinite;"></div>
+                  <div style="position:absolute;top:26px;left:-38px;width:76px;height:26px;display:flex;align-items:center;justify-content:center;font-family:ui-monospace,monospace;font-size:8.5px;letter-spacing:0.1em;background:color-mix(in srgb, var(--accent) 8%, transparent);border:1px solid var(--accent);border-radius:4px;animation:devGlow 2s ease-in-out infinite;">PROFIBUS</div>
+                </div>
+                <div style="position:absolute;top:62px;left:50%;width:0;color:#C9A6FF;">
+                  <div style="position:absolute;top:0;left:-1px;width:2px;height:26px;background:#C9A6FF;"></div>
+                  <div style="position:absolute;top:0;left:-3px;width:6px;height:6px;background:#C9A6FF;border-radius:1px;animation:branchFlow 2s linear infinite;"></div>
+                  <div style="position:absolute;top:26px;left:-38px;width:76px;height:26px;display:flex;align-items:center;justify-content:center;font-family:ui-monospace,monospace;font-size:8.5px;letter-spacing:0.1em;background:rgba(201,166,255,0.08);border:1px solid #C9A6FF;border-radius:4px;animation:devGlow 2s ease-in-out infinite;">CAN&nbsp;BUS</div>
+                </div>
+                <div style="position:absolute;top:62px;left:84%;width:0;color:#A1A1AA;">
+                  <div style="position:absolute;top:0;left:-1px;width:2px;height:26px;background:#A1A1AA;"></div>
+                  <div style="position:absolute;top:0;left:-3px;width:6px;height:6px;background:#A1A1AA;border-radius:1px;animation:branchFlow 2s linear infinite;"></div>
+                  <div style="position:absolute;top:26px;left:-38px;width:76px;height:26px;display:flex;align-items:center;justify-content:center;font-family:ui-monospace,monospace;font-size:8.5px;letter-spacing:0.1em;background:rgba(161,161,170,0.08);border:1px solid #A1A1AA;border-radius:4px;animation:devGlow 2s ease-in-out infinite;">MODBUS</div>
+                </div>
             </div>
-            <div class="diag-body">
+            <div class="comm3d-views" role="group" aria-label="Visning">
+              <button type="button" class="on" data-view="field" aria-pressed="true"><span data-i18n="viewField">Feltnivå</span></button>
+              <button type="button" data-view="ot" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.5 19a4.5 4.5 0 0 0 .5-8.97A6 6 0 0 0 6.34 9.5 4.75 4.75 0 0 0 6.75 19z"/></svg><span data-i18n="viewOt">Sky &amp; fjerntilgang</span></button>
+            </div>
+            <span class="comm3d-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 13.5A8.5 8.5 0 1 1 17.6 6"/><path d="M20.5 3.5v4.2h-4.2"/><path d="M12 8.2l3.3 1.9v3.8L12 15.8l-3.3-1.9v-3.8z"/><path d="M8.7 10.1L12 12l3.3-1.9M12 12v3.8"/></svg>3D</span>
+            <span class="comm3d-hint" data-i18n="dragHint">Dra for å rotere</span>
+          </div>
+          <div class="comm-text">
+            <div class="comm-pane on" data-pane="field">
               <p class="tj-num">02</p>
               <h3 class="tj-title" data-i18n="svc1Title">Industriell kommunikasjon</h3>
               <p class="tj-desc" data-i18n="svc1Desc">Modbus TCP/RTU, PROFINET, Profibus DP, OPC UA, S7 og CAN / J1939 — pålitelig kommunikasjon mellom feltutstyr og styringssystemer.</p>
+              <ul class="comm-legend">
+                <li><i class="lg-pb"></i>PROFIBUS DP</li>
+                <li><i class="lg-eth"></i>MODBUS TCP</li>
+                <li><i class="lg-field"></i><span data-i18n="legendField">Feltkabler</span></li>
+                <li><i class="lg-motor"></i><span data-i18n="legendMotor">Motorkabel</span></li>
+              </ul>
             </div>
-          </article>
-
-          <article class="glass diag-card">
-            <div class="diag-visual">
-              <div style="position:absolute;top:56px;left:14px;width:92px;height:40px;display:flex;align-items:center;justify-content:center;color:#E7F0EA;font-family:ui-monospace,monospace;font-size:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.35);border-radius:6px;" data-i18n="diagOtNet">OT-nett</div>
-              <div style="position:absolute;top:56px;right:14px;width:92px;height:40px;display:flex;align-items:center;justify-content:center;text-align:center;color:#E7F0EA;font-family:ui-monospace,monospace;font-size:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.35);border-radius:6px;" data-i18n="diagRemote">Fjerntilgang</div>
-              <div style="position:absolute;top:52px;left:112px;right:112px;height:48px;">
-                <div style="position:absolute;top:14px;left:0;right:0;height:2px;background:repeating-linear-gradient(90deg,#6FE0A0 0 7px,transparent 7px 14px);animation:vpnDash 0.9s linear infinite;"></div>
-                <div style="position:absolute;top:32px;left:0;right:0;height:2px;background:repeating-linear-gradient(90deg,#6FE0A0 0 7px,transparent 7px 14px);animation:vpnDash 0.9s linear infinite reverse;"></div>
-                <div style="position:absolute;top:11px;width:8px;height:8px;background:#6FE0A0;border-radius:1px;animation:vpnPacket 2.2s linear infinite;"></div>
-                <div style="position:absolute;top:29px;width:8px;height:8px;background:#9BF0BE;border-radius:1px;animation:vpnPacket 2.2s linear infinite;animation-delay:-1.1s;"></div>
-              </div>
-              <div style="position:absolute;top:44px;left:50%;transform:translateX(-50%);animation:vpnLock 1.8s ease-in-out infinite;">
-                <svg width="20" height="22" viewBox="0 0 10 11" shape-rendering="crispEdges"><g fill="#6FE0A0"><rect x="2" y="1" width="1" height="3"></rect><rect x="7" y="1" width="1" height="3"></rect><rect x="3" y="0" width="4" height="1"></rect><rect x="1" y="4" width="8" height="6"></rect></g><rect x="4" y="6" width="2" height="3" fill="#0A1A11"></rect></svg>
-              </div>
-              <div style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-family:ui-monospace,monospace;font-size:8.5px;letter-spacing:0.1em;color:#8FA096;" data-i18n="diagTunnel">KRYPTERT VPN-TUNNEL</div>
-            </div>
-            <div class="diag-body">
-              <p class="tj-num">03</p>
+            <div class="comm-pane" data-pane="ot">
+              <p class="tj-num">02</p>
               <h3 class="tj-title" data-i18n="svc2Title">Systemintegrasjon &amp; OT</h3>
               <p class="tj-desc" data-i18n="svc2Desc">OT-arkitektur, nettverkssegmentering, VPN og fjern-idriftsettelse — mekanikk, elektro, programvare og nettverk satt sammen til én robust helhet.</p>
+              <ul class="comm-legend">
+                <li><i class="lg-vpn"></i><span data-i18n="legendVpn">VPN-tunnel</span></li>
+                <li><i class="lg-eth"></i>Ethernet</li>
+              </ul>
             </div>
-          </article>
+          </div>
+        </article>
 
-          <article class="glass diag-card">
-            <div class="diag-visual">
-              <div style="position:absolute;top:22px;left:50%;transform:translateX(-50%);width:214px;height:110px;">
-                <div style="position:absolute;top:0;left:2px;font-family:ui-monospace,monospace;font-size:9px;color:#8FA096;">24V DC</div>
-                <div style="position:absolute;top:22px;left:2px;width:58px;height:28px;display:flex;align-items:center;justify-content:center;font-family:ui-monospace,monospace;font-size:10px;color:#6FE0A0;background:rgba(111,224,160,0.08);border:1px solid #6FE0A0;border-radius:4px;animation:k04test 3s ease-in-out infinite;">I/O</div>
-                <div style="position:absolute;top:35px;left:60px;width:86px;height:2px;background:rgba(255,255,255,0.25);"></div>
-                <div style="position:absolute;top:32px;left:62px;width:7px;height:7px;background:#6FE0A0;border-radius:1px;animation:k04flow 3s ease-in-out infinite;"></div>
-                <div style="position:absolute;top:22px;left:148px;width:64px;height:28px;display:flex;align-items:center;justify-content:center;gap:6px;font-family:ui-monospace,monospace;font-size:10px;color:#E7F0EA;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.3);border-radius:4px;animation:k04coil 3s ease-in-out infinite;"><span style="width:12px;height:12px;border:2px solid #6FE0A0;border-radius:50%;"></span>K1</div>
-                <div style="position:absolute;top:86px;left:2px;font-family:ui-monospace,monospace;font-size:9px;color:#8FA096;">K1</div>
-                <div style="position:absolute;top:80px;left:28px;width:22px;height:2px;background:rgba(255,255,255,0.25);"></div>
-                <div style="position:absolute;top:81px;left:50px;width:28px;height:2px;background:#6FE0A0;transform-origin:left center;animation:k04contact 3s ease-in-out infinite;"></div>
-                <div style="position:absolute;top:80px;left:80px;width:70px;height:2px;background:rgba(255,255,255,0.25);"></div>
-                <div style="position:absolute;top:68px;left:154px;width:26px;height:26px;border-radius:50%;background:radial-gradient(circle,#F2B705,#8A6404);border:1px solid #F2B705;animation:k04lamp 3s ease-in-out infinite;"></div>
-                <div style="position:absolute;top:98px;left:140px;font-family:ui-monospace,monospace;font-size:8.5px;color:#8FA096;" data-i18n="diagOutput">Utgang / lampe</div>
-              </div>
-            </div>
-            <div class="diag-body">
-              <p class="tj-num">04</p>
-              <h3 class="tj-title" data-i18n="svc3Title">Elektroteknisk rådgivning</h3>
-              <p class="tj-desc" data-i18n="svc3Desc">Rådgivning innen elektroteknikk og styringssystemer, inkludert programvare og systemforståelse for elektriske spesialkjøretøy.</p>
-            </div>
-          </article>
-
-          <article class="glass diag-card">
-            <div class="diag-visual">
-              <div style="position:absolute;inset:14px;border-radius:8px;background:rgba(6,12,9,0.6);border:1px solid rgba(255,255,255,0.12);overflow:hidden;display:flex;flex-direction:column;">
-                <div style="display:flex;align-items:center;gap:6px;padding:7px 10px;border-bottom:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);">
-                  <span style="width:8px;height:8px;border-radius:50%;background:#FF6058;"></span>
-                  <span style="width:8px;height:8px;border-radius:50%;background:#FFBD2E;"></span>
-                  <span style="width:8px;height:8px;border-radius:50%;background:#28C840;"></span>
-                  <span style="margin-left:5px;font-family:ui-monospace,monospace;font-size:10px;color:#8FA096;">ContentView.swift</span>
-                </div>
-                <div id="swiftCode" style="padding:10px 12px;font-family:ui-monospace,monospace;font-size:11px;line-height:1.5;white-space:pre;color:#C7D6CC;"></div>
-              </div>
-            </div>
-            <div class="diag-body">
-              <p class="tj-num">05</p>
-              <h3 class="tj-title" data-i18n="svc4Title">App- &amp; programvareutvikling</h3>
-              <p class="tj-desc" data-i18n="svc4Desc">Moderne Apple-apper i Swift &amp; SwiftUI (App Store) — en sjelden kombinasjon av OT-kompetanse og moderne programvareutvikling.</p>
-            </div>
-          </article>
-
-        </div>
+        <article class="glass wide elec-card">
+          <div class="schem-wrap">
+            <svg class="schem" viewBox="0 0 520 300" role="img" aria-label="Animert koblingsskjema: 3-fase 400 V inn, motorvernbryter Q1 som slår på motor M1, 24 V DC strømforsyning G1, PLS A1 og PNP-sensor B1 på inngang I0.0">
+              <text class="f ttl" x="40" y="20" style="--t:.1s">3~ 400 V AC · 50 Hz</text>
+              <text class="f" x="12" y="39" style="--t:0.2s">L1</text>
+              <path class="w ph" pathLength="1" style="--t:0.0s;--dur:1.1s" d="M40 36H506"/>
+              <text class="f" x="12" y="51" style="--t:0.3s">L2</text>
+              <path class="w ph" pathLength="1" style="--t:0.12s;--dur:1.1s" d="M40 48H506"/>
+              <text class="f" x="12" y="63" style="--t:0.4s">L3</text>
+              <path class="w ph" pathLength="1" style="--t:0.24s;--dur:1.1s" d="M40 60H506"/>
+              <text class="f" x="12" y="75" style="--t:0.5s">N</text>
+              <path class="w n" pathLength="1" style="--t:0.36s;--dur:1.1s" d="M40 72H506"/>
+              <text class="f" x="12" y="87" style="--t:0.6s">PE</text>
+              <path class="w pe" pathLength="1" style="--t:0.48s;--dur:1.1s" d="M40 84H506"/>
+              <g class="f" style="--t:1s"><circle class="dot" cx="78" cy="36" r="2.4"/><circle class="dot" cx="90" cy="48" r="2.4"/><circle class="dot" cx="102" cy="60" r="2.4"/><circle class="dot" cx="122" cy="84" r="2.4"/></g>
+              <path class="w ph" pathLength="1" style="--t:1.0s;--dur:0.5s" d="M78 36V102"/>
+              <path class="w ph" pathLength="1" style="--t:1.05s;--dur:0.5s" d="M90 48V102"/>
+              <path class="w ph" pathLength="1" style="--t:1.1s;--dur:0.5s" d="M102 60V102"/>
+              <path class="f qbox" style="--t:1.4s" d="M58 94h50v56h-50Z"/>
+              <path class="w sym" pathLength="1" style="--t:1.45s;--dur:0.3s" d="M75 99l6 6M81 99l-6 6"/>
+              <path class="w sym blade hot" pathLength="1" style="--t:1.55s;--dur:0.35s;transform-origin:78px 122px" d="M78 122V102"/>
+              <circle class="f dot" cx="78" cy="122" r="1.6" style="--t:1.45s"/>
+              <path class="w ph hot" pathLength="1" style="--t:1.65s;--dur:0.2s" d="M78 122V130"/>
+              <path class="w sym" pathLength="1" style="--t:1.7s;--dur:0.35s" d="M74 130h8v12h-8Z"/>
+              <path class="w sym" pathLength="1" style="--t:1.8s;--dur:0.2s" d="M76 139l2-6l2 6"/>
+              <path class="w sym" pathLength="1" style="--t:1.5s;--dur:0.3s" d="M87 99l6 6M93 99l-6 6"/>
+              <path class="w sym blade hot" pathLength="1" style="--t:1.6s;--dur:0.35s;transform-origin:90px 122px" d="M90 122V102"/>
+              <circle class="f dot" cx="90" cy="122" r="1.6" style="--t:1.5s"/>
+              <path class="w ph hot" pathLength="1" style="--t:1.7s;--dur:0.2s" d="M90 122V130"/>
+              <path class="w sym" pathLength="1" style="--t:1.75s;--dur:0.35s" d="M86 130h8v12h-8Z"/>
+              <path class="w sym" pathLength="1" style="--t:1.85s;--dur:0.2s" d="M88 139l2-6l2 6"/>
+              <path class="w sym" pathLength="1" style="--t:1.55s;--dur:0.3s" d="M99 99l6 6M105 99l-6 6"/>
+              <path class="w sym blade hot" pathLength="1" style="--t:1.65s;--dur:0.35s;transform-origin:102px 122px" d="M102 122V102"/>
+              <circle class="f dot" cx="102" cy="122" r="1.6" style="--t:1.55s"/>
+              <path class="w ph hot" pathLength="1" style="--t:1.75s;--dur:0.2s" d="M102 122V130"/>
+              <path class="w sym" pathLength="1" style="--t:1.8s;--dur:0.35s" d="M98 130h8v12h-8Z"/>
+              <path class="w sym" pathLength="1" style="--t:1.9s;--dur:0.2s" d="M100 139l2-6l2 6"/>
+              <path class="f link" style="--t:1.8s" d="M62 112H104"/>
+              <path class="w sym" pathLength="1" style="--t:1.8s;--dur:0.3s" d="M62 107V117M59 107H65"/>
+              <text class="f tag" x="26" y="112" style="--t:1.8s">Q1</text>
+              <text class="q-off" x="26" y="125">OFF</text>
+              <text class="f on" x="26" y="125" style="--t:6.7s">ON</text>
+              <path class="w ph hot" pathLength="1" style="--t:1.9s;--dur:0.5s" d="M78 142V206"/>
+              <path class="w ph hot" pathLength="1" style="--t:1.95s;--dur:0.5s" d="M90 142V202"/>
+              <path class="w ph hot" pathLength="1" style="--t:2.0s;--dur:0.5s" d="M102 142V206"/>
+              <path class="w pe" pathLength="1" style="--t:2.0s;--dur:0.8s" d="M122 84V222H110"/>
+              <path class="w sym hot" pathLength="1" style="--t:2.2s;--dur:0.7s" d="M70 222a20 20 0 1 0 40 0a20 20 0 1 0 -40 0"/>
+              <circle class="f rotor" cx="90" cy="222" r="26" style="--t:6.8s"/>
+              <text class="f big" x="90" y="222" text-anchor="middle" style="--t:2.6s">M</text>
+              <text class="f" x="90" y="234" text-anchor="middle" style="--t:2.6s">3~</text>
+              <text class="f tag" x="34" y="226" style="--t:2.6s">M1</text>
+              <g class="f" style="--t:2.3s"><circle class="dot" cx="196" cy="36" r="2.4"/><circle class="dot" cx="208" cy="72" r="2.4"/></g>
+              <path class="w ph" pathLength="1" style="--t:2.3s;--dur:0.4s" d="M196 36V98"/>
+              <path class="w n" pathLength="1" style="--t:2.4s;--dur:0.6s" d="M208 72V142"/>
+              <path class="w sym" pathLength="1" style="--t:2.7s;--dur:0.5s" d="M192 98h8v22h-8Z"/>
+              <path class="w ph" pathLength="1" style="--t:2.75s;--dur:0.3s" d="M196 98V120"/>
+              <path class="w ph" pathLength="1" style="--t:2.9s;--dur:0.3s" d="M196 120V142"/>
+              <text class="f tag" x="170" y="113" style="--t:2.9s">F1</text>
+              <path class="w sym" pathLength="1" style="--t:3.1s;--dur:0.8s" d="M182 142h60v48h-60Z"/>
+              <path class="w sym" pathLength="1" style="--t:3.4s;--dur:0.4s" d="M182 190L242 142"/>
+              <text class="f big" x="190" y="160" style="--t:3.6s">~</text>
+              <text class="f big" x="226" y="186" style="--t:3.6s">=</text>
+              <text class="f tag" x="156" y="170" style="--t:3.6s">G1</text>
+              <text class="f sm" x="250" y="170" style="--t:3.8s">→ 24 V DC</text>
+              <path class="w p24" pathLength="1" style="--t:3.7s;--dur:0.3s" d="M196 190V210"/>
+              <path class="w m0" pathLength="1" style="--t:3.75s;--dur:0.3s" d="M230 190V224"/>
+              <path class="w p24" pathLength="1" style="--t:4.0s;--dur:0.9s" d="M196 210H506"/>
+              <path class="w m0" pathLength="1" style="--t:4.1s;--dur:0.9s" d="M230 224H506"/>
+              <text class="f t24" x="256" y="206" style="--t:4.4s">+24 V</text>
+              <text class="f t0" x="256" y="237" style="--t:4.4s">0 V</text>
+              <path class="w sym" pathLength="1" style="--t:4.5s;--dur:0.9s" d="M316 112h104v64h-104Z"/>
+              <text class="f big" x="368" y="141" text-anchor="middle" style="--t:4.9s">PLC</text>
+              <text class="f tag" x="316" y="106" style="--t:4.9s">A1</text>
+              <text class="f sm" x="330" y="170" text-anchor="middle" style="--t:5s">L+</text>
+              <text class="f sm" x="346" y="170" text-anchor="middle" style="--t:5s">M</text>
+              <text class="f sm" x="400" y="170" text-anchor="middle" style="--t:5s">I0.0</text>
+              <circle class="f led" cx="400" cy="154" r="3.2" style="--t:5s"/>
+              <path class="w p24" pathLength="1" style="--t:4.9s;--dur:0.3s" d="M330 176V210"/>
+              <path class="w m0" pathLength="1" style="--t:5.0s;--dur:0.35s" d="M346 176V224"/>
+              <g class="f" style="--t:5.3s"><circle class="dot" cx="330" cy="210" r="2.4"/><circle class="dot" cx="346" cy="224" r="2.4"/></g>
+              <path class="w sym" pathLength="1" style="--t:5.3s;--dur:0.6s" d="M436 246h38v36h-38Z"/>
+              <path class="w sym" pathLength="1" style="--t:5.6s;--dur:0.4s" d="M455 252l10 12l-10 12l-10-12Z"/>
+              <path class="w p24" pathLength="1" style="--t:5.6s;--dur:0.3s" d="M446 246V210"/>
+              <path class="w m0" pathLength="1" style="--t:5.7s;--dur:0.25s" d="M464 246V224"/>
+              <g class="f" style="--t:6s"><circle class="dot" cx="446" cy="210" r="2.4"/><circle class="dot" cx="464" cy="224" r="2.4"/></g>
+              <path class="w sig" pathLength="1" style="--t:5.8s;--dur:0.7s" d="M400 176V264H436"/>
+              <path class="sig-on" d="M400 176V264H436"/>
+              <text class="f sm" x="438" y="241" style="--t:6s">BN</text>
+              <text class="f sm" x="467" y="241" style="--t:6s">BU</text>
+              <text class="f sm" x="408" y="259" style="--t:6s">BK</text>
+              <text class="f tag" x="436" y="296" style="--t:6s">B1 · PNP</text>
+              <circle class="f led" cx="468" cy="252" r="2.6" style="--t:6s"/>
+              <path class="f target" d="M482 250h10v28h-10Z" style="--t:6.4s"/>
+            </svg>
+          </div>
+          <div>
+            <p class="tj-num">03</p>
+            <h3 class="tj-title" data-i18n="svc3Title">Elektroteknisk rådgivning</h3>
+            <p class="tj-desc" data-i18n="svc3Desc">Rådgivning innen elektroteknikk og styringssystemer — fra 400 V kraftforsyning og motorkurser til 24 V styrestrøm, PLS og sensorer. Også erfaring med elektriske spesialkjøretøy.</p>
+          </div>
+        </article>
 
         <article class="glass wide">
           <div>
-            <p class="tj-num">06</p>
+            <p class="tj-num">04</p>
+            <h3 class="tj-title" data-i18n="svc4Title">App- &amp; programvareutvikling</h3>
+            <p class="tj-desc" data-i18n="svc4Desc">Moderne Apple-apper i Swift &amp; SwiftUI (App Store) — en sjelden kombinasjon av OT-kompetanse og moderne programvareutvikling.</p>
+          </div>
+          <div class="code-panel">
+            <div class="code-topbar">
+              <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+              <span class="code-label">ContentView.swift</span>
+            </div>
+            <div class="code-body code-swift" id="swiftCode"></div>
+          </div>
+        </article>
+
+        <article class="glass wide">
+          <div>
+            <p class="tj-num">05</p>
             <h3 class="tj-title" data-i18n="svc5Title">Nettsider &amp; AI-integrasjon</h3>
             <p class="tj-desc" data-i18n="svc5Desc">Utvikling av nettsider og AI-integrasjoner for bedrifter — for å automatisere utvalgte oppgaver og arbeidsflyter.</p>
           </div>
@@ -471,11 +811,11 @@ footer { border-top: 1px solid rgba(255,255,255,0.1); position: relative; z-inde
             <div class="code-topbar">
               <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
               <span class="code-label" style="display:inline-flex;align-items:center;gap:6px;">
-                <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#6FE0A0;box-shadow:0 0 8px #6FE0A0;"></span>AI
+                <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);"></span>AI
               </span>
             </div>
             <div class="ai-body">
-              <span style="color:#6FE0A0;margin-right:8px;">❯</span><span id="aiText" style="color:#E7F0EA;"></span><span class="caret"></span>
+              <span style="color:var(--accent);margin-right:8px;">❯</span><span id="aiText" style="color:#E4E4E7;"></span><span class="caret"></span>
             </div>
           </div>
         </article>
@@ -531,7 +871,7 @@ footer { border-top: 1px solid rgba(255,255,255,0.1); position: relative; z-inde
               <label for="message" data-i18n="labelMelding">Melding</label>
               <textarea id="message" name="message" rows="5"></textarea>
             </div>
-            <button type="submit" class="form-submit" data-i18n="sendBtn">Send melding</button>
+            <button type="submit" class="form-submit"><span data-i18n="sendBtn">Send melding</span><span class="arr" aria-hidden="true">→</span></button>
             <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
             <p class="form-privacy">
               <span data-i18n="privacy">Opplysningene brukes kun for å besvare din henvendelse og lagres ikke utover det. Les mer i</span>
@@ -581,7 +921,7 @@ const COPY = {
     navOm: 'Om', navKompetanse: 'Kompetanse', navTjenester: 'Tjenester', navProsjekter: 'Prosjekter',
     cta: 'Ta kontakt', ctaSecondary: 'Se tjenester',
     heroEyebrow: 'Automasjon · Systemintegrasjon · Elektroteknikk',
-    heroTitle: 'Systemer som holder industrien i drift',
+    heroTitleA: 'Automasjon tilpasset', heroTitleB: 'dine behov',
     heroLead: 'Walde Automation leverer automasjon, systemintegrasjon og elektroteknisk rådgivning — fra PLC-programmering og industriell kommunikasjon til programvareutvikling.',
     omEyebrow: 'Om',
     omTitle: 'Ingeniørarbeid i grensesnittet mellom fagene',
@@ -594,11 +934,14 @@ const COPY = {
     svc0Title: 'PLC-programmering', svc0Desc: 'Utvikling, feilsøking og idriftsettelse av PLC-programvare på Schneider, Siemens og Danfoss — med tilstandsmaskiner, feilhåndtering, interlocks og teknisk dokumentasjon.',
     svc1Title: 'Industriell kommunikasjon', svc1Desc: 'Modbus TCP/RTU, PROFINET, Profibus DP, OPC UA, S7 og CAN / J1939 — pålitelig kommunikasjon mellom feltutstyr og styringssystemer.',
     svc2Title: 'Systemintegrasjon & OT', svc2Desc: 'OT-arkitektur, nettverkssegmentering, VPN og fjern-idriftsettelse — mekanikk, elektro, programvare og nettverk satt sammen til én robust helhet.',
-    svc3Title: 'Elektroteknisk rådgivning', svc3Desc: 'Rådgivning innen elektroteknikk og styringssystemer, inkludert programvare og systemforståelse for elektriske spesialkjøretøy.',
+    svc3Title: 'Elektroteknisk rådgivning', svc3Desc: 'Rådgivning innen elektroteknikk og styringssystemer — fra 400 V kraftforsyning og motorkurser til 24 V styrestrøm, PLS og sensorer. Også erfaring med elektriske spesialkjøretøy.',
     svc4Title: 'App- & programvareutvikling', svc4Desc: 'Moderne Apple-apper i Swift & SwiftUI (App Store) — en sjelden kombinasjon av OT-kompetanse og moderne programvareutvikling.',
     svc5Title: 'Nettsider & AI-integrasjon', svc5Desc: 'Utvikling av nettsider og AI-integrasjoner for bedrifter — for å automatisere utvalgte oppgaver og arbeidsflyter.',
     aiTasks: ['les gjennom kundetilbakemeldinger', 'opprett support-tickets automatisk', 'kjør hver tirsdag kl. 14:00', 'oppsummer ukens henvendelser', 'kategoriser innkommende e-post'],
-    diagOtNet: 'OT-nett', diagRemote: 'Fjerntilgang', diagTunnel: 'KRYPTERT VPN-TUNNEL', diagOutput: 'Utgang / lampe',
+    dragHint: 'Dra for å rotere', legendField: 'Feltkabler', legendVpn: 'VPN-tunnel', legendMotor: 'Motorkabel',
+    viewField: 'Feltnivå', viewOt: 'Sky & fjerntilgang',
+    tagRouter: '4G-ruter / VPN', tagVpn: 'VPN · 4G', tagCloud: 'Sky', tagServer: 'SCADA-server', tagRemote: 'Fjerntilgang',
+   
     prosjEyebrow: 'Referanseprosjekter', prosjTitle: 'Utvalgte prosjekter',
     projPhoto: 'Prosjektbilde',
     proj1Meta: 'Prosessindustri · Årstall', proj1Title: 'Pumpestyring',
@@ -620,7 +963,7 @@ const COPY = {
     navOm: 'About', navKompetanse: 'Expertise', navTjenester: 'Services', navProsjekter: 'Projects',
     cta: 'Get in touch', ctaSecondary: 'View services',
     heroEyebrow: 'Automation · Systems Integration · Electrical Engineering',
-    heroTitle: 'Systems that keep industry running',
+    heroTitleA: 'Automation tailored', heroTitleB: 'to your needs',
     heroLead: 'Walde Automation delivers automation, systems integration and electrical engineering consultation — from PLC programming and industrial communication to software development.',
     omEyebrow: 'About',
     omTitle: 'Engineering at the interfaces between disciplines',
@@ -633,11 +976,14 @@ const COPY = {
     svc0Title: 'PLC Programming', svc0Desc: 'Development, troubleshooting and commissioning of PLC software on Schneider, Siemens and Danfoss — with state machines, fault handling, interlocks and technical documentation.',
     svc1Title: 'Industrial Communication', svc1Desc: 'Modbus TCP/RTU, PROFINET, Profibus DP, OPC UA, S7 and CAN / J1939 — reliable communication between field devices and control systems.',
     svc2Title: 'Systems Integration & OT', svc2Desc: 'OT architecture, network segmentation, VPN and remote commissioning — mechanical, electrical, software and network brought together into one robust whole.',
-    svc3Title: 'Electrical Engineering Consultation', svc3Desc: 'Consultation on electrical engineering and control systems, including software and systems understanding for electric special-purpose vehicles.',
+    svc3Title: 'Electrical Engineering Consultation', svc3Desc: 'Consulting in electrical engineering and control systems — from 400 V power supply and motor circuits to 24 V control power, PLCs and sensors. Also experience with electric special-purpose vehicles.',
     svc4Title: 'App & Software Development', svc4Desc: 'Modern Apple apps in Swift & SwiftUI (App Store) — a rare combination of OT expertise and modern software development.',
     svc5Title: 'Websites & AI Integration', svc5Desc: 'Building websites and AI integrations for businesses — to automate selected tasks and workflows.',
     aiTasks: ['read through customer feedback', 'create support tickets automatically', 'run every Tuesday at 2:00 PM', 'summarise this week\u2019s enquiries', 'categorise incoming email'],
-    diagOtNet: 'OT network', diagRemote: 'Remote access', diagTunnel: 'ENCRYPTED VPN TUNNEL', diagOutput: 'Output / lamp',
+    dragHint: 'Drag to rotate', legendField: 'Field wiring', legendVpn: 'VPN tunnel', legendMotor: 'Motor cable',
+    viewField: 'Field level', viewOt: 'Cloud & remote access',
+    tagRouter: '4G router / VPN', tagVpn: 'VPN · 4G', tagCloud: 'Cloud', tagServer: 'SCADA server', tagRemote: 'Remote access',
+   
     prosjEyebrow: 'Reference projects', prosjTitle: 'Selected projects',
     projPhoto: 'Project image',
     proj1Meta: 'Process industry · Year', proj1Title: 'Pump control',
@@ -733,15 +1079,15 @@ function showStatus(msg, type) {
 
 // PLC code typing animation
 const plcSegs = [
-  { c: '#7FC8FF', t: 'FUNCTION' }, { c: '#E7F0EA', t: ' StartPump' }, { c: '#8FA096', t: ' : ' }, { c: '#6FE0A0', t: 'BOOL' }, { c: '#E7F0EA', t: '\n' },
-  { c: '#7FC8FF', t: 'VAR_INPUT' }, { c: '#E7F0EA', t: '\n    ' },
-  { c: '#E7F0EA', t: 'Level, SetPoint' }, { c: '#8FA096', t: ' : ' }, { c: '#6FE0A0', t: 'REAL' }, { c: '#8FA096', t: ';' }, { c: '#E7F0EA', t: '\n' },
-  { c: '#7FC8FF', t: 'END_VAR' }, { c: '#E7F0EA', t: '\n\n' },
-  { c: '#C9A6FF', t: 'IF' }, { c: '#E7F0EA', t: ' Level ' }, { c: '#8FA096', t: '<' }, { c: '#E7F0EA', t: ' SetPoint ' }, { c: '#C9A6FF', t: 'THEN' }, { c: '#E7F0EA', t: '\n    ' },
-  { c: '#E7F0EA', t: 'StartPump' }, { c: '#8FA096', t: ' := ' }, { c: '#F4B860', t: 'TRUE' }, { c: '#8FA096', t: ';' }, { c: '#E7F0EA', t: '\n' },
-  { c: '#C9A6FF', t: 'ELSE' }, { c: '#E7F0EA', t: '\n    ' },
-  { c: '#E7F0EA', t: 'StartPump' }, { c: '#8FA096', t: ' := ' }, { c: '#F4B860', t: 'FALSE' }, { c: '#8FA096', t: ';' }, { c: '#E7F0EA', t: '\n' },
-  { c: '#C9A6FF', t: 'END_IF' }, { c: '#8FA096', t: ';' }
+  { c: '#7FC8FF', t: 'FUNCTION' }, { c: '#E4E4E7', t: ' StartPump' }, { c: '#71717A', t: ' : ' }, { c: 'var(--accent)', t: 'BOOL' }, { c: '#E4E4E7', t: '\n' },
+  { c: '#7FC8FF', t: 'VAR_INPUT' }, { c: '#E4E4E7', t: '\n    ' },
+  { c: '#E4E4E7', t: 'Level, SetPoint' }, { c: '#71717A', t: ' : ' }, { c: 'var(--accent)', t: 'REAL' }, { c: '#71717A', t: ';' }, { c: '#E4E4E7', t: '\n' },
+  { c: '#7FC8FF', t: 'END_VAR' }, { c: '#E4E4E7', t: '\n\n' },
+  { c: '#C9A6FF', t: 'IF' }, { c: '#E4E4E7', t: ' Level ' }, { c: '#71717A', t: '<' }, { c: '#E4E4E7', t: ' SetPoint ' }, { c: '#C9A6FF', t: 'THEN' }, { c: '#E4E4E7', t: '\n    ' },
+  { c: '#E4E4E7', t: 'StartPump' }, { c: '#71717A', t: ' := ' }, { c: '#F4B860', t: 'TRUE' }, { c: '#71717A', t: ';' }, { c: '#E4E4E7', t: '\n' },
+  { c: '#C9A6FF', t: 'ELSE' }, { c: '#E4E4E7', t: '\n    ' },
+  { c: '#E4E4E7', t: 'StartPump' }, { c: '#71717A', t: ' := ' }, { c: '#F4B860', t: 'FALSE' }, { c: '#71717A', t: ';' }, { c: '#E4E4E7', t: '\n' },
+  { c: '#C9A6FF', t: 'END_IF' }, { c: '#71717A', t: ';' }
 ];
 function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 function buildCode(n) {
@@ -804,7 +1150,7 @@ function restartAiTyper() {
 // Swift code typing animation (once, doesn't need re-run on lang switch)
 (function startSwiftTyper() {
   const el = document.getElementById('swiftCode');
-  const K = '#C9A6FF', T = '#6FE0A0', S = '#F4B860', W = '#E7F0EA', P = '#8FA096';
+  const K = '#C9A6FF', T = 'var(--accent)', S = '#F4B860', W = '#E4E4E7', P = '#71717A';
   const segs = [
     { c: K, t: 'struct' }, { c: W, t: ' ContentView' }, { c: P, t: ': ' }, { c: T, t: 'View' }, { c: W, t: ' {' }, { c: W, t: '\n    ' },
     { c: K, t: 'var' }, { c: W, t: ' body' }, { c: P, t: ': ' }, { c: K, t: 'some' }, { c: T, t: ' View' }, { c: W, t: ' {' }, { c: W, t: '\n        ' },
@@ -840,7 +1186,734 @@ function restartAiTyper() {
   setTimeout(tick, 900);
 })();
 
+// Header background on scroll
+const headerEl = document.querySelector('header');
+function onScroll() { headerEl.classList.toggle('scrolled', window.scrollY > 12); }
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+
+// Close mobile menu after picking a link
+document.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', () => {
+  document.getElementById('mainNav').classList.remove('open');
+}));
+
+// Scroll to in-page sections ourselves, so links also work where
+// hash navigation is blocked (e.g. previews that load the page as a data: URL)
+document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+  const id = a.getAttribute('href').slice(1);
+  const target = id && document.getElementById(id);
+  if (!target) return;
+  e.preventDefault();
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  try { history.pushState(null, '', '#' + id); } catch (err) {}
+}));
+
+// Electrical drawing: draw the schematic each time it scrolls into view
+(function setupSchematic() {
+  const svg = document.querySelector('.schem');
+  if (!svg) return;
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce || !('IntersectionObserver' in window)) { svg.classList.add('go'); return; }
+  new IntersectionObserver(entries => entries.forEach(entry => {
+    if (entry.intersectionRatio >= 0.35 && !svg.classList.contains('go')) {
+      svg.classList.remove('reset');
+      svg.getBoundingClientRect();
+      svg.classList.add('go');
+    } else if (!entry.isIntersecting) {
+      svg.classList.add('reset');
+      svg.classList.remove('go');
+    }
+  }), { threshold: [0, 0.35] }).observe(svg);
+})();
+
+// 3D card: switch between field level and cloud / remote access
+(function setupCommViews() {
+  const host = document.getElementById('comm3d');
+  if (!host) return;
+  const buttons = host.querySelectorAll('.comm3d-views button');
+  buttons.forEach(btn => btn.addEventListener('click', () => {
+    const view = btn.dataset.view;
+    buttons.forEach(b => {
+      b.classList.toggle('on', b === btn);
+      b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+    });
+    document.querySelectorAll('.comm-pane').forEach(p => p.classList.toggle('on', p.dataset.pane === view));
+    host.dataset.view = view;
+    host.classList.toggle('view-ot', view === 'ot');
+    host.dispatchEvent(new CustomEvent('commview', { detail: view }));
+  }));
+})();
+
+// Pause decorative animations while they are off-screen
+(function setupPause() {
+  if (!('IntersectionObserver' in window)) return;
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(entry => entry.target.classList.toggle('offscreen', !entry.isIntersecting));
+  });
+  document.querySelectorAll('.schem-wrap, .marquee').forEach(el => io.observe(el));
+})();
+
+// Highlight the nav link for the section in view
+(function setupActiveNav() {
+  if (!('IntersectionObserver' in window)) return;
+  const links = {};
+  document.querySelectorAll('.nav-links a[href^="#"]:not(.btn-cta)').forEach(a => { links[a.getAttribute('href').slice(1)] = a; });
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      Object.values(links).forEach(l => l.classList.remove('active'));
+      const link = links[entry.target.id];
+      if (link) link.classList.add('active');
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  document.querySelectorAll('main section').forEach(sec => io.observe(sec));
+})();
+
+// Light / dark theme
+(function setupTheme() {
+  const root = document.documentElement;
+  const meta = document.querySelector('meta[name="theme-color"]');
+  const sync = () => { meta.content = root.dataset.theme === 'dark' ? '#0B0D0C' : '#F6F8F6'; };
+  sync();
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    root.classList.add('theme-anim');
+    if (next === 'dark') root.dataset.theme = 'dark'; else delete root.dataset.theme;
+    sync();
+    try { localStorage.setItem('walde-theme', next); } catch (e) {}
+    setTimeout(() => root.classList.remove('theme-anim'), 450);
+  });
+})();
+
+// Gentle fade-up as content scrolls into view
+(function setupReveal() {
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce || !('IntersectionObserver' in window)) return;
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('in');
+      io.unobserve(entry.target);
+    });
+  }, { rootMargin: '0px 0px -8% 0px' });
+  document.querySelectorAll('section:not(.hero) .eyebrow, section:not(.hero) .section-title, .om-card, .stack, .tj-grid .wide, .prosj-card, .kontakt-form-card, .kontakt-info').forEach(el => {
+    const i = Array.prototype.indexOf.call(el.parentNode.children, el);
+    el.classList.add('reveal');
+    el.style.setProperty('--d', (i % 3) * 70 + 'ms');
+    io.observe(el);
+  });
+})();
+
 applyLang(currentLang);
+</script>
+<script type="module">
+// Rotatable 3D view for "Industriell kommunikasjon" and "Systemintegrasjon & OT":
+// PLC 1 wired to field devices, PROFIBUS DP to PLC 2, Modbus TCP to PLC 3/4,
+// and PLC 2 reaching a SCADA server and a remote workstation through a 4G/VPN router.
+// Three.js is only loaded when the card gets close to the viewport;
+// if WebGL or the CDN is unavailable the flat 2D diagram stays in place.
+const host = document.getElementById('comm3d');
+if (host && 'IntersectionObserver' in window) {
+  const loader = new IntersectionObserver(entries => {
+    if (!entries.some(e => e.isIntersecting)) return;
+    loader.disconnect();
+    initComm3d(host).catch(() => {});
+  }, { rootMargin: '400px 0px' });
+  loader.observe(host);
+}
+
+async function initComm3d(host) {
+  const THREE = await import('three');
+  const { OrbitControls } = await import('three/addons/controls/OrbitControls.js');
+  const { CSS2DRenderer, CSS2DObject } = await import('three/addons/renderers/CSS2DRenderer.js');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const V = (x, y, z) => new THREE.Vector3(x, y, z);
+  const t9n = key => (typeof COPY !== 'undefined' && typeof currentLang !== 'undefined' && COPY[currentLang][key]) || key;
+
+  // Renderer, labels, scene, camera
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setClearColor(0x000000, 0);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  host.appendChild(renderer.domElement);
+
+  const labels = new CSS2DRenderer();
+  labels.domElement.className = 'comm3d-labels';
+  host.appendChild(labels.domElement);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 120);
+
+  scene.add(new THREE.HemisphereLight(0xe6efe9, 0x0b100d, 1.6));
+  const sun = new THREE.DirectionalLight(0xffffff, 2.6);
+  sun.position.set(6, 12, 7);
+  sun.castShadow = true;
+  sun.shadow.mapSize.set(2048, 2048);
+  Object.assign(sun.shadow.camera, { left: -15, right: 15, top: 15, bottom: -15, near: 1, far: 45 });
+  sun.shadow.bias = -0.0005;
+  sun.shadow.normalBias = 0.02;
+  scene.add(sun);
+
+  // Field-level objects live in their own group so the cloud view can fade them out
+  const field = new THREE.Group();
+  scene.add(field);
+
+  // Materials
+  const std = (color, metalness, roughness, extra = {}) =>
+    new THREE.MeshStandardMaterial({ color, metalness, roughness, ...extra });
+  const M = {
+    cabinet: std(0xcfd5da, 0.25, 0.55),
+    plinth: std(0x3a4148, 0.3, 0.6),
+    plate: std(0xa9b2ba, 0.5, 0.45),
+    rail: std(0x8d969e, 0.8, 0.3),
+    duct: std(0x9aa3ab, 0.1, 0.7),
+    module: std(0x2c3238, 0.2, 0.6),
+    moduleFace: std(0x3d454d, 0.1, 0.7),
+    device: std(0x2a3036, 0.3, 0.5),
+    steel: std(0xb4bcc3, 0.7, 0.3),
+    tank: std(0xc8d0d6, 0.3, 0.15, { transparent: true, opacity: 0.32, depthWrite: false }),
+    liquid: std(0x3aa0c8, 0.1, 0.2, { transparent: true, opacity: 0.55, emissive: 0x0d3a4a, emissiveIntensity: 0.4 }),
+    head: std(0xdde2e6, 0.3, 0.4),
+    flow: std(0x4f6f8a, 0.4, 0.45),
+    motor: std(0x5d6873, 0.5, 0.45),
+    motorCable: std(0xe07b39, 0.1, 0.5),
+    drive: std(0x2d343a, 0.3, 0.5),
+    tray: std(0x6f7a83, 0.6, 0.4),
+    wire: std(0x8e99a3, 0.1, 0.6),
+    profibus: std(0x4ca968, 0.1, 0.4, { emissive: 0x2f8a4f, emissiveIntensity: 0.5 }),
+    ethernet: std(0x3fa9e0, 0.1, 0.4, { emissive: 0x1b6e99, emissiveIntensity: 0.45 }),
+  };
+
+  const mesh = (geo, mat) => { const m = new THREE.Mesh(geo, mat); m.castShadow = true; m.receiveShadow = true; return m; };
+  const box = (w, h, d, mat) => mesh(new THREE.BoxGeometry(w, h, d), mat);
+  const cyl = (r, h, mat, axis = 'y', seg = 28) => {
+    const m = mesh(new THREE.CylinderGeometry(r, r, h, seg), mat);
+    if (axis === 'x') m.rotation.z = Math.PI / 2;
+    if (axis === 'z') m.rotation.x = Math.PI / 2;
+    return m;
+  };
+  const at = (obj, x, y, z) => { obj.position.set(x, y, z); return obj; };
+
+  // Floor: faded grid plus a shadow catcher
+  const gridCanvas = document.createElement('canvas');
+  gridCanvas.width = gridCanvas.height = 1024;
+  const g = gridCanvas.getContext('2d');
+  g.strokeStyle = 'rgba(160,190,172,0.4)';
+  g.lineWidth = 1.5;
+  for (let i = 0; i <= 1024; i += 32) {
+    g.beginPath(); g.moveTo(i, 0); g.lineTo(i, 1024); g.stroke();
+    g.beginPath(); g.moveTo(0, i); g.lineTo(1024, i); g.stroke();
+  }
+  g.globalCompositeOperation = 'destination-in';
+  const fade = g.createRadialGradient(512, 512, 100, 512, 512, 512);
+  fade.addColorStop(0, 'rgba(0,0,0,1)');
+  fade.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = fade;
+  g.fillRect(0, 0, 1024, 1024);
+  const gridTex = new THREE.CanvasTexture(gridCanvas);
+  gridTex.colorSpace = THREE.SRGBColorSpace;
+  const grid = new THREE.Mesh(new THREE.PlaneGeometry(36, 36), new THREE.MeshBasicMaterial({ map: gridTex, transparent: true, depthWrite: false }));
+  grid.rotation.x = -Math.PI / 2;
+  grid.position.set(-2, 0.002, -2.5);
+  scene.add(grid);
+  const shadowFloor = new THREE.Mesh(new THREE.PlaneGeometry(36, 36), new THREE.ShadowMaterial({ opacity: 0.35 }));
+  shadowFloor.rotation.x = -Math.PI / 2;
+  shadowFloor.position.set(-2, 0, -2.5);
+  shadowFloor.receiveShadow = true;
+  scene.add(shadowFloor);
+
+  // Status LEDs (blinking unless fixed)
+  const leds = [];
+  const led = (color, x, y, z, parent, fixed = false, mat) => {
+    const m = at(new THREE.Mesh(new THREE.BoxGeometry(0.035, 0.035, 0.02), mat || new THREE.MeshBasicMaterial({ color: 0x1d2a22, toneMapped: false })), x, y, z);
+    parent.add(m);
+    const l = { mat: m.material, on: new THREE.Color(color), off: new THREE.Color(0x1d2a22), next: 0, fixed };
+    if (fixed) l.mat.color.copy(l.on);
+    leds.push(l);
+    return l;
+  };
+
+  // Control cabinet with a PLC rack: CPU + I/O modules on a DIN rail
+  function makePlc(ioCount) {
+    const grp = new THREE.Group();
+    const W = 0.62 + ioCount * 0.36 + 0.7, H = 2.3, D = 0.75, t = 0.05, base = 0.2;
+    grp.add(at(box(W, base, D, M.plinth), 0, base / 2, 0));
+    grp.add(at(box(W, H, t, M.cabinet), 0, base + H / 2, -D / 2 + t / 2));
+    grp.add(at(box(t, H, D, M.cabinet), -W / 2, base + H / 2, 0));
+    grp.add(at(box(t, H, D, M.cabinet), W / 2, base + H / 2, 0));
+    grp.add(at(box(W + t, t, D, M.cabinet), 0, base + H, 0));
+    grp.add(at(box(W + t, t, D, M.cabinet), 0, base + t / 2, 0));
+    grp.add(at(box(W - 0.2, H - 0.3, 0.03, M.plate), 0, base + H / 2, -D / 2 + 0.07));
+    const railY = 1.45, railZ = -D / 2 + 0.11;
+    grp.add(at(box(W - 0.35, 0.07, 0.04, M.rail), 0, railY, railZ));
+    grp.add(at(box(W - 0.4, 0.12, 0.1, M.duct), 0, 0.72, railZ + 0.04));
+    const depth = 0.55, frontZ = railZ + 0.02 + depth;
+    const widths = [0.6, ...Array(ioCount).fill(0.34)];
+    const total = widths.reduce((a, w) => a + w, 0) + (widths.length - 1) * 0.02;
+    let x = -total / 2;
+    const centers = widths.map(w => { const c = x + w / 2; x += w + 0.02; return c; });
+    widths.forEach((w, i) => {
+      grp.add(at(box(w, 1.0, depth, M.module), centers[i], railY, railZ + 0.02 + depth / 2));
+      grp.add(at(box(w - 0.06, 0.28, 0.01, M.moduleFace), centers[i], railY - 0.3, frontZ + 0.005));
+    });
+    const cpu = centers[0];
+    led(0x62e08e, cpu - 0.2, railY + 0.36, frontZ + 0.01, grp, true);
+    led(0xff5a4f, cpu - 0.2, railY + 0.29, frontZ + 0.01, grp, true).mat.color.set(0x3a1a18);
+    led(0x9be0b0, cpu - 0.2, railY + 0.22, frontZ + 0.01, grp);
+    centers.slice(1).forEach(c => {
+      for (let r = 0; r < 4; r++) for (let col = 0; col < 2; col++) {
+        led(0x62e08e, c - 0.05 + col * 0.1, railY + 0.36 - r * 0.07, frontZ + 0.01, grp);
+      }
+    });
+    return {
+      grp, W, D, top: base + H,
+      dpPort: V(cpu + 0.16, railY - 0.32, frontZ + 0.01),
+      ethPort: V(cpu + 0.27, railY - 0.32, frontZ + 0.01),
+      ioPort: (k, off = 0) => V(centers[k + 1] + off, railY - 0.38, frontZ + 0.01),
+    };
+  }
+  const placePlc = (io, x, z, parent = field) => { const p = makePlc(io); p.grp.position.set(x, 0, z); parent.add(p.grp); return p; };
+  const plc1 = placePlc(4, -2.6, 0.3);
+  const plc2 = placePlc(1, -6.0, -3.0, scene);
+  const plc3 = placePlc(1, -9.4, 0.6);
+
+  // 4G / VPN router on top of PLC 2's cabinet
+  const routerX = 0.35, routerY = plc2.top + 0.075;
+  plc2.grp.add(at(box(0.42, 0.1, 0.28, M.device), routerX, routerY, 0));
+  [-0.16, 0.16].forEach(dx => plc2.grp.add(at(cyl(0.012, 0.4, M.device, 'y', 8), routerX + dx, routerY + 0.25, -0.1)));
+  [-0.12, -0.06, 0].forEach(dx => led(0x62e08e, routerX + dx, routerY, 0.145, plc2.grp));
+  scene.updateMatrixWorld(true);
+  const world = (plc, v) => plc.grp.localToWorld(v.clone());
+
+  // Process: tank with level transmitter, pump, pipe with pressure / flow / temperature
+  const TX = 1.8, TZ = -1.6, PY = 0.6;
+  const PX = 3.6, PTX = 4.6, FTX = 5.7, TTX = 6.8, PIPE_END = 7.3;
+  field.add(at(cyl(0.75, 2.0, M.tank, 'y', 48), TX, 1.35, TZ));
+  const liquid = at(cyl(0.71, 1, M.liquid, 'y', 48), TX, 0.9, TZ);
+  liquid.castShadow = false;
+  field.add(liquid);
+  field.add(at(cyl(0.77, 0.06, M.steel, 'y', 48), TX, 2.36, TZ));
+  field.add(at(cyl(0.77, 0.06, M.steel, 'y', 48), TX, 0.34, TZ));
+  [[-0.5, -0.5], [0.5, -0.5], [-0.5, 0.5], [0.5, 0.5]].forEach(([dx, dz]) => field.add(at(cyl(0.04, 0.34, M.steel), TX + dx, 0.17, TZ + dz)));
+  field.add(at(cyl(0.08, 0.12, M.steel), TX, 2.44, TZ));
+  field.add(at(box(0.22, 0.18, 0.2, M.head), TX, 2.59, TZ));
+
+  const pipeStart = TX + 0.7;
+  field.add(at(cyl(0.09, PIPE_END - pipeStart, M.steel, 'x'), (PIPE_END + pipeStart) / 2, PY, TZ));
+  field.add(at(cyl(0.14, 0.05, M.steel, 'x'), PIPE_END, PY, TZ));
+  [4.1, 6.25, 7.2].forEach(x => field.add(at(box(0.08, PY - 0.09, 0.08, M.steel), x, (PY - 0.09) / 2, TZ)));
+
+  field.add(at(cyl(0.24, 0.28, M.motor, 'z'), PX, PY, TZ));
+  field.add(at(cyl(0.19, 0.55, M.motor, 'z'), PX, PY, TZ + 0.415));
+  field.add(at(cyl(0.2, 0.06, M.steel, 'z'), PX, PY, TZ + 0.72));
+  field.add(at(box(0.2, 0.12, 0.2, M.head), PX, PY + 0.25, TZ + 0.4));
+
+  field.add(at(cyl(0.03, 0.32, M.steel), PTX, PY + 0.25, TZ));
+  field.add(at(cyl(0.12, 0.12, M.head, 'z'), PTX, 1.1, TZ));
+
+  field.add(at(cyl(0.19, 0.4, M.flow, 'x'), FTX, PY, TZ));
+  [FTX - 0.22, FTX + 0.22].forEach(x => field.add(at(cyl(0.22, 0.04, M.steel, 'x'), x, PY, TZ)));
+  field.add(at(cyl(0.04, 0.14, M.steel), FTX, PY + 0.25, TZ));
+  field.add(at(box(0.24, 0.18, 0.2, M.head), FTX, 1.0, TZ));
+
+  field.add(at(cyl(0.025, 0.38, M.steel), TTX, PY + 0.28, TZ));
+  field.add(at(cyl(0.09, 0.14, M.head), TTX, 1.12, TZ));
+
+  // Cable tray in front of the process
+  const TRZ = 1.35, TRAY_X0 = -2.95, TRAY_X1 = 7.4;
+  field.add(at(box(TRAY_X1 - TRAY_X0, 0.03, 0.5, M.tray), (TRAY_X0 + TRAY_X1) / 2, 0.015, TRZ));
+  [TRZ - 0.25, TRZ + 0.25].forEach(z => field.add(at(box(TRAY_X1 - TRAY_X0, 0.08, 0.02, M.tray), (TRAY_X0 + TRAY_X1) / 2, 0.04, z)));
+
+  // Frequency drive (VFD), controlled by PLC 3 over Modbus TCP
+  const vfd = new THREE.Group();
+  vfd.position.set(-6.6, 0, 2.6);
+  field.add(vfd);
+  vfd.add(at(box(0.62, 0.12, 0.46, M.plinth), 0, 0.06, 0));
+  vfd.add(at(box(0.55, 1.35, 0.42, M.drive), 0, 0.795, 0));
+  [-1, 1].forEach(sx => { for (let k = 0; k < 6; k++) vfd.add(at(box(0.05, 1.1, 0.012, M.steel), sx * 0.3, 0.8, -0.15 + k * 0.06)); });
+  vfd.add(at(box(0.26, 0.34, 0.03, M.device), 0, 1.2, 0.225));
+  const hzCanvas = document.createElement('canvas');
+  hzCanvas.width = 128; hzCanvas.height = 64;
+  const hz = hzCanvas.getContext('2d');
+  const hzTex = new THREE.CanvasTexture(hzCanvas);
+  hzTex.colorSpace = THREE.SRGBColorSpace;
+  const drawHz = v => {
+    hzNow = v;
+    hz.fillStyle = '#0b120e'; hz.fillRect(0, 0, 128, 64);
+    hz.fillStyle = '#62c27f'; hz.font = 'bold 30px monospace'; hz.textAlign = 'center'; hz.textBaseline = 'middle';
+    hz.fillText(v.toFixed(1) + ' Hz', 64, 34);
+    hzTex.needsUpdate = true;
+  };
+  vfd.add(at(new THREE.Mesh(new THREE.PlaneGeometry(0.2, 0.1), new THREE.MeshBasicMaterial({ map: hzTex, toneMapped: false })), 0, 1.28, 0.242));
+  [-0.07, 0, 0.07].forEach(dx => vfd.add(at(box(0.04, 0.03, 0.01, M.steel), dx, 1.12, 0.242)));
+  led(0x62e08e, 0.1, 1.33, 0.242, vfd, true);
+
+  // Fan motor M-201, driven by the VFD (fan speed follows the drive frequency)
+  const fanMotor = new THREE.Group();
+  fanMotor.position.set(-4.8, 0, 3.4);
+  field.add(fanMotor);
+  fanMotor.add(at(box(0.4, 0.08, 0.5, M.plinth), 0, 0.04, 0));
+  fanMotor.add(at(cyl(0.2, 0.55, M.motor, 'z'), 0, 0.32, 0));
+  fanMotor.add(at(box(0.16, 0.1, 0.16, M.head), 0, 0.57, -0.05));
+  const guard = at(mesh(new THREE.TorusGeometry(0.3, 0.02, 8, 40), M.steel), 0, 0.32, 0.36);
+  fanMotor.add(guard);
+  const fan = at(new THREE.Group(), 0, 0.32, 0.34);
+  fanMotor.add(fan);
+  fan.add(cyl(0.05, 0.05, M.steel, 'z'));
+  for (let k = 0; k < 5; k++) {
+    const blade = at(box(0.08, 0.24, 0.01, M.head), 0, 0.14, 0);
+    const arm = new THREE.Group();
+    arm.rotation.z = (k / 5) * Math.PI * 2;
+    blade.rotation.y = 0.35;
+    arm.add(blade);
+    fan.add(arm);
+  }
+  let hzNow = 42.5;
+  drawHz(hzNow);
+
+  // Tubes that follow a polyline with rounded corners
+  function roundedPath(pts, r = 0.16) {
+    const path = new THREE.CurvePath();
+    let start = pts[0].clone();
+    for (let i = 1; i < pts.length - 1; i++) {
+      const a = pts[i - 1], p = pts[i], b = pts[i + 1];
+      const d1 = p.clone().sub(a), d2 = b.clone().sub(p);
+      const rr = Math.min(r, d1.length() / 2, d2.length() / 2);
+      const p1 = p.clone().sub(d1.normalize().multiplyScalar(rr));
+      const p2 = p.clone().add(d2.normalize().multiplyScalar(rr));
+      if (start.distanceTo(p1) > 1e-4) path.add(new THREE.LineCurve3(start, p1));
+      path.add(new THREE.QuadraticBezierCurve3(p1, p.clone(), p2));
+      start = p2;
+    }
+    path.add(new THREE.LineCurve3(start, pts[pts.length - 1].clone()));
+    return path;
+  }
+  // flow: 'in' = device -> controller, 'out' = controller -> device, 'both' = traffic both ways
+  const cables = [];
+  function cable(path, mat, radius, packetColor, count, speed, flow, parent = field) {
+    parent.add(mesh(new THREE.TubeGeometry(path, 220, radius, 10, false), mat));
+    const pMat = new THREE.MeshBasicMaterial({ color: packetColor, toneMapped: false });
+    const packets = [];
+    for (let i = 0; i < count; i++) {
+      const p = new THREE.Mesh(new THREE.SphereGeometry(radius * 1.9, 12, 12), pMat);
+      p.visible = !reduce;
+      parent.add(p);
+      packets.push({ mesh: p, offset: i / count, rev: flow === 'in' || (flow === 'both' && i % 2 === 1) });
+    }
+    cables.push({ path, packets, speed });
+    return path;
+  }
+
+  // Field wiring: PLC 1 I/O modules -> cable tray -> each device
+  const cabFront = plc1.grp.position.z + plc1.D / 2;
+  const devices = [
+    { tag: 'LT-101', port: plc1.ioPort(0, -0.07), end: V(TX, 2.59, TZ + 0.1), riseZ: TZ + 0.92, label: V(TX, 3.0, TZ) },
+    { tag: 'M-101', port: plc1.ioPort(2, 0), end: V(PX, PY + 0.25, TZ + 0.5), riseZ: TZ + 0.88, label: V(PX, 1.25, TZ + 0.4), output: true },
+    { tag: 'PT-102', port: plc1.ioPort(0, 0.07), end: V(PTX, 1.1, TZ + 0.06), riseZ: TZ + 0.45, label: V(PTX, 1.5, TZ) },
+    { tag: 'FT-103', port: plc1.ioPort(1, -0.07), end: V(FTX, 1.0, TZ + 0.1), riseZ: TZ + 0.45, label: V(FTX, 1.4, TZ) },
+    { tag: 'TT-104', port: plc1.ioPort(1, 0.07), end: V(TTX, 1.12, TZ + 0.09), riseZ: TZ + 0.45, label: V(TTX, 1.52, TZ) },
+  ];
+  devices.forEach((d, i) => {
+    const p = world(plc1, d.port);
+    const drop = cabFront + 0.1 + i * 0.03;
+    const lane = TRZ - 0.2 + i * 0.09;
+    const y = 0.07;
+    cable(roundedPath([
+      p, V(p.x, p.y, drop), V(p.x, y, drop), V(p.x, y, lane),
+      V(d.end.x, y, lane), V(d.end.x, y, d.riseZ), V(d.end.x, d.end.y, d.riseZ), d.end,
+    ]), M.wire, 0.022, 0xe6f7ec, 2, 0.32, d.output ? 'out' : 'in');
+  });
+
+  // PROFIBUS DP between PLC 1 and PLC 2 (green)
+  const a = world(plc1, plc1.dpPort), b = world(plc2, plc2.dpPort);
+  const pbZ = cabFront + 0.07;
+  const pbPath = cable(roundedPath([a, V(a.x, a.y, pbZ), V(a.x, 0.07, pbZ), V(b.x, 0.07, pbZ), V(b.x, 0.07, b.z + 0.25), V(b.x, b.y, b.z + 0.25), b]),
+    M.profibus, 0.04, 0xc8f5a0, 6, 0.2, 'both');
+
+  // Modbus TCP: PLC 1 -> PLC 3 and PLC 3 -> drive (blue Ethernet); motor cable drive -> fan
+  scene.updateMatrixWorld(true);
+  const facing = obj => V(Math.sin(obj.rotation.y), 0, Math.cos(obj.rotation.y));
+  const e1 = world(plc1, plc1.ethPort), ethZ = cabFront + 0.04, ethRun = TRZ - 0.25;
+  const n3 = facing(plc3.grp);
+  const e3 = world(plc3, plc3.ethPort), e3a = e3.clone().addScaledVector(n3, 0.35);
+  cable(roundedPath([e1, V(e1.x, e1.y, ethZ), V(e1.x, 0.07, ethZ), V(e1.x, 0.07, ethRun), V(e3a.x, 0.07, ethRun),
+    V(e3a.x, 0.07, e3a.z), V(e3a.x, e3a.y, e3a.z), e3]), M.ethernet, 0.03, 0xbfe9ff, 4, 0.2, 'both');
+  const nV = facing(vfd);
+  const d3 = world(plc3, plc3.dpPort), d3a = d3.clone().addScaledVector(n3, 0.3);
+  const vIn = vfd.localToWorld(V(-0.12, 0.35, 0.215)), vInA = vIn.clone().addScaledVector(nV, 0.3);
+  const drivePath = cable(roundedPath([d3, d3a, V(d3a.x, 0.07, d3a.z), V(d3a.x, 0.07, vInA.z),
+    V(vInA.x, 0.07, vInA.z), V(vInA.x, vIn.y, vInA.z), vIn]), M.ethernet, 0.03, 0xbfe9ff, 3, 0.26, 'both');
+  const vOut = vfd.localToWorld(V(0.12, 0.25, 0.215)), vOutA = vOut.clone().addScaledVector(nV, 0.22);
+  const tb = fanMotor.localToWorld(V(-0.08, 0.57, -0.05)), tbA = tb.clone().add(V(-0.22, 0, 0));
+  cable(roundedPath([vOut, vOutA, V(vOutA.x, 0.07, vOutA.z), V(tbA.x, 0.07, vOutA.z), V(tbA.x, 0.07, tbA.z), V(tbA.x, tb.y, tbA.z), tb]),
+    M.motorCable, 0.035, 0xffffff, 0, 0, 'out');
+
+  // PLC 2 -> router (Ethernet, up the front of the cabinet)
+  const pe = plc2.ethPort, frontOut = plc2.D / 2 + 0.06;
+  cable(roundedPath([pe, V(pe.x, pe.y, frontOut), V(pe.x, routerY, frontOut), V(routerX - 0.12, routerY, frontOut), V(routerX - 0.12, routerY, 0.14)].map(v => plc2.grp.localToWorld(v))),
+    M.ethernet, 0.025, 0xbfe9ff, 2, 0.3, 'both', scene);
+
+  // Cloud, SCADA server and remote workstation (fade in with the cloud view)
+  const ot = new THREE.Group();
+  scene.add(ot);
+  const CLOUD = V(-7.6, 5.2, -7.4);
+  const cloudMat = std(0xeaf4ee, 0, 0.9, { emissive: 0x6cd08e, emissiveIntensity: 0.1 });
+  [[0, 0, 0, 0.95], [0.95, -0.15, 0.1, 0.72], [-0.95, -0.2, 0, 0.72], [0.4, 0.5, -0.1, 0.7], [-0.4, 0.42, 0.15, 0.62], [0.1, -0.3, 0.45, 0.6], [-0.2, -0.25, -0.45, 0.6]]
+    .forEach(([x, y, z, r]) => {
+      const puff = at(mesh(new THREE.SphereGeometry(r, 32, 20), cloudMat), CLOUD.x + x, CLOUD.y + y, CLOUD.z + z);
+      puff.castShadow = false;
+      ot.add(puff);
+    });
+
+  const RACK = V(-10.4, 0, -7.6);
+  ot.add(at(box(0.9, 2.1, 0.9, std(0x1d2329, 0.4, 0.5)), RACK.x, 1.05, RACK.z));
+  for (let i = 0; i < 6; i++) {
+    const y = 0.35 + i * 0.28;
+    ot.add(at(box(0.8, 0.22, 0.02, std(0x2d353c, 0.3, 0.5)), RACK.x, y, RACK.z + 0.46));
+    led(0x62e08e, RACK.x + 0.3, y, RACK.z + 0.475, ot);
+    led(0x3fa9e0, RACK.x + 0.24, y, RACK.z + 0.475, ot);
+  }
+
+  const DESK = V(-5.2, 0, -8.8);
+  const woodMat = std(0x3b4046, 0.2, 0.6);
+  ot.add(at(box(1.5, 0.05, 0.75, woodMat), DESK.x, 0.74, DESK.z));
+  [[-0.68, -0.32], [0.68, -0.32], [-0.68, 0.32], [0.68, 0.32]].forEach(([dx, dz]) => ot.add(at(box(0.05, 0.72, 0.05, woodMat), DESK.x + dx, 0.36, DESK.z + dz)));
+  ot.add(at(box(0.3, 0.02, 0.2, M.device), DESK.x, 0.775, DESK.z - 0.15));
+  ot.add(at(box(0.06, 0.3, 0.06, M.device), DESK.x, 0.93, DESK.z - 0.15));
+  ot.add(at(box(1.0, 0.6, 0.04, M.device), DESK.x, 1.3, DESK.z - 0.12));
+  ot.add(at(box(0.6, 0.02, 0.2, M.device), DESK.x, 0.775, DESK.z + 0.15));
+  const screenCanvas = document.createElement('canvas');
+  screenCanvas.width = 256; screenCanvas.height = 144;
+  const sc = screenCanvas.getContext('2d');
+  sc.fillStyle = '#0b120e'; sc.fillRect(0, 0, 256, 144);
+  sc.strokeStyle = 'rgba(255,255,255,0.08)';
+  for (let i = 0; i < 256; i += 32) { sc.beginPath(); sc.moveTo(i, 0); sc.lineTo(i, 144); sc.stroke(); }
+  sc.fillStyle = 'rgba(98,194,127,0.25)'; sc.fillRect(14, 14, 60, 50); sc.fillRect(84, 14, 60, 50);
+  sc.strokeStyle = '#62c27f'; sc.lineWidth = 3; sc.beginPath();
+  for (let i = 0; i <= 20; i++) sc.lineTo(14 + i * 11.4, 112 - Math.sin(i / 2.5) * 16 - i);
+  sc.stroke();
+  const screenTex = new THREE.CanvasTexture(screenCanvas);
+  screenTex.colorSpace = THREE.SRGBColorSpace;
+  ot.add(at(new THREE.Mesh(new THREE.PlaneGeometry(0.92, 0.52), new THREE.MeshBasicMaterial({ map: screenTex, toneMapped: false })), DESK.x, 1.3, DESK.z - 0.098));
+
+  // Animated dashed links over the internet / VPN
+  const dashCanvas = document.createElement('canvas');
+  dashCanvas.width = 64; dashCanvas.height = 4;
+  const dc = dashCanvas.getContext('2d');
+  dc.fillStyle = '#fff'; dc.fillRect(0, 0, 36, 4);
+  const dashTex = new THREE.CanvasTexture(dashCanvas);
+  dashTex.wrapS = THREE.RepeatWrapping;
+  dashTex.repeat.set(26, 1);
+  const vpnMat = new THREE.MeshBasicMaterial({ color: 0xb8f09a, alphaMap: dashTex, transparent: true, toneMapped: false });
+  const antenna = world(plc2, V(routerX + 0.16, routerY + 0.45, -0.1));
+  const smooth = pts => new THREE.CatmullRomCurve3(pts, false, 'centripetal');
+  const vpnPath = cable(smooth([antenna, V(antenna.x - 0.3, antenna.y + 1.4, antenna.z - 1.2), V(CLOUD.x + 0.6, CLOUD.y - 1.4, CLOUD.z + 1.1), V(CLOUD.x + 0.3, CLOUD.y - 0.6, CLOUD.z + 0.4)]),
+    vpnMat, 0.035, 0xe6ffd6, 3, 0.3, 'both', ot);
+  cable(smooth([V(CLOUD.x - 0.9, CLOUD.y - 0.6, CLOUD.z), V(RACK.x + 0.2, CLOUD.y - 1.0, RACK.z + 0.2), V(RACK.x, 2.6, RACK.z), V(RACK.x, 2.15, RACK.z)]),
+    vpnMat, 0.035, 0xe6ffd6, 3, 0.3, 'both', ot);
+  cable(smooth([V(CLOUD.x + 0.5, CLOUD.y - 0.6, CLOUD.z - 0.3), V(DESK.x - 0.6, CLOUD.y - 1.4, DESK.z + 0.8), V(DESK.x, 2.1, DESK.z - 0.12), V(DESK.x, 1.62, DESK.z - 0.12)]),
+    vpnMat, 0.035, 0xe6ffd6, 3, 0.3, 'both', ot);
+
+  const fieldMats = new Map();
+  field.traverse(o => {
+    if (!o.material) return;
+    if (!fieldMats.has(o.material)) {
+      const c = o.material.clone();
+      c.userData.baseOpacity = o.material.opacity;
+      c.userData.baseTransparent = o.material.transparent;
+      c.userData.baseDepthWrite = o.material.depthWrite;
+      fieldMats.set(o.material, c);
+    }
+    o.material = fieldMats.get(o.material);
+  });
+  leds.forEach(l => { if (fieldMats.has(l.mat)) l.mat = fieldMats.get(l.mat); });
+  const profibusMat = fieldMats.get(M.profibus) || M.profibus;
+  let fieldLevel = 1, fieldTarget = 1;
+  const applyFieldFade = () => {
+    const solid = fieldLevel >= 1;
+    fieldMats.forEach(m => {
+      const transparent = !solid || m.userData.baseTransparent;
+      if (m.transparent !== transparent) { m.transparent = transparent; m.needsUpdate = true; }
+      m.depthWrite = solid ? m.userData.baseDepthWrite : false;
+      m.opacity = m.userData.baseOpacity * fieldLevel;
+    });
+    field.visible = fieldLevel > 0.01;
+  };
+
+  const otMats = new Set();
+  ot.traverse(o => { if (o.material) otMats.add(o.material); });
+  otMats.forEach(m => { m.transparent = true; m.userData.baseOpacity = m.opacity; m.opacity = 0; });
+  ot.visible = false;
+  let otLevel = 0, otTarget = 0;
+
+  // Labels (texts with a data-i18n key follow the language switch)
+  const tag = (text, pos, cls = '', key) => {
+    const el = document.createElement('div');
+    el.className = 'tag3d ' + cls;
+    el.textContent = key ? t9n(key) : text;
+    if (key) el.dataset.i18n = key;
+    const o = new CSS2DObject(el);
+    o.position.copy(pos);
+    scene.add(o);
+  };
+  tag('PLC 1', world(plc1, V(0, 2.85, 0)), 'plc');
+  tag('PLC 2', world(plc2, V(0, 2.85, 0)), 'plc keep');
+  tag('PLC 3', world(plc3, V(0, 2.85, 0)), 'plc');
+  tag('PROFIBUS DP', pbPath.getPointAt(0.74).add(V(0, 0.3, 0)), 'pb');
+  tag('MODBUS TCP', drivePath.getPointAt(0.72).add(V(0, 0.3, 0)), 'eth');
+  tag('VFD-201', vfd.localToWorld(V(0, 1.75, 0)));
+  tag('M-201', fanMotor.localToWorld(V(0, 1.0, 0)));
+  devices.forEach(d => tag(d.tag, d.label));
+  tag('', world(plc2, V(routerX + 0.55, routerY + 0.95, 0)), 'ot keep', 'tagRouter');
+  tag('', vpnPath.getPointAt(0.45).add(V(-0.7, 0, 0.3)), 'ot vpn', 'tagVpn');
+  tag('', V(CLOUD.x, CLOUD.y + 1.35, CLOUD.z), 'ot', 'tagCloud');
+  tag('', V(RACK.x, 2.55, RACK.z), 'ot', 'tagServer');
+  tag('', V(DESK.x, 1.95, DESK.z), 'ot', 'tagRemote');
+
+  // Camera views: field level and cloud / remote access
+  const views = {
+    field: { target: V(-1.1, 0.9, 0.2), az: 0.62, polar: 1.05, scale: 1, sway: 0.55 },
+    ot: { target: V(-7.6, 3.0, -6.0), az: 0.4, polar: 1.02, scale: 0.72, sway: 0.8 },
+  };
+  let view = 'field';
+  const dirOf = v => V(Math.sin(v.az) * Math.sin(v.polar), Math.cos(v.polar), Math.cos(v.az) * Math.sin(v.polar));
+  const baseDist = () => Math.min(40, Math.max(21, 33 / camera.aspect));
+
+  // Orbit controls: drag to rotate, no zoom/pan so the page keeps scrolling
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.target.copy(views.field.target);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.08;
+  controls.enablePan = false;
+  controls.enableZoom = false;
+  controls.minPolarAngle = 0.55;
+  controls.maxPolarAngle = 1.38;
+  controls.autoRotate = !reduce;
+  controls.autoRotateSpeed = 0.6;
+  renderer.domElement.style.touchAction = 'pan-y';
+  let resume = 0;
+  const resumeLater = ms => { clearTimeout(resume); if (!reduce) resume = setTimeout(() => { controls.autoRotate = true; }, ms); };
+  controls.addEventListener('start', () => {
+    controls.autoRotate = false;
+    clearTimeout(resume);
+    host.classList.add('touched');
+  });
+  controls.addEventListener('end', () => resumeLater(6000));
+
+  // Fly between the two views
+  let tween = null;
+  function goTo(name, instant = false) {
+    if (!views[name]) return;
+    view = name;
+    otTarget = name === 'ot' ? 1 : 0;
+    fieldTarget = 1 - otTarget;
+    const v = views[name];
+    const toP = v.target.clone().add(dirOf(v).multiplyScalar(baseDist() * v.scale));
+    if (instant || reduce) {
+      controls.target.copy(v.target);
+      camera.position.copy(toP);
+      if (reduce) { otLevel = otTarget; fieldLevel = fieldTarget; applyFieldFade(); }
+      return;
+    }
+    tween = { start: clock.elapsedTime, dur: 1.8, fromT: controls.target.clone(), toT: v.target.clone(), fromP: camera.position.clone(), toP };
+    controls.enabled = false;
+    controls.autoRotate = false;
+    clearTimeout(resume);
+  }
+  host.addEventListener('commview', e => goTo(e.detail));
+
+  function resize() {
+    const w = host.clientWidth, h = host.clientHeight;
+    if (!w || !h) return;
+    renderer.setSize(w, h);
+    labels.setSize(w, h);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    if (tween) return;
+    const dist = baseDist() * views[view].scale;
+    const offset = camera.position.clone().sub(controls.target);
+    camera.position.copy(controls.target).add((offset.lengthSq() ? offset.normalize() : dirOf(views[view])).multiplyScalar(dist));
+  }
+  const clock = new THREE.Clock();
+  camera.aspect = (host.clientWidth || 1) / (host.clientHeight || 1);
+  goTo(host.dataset.view === 'ot' ? 'ot' : 'field', true);
+  resize();
+  new ResizeObserver(resize).observe(host);
+
+  // Render loop, only while the card is on screen
+  let visible = false, running = false, lastHz = -1;
+  function frame() {
+    if (!visible || document.hidden) { running = false; return; }
+    requestAnimationFrame(frame);
+    const dt = Math.min(clock.getDelta(), 0.05);
+    const t = clock.elapsedTime;
+
+    if (tween) {
+      const k = Math.min(1, (t - tween.start) / tween.dur);
+      const e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+      controls.target.lerpVectors(tween.fromT, tween.toT, e);
+      camera.position.lerpVectors(tween.fromP, tween.toP, e);
+      camera.position.y += Math.sin(Math.PI * e) * 2.5;
+      if (k >= 1) { tween = null; controls.enabled = true; resumeLater(2500); }
+    }
+
+    if (otLevel !== otTarget) {
+      otLevel += Math.sign(otTarget - otLevel) * Math.min(Math.abs(otTarget - otLevel), dt * 1.6);
+      otMats.forEach(m => { m.opacity = m.userData.baseOpacity * otLevel; });
+    }
+    ot.visible = otLevel > 0.01;
+    if (fieldLevel !== fieldTarget) {
+      fieldLevel += Math.sign(fieldTarget - fieldLevel) * Math.min(Math.abs(fieldTarget - fieldLevel), dt * 1.6);
+      applyFieldFade();
+    }
+
+    if (!reduce) {
+      cables.forEach(c => c.packets.forEach(p => {
+        const u = (t * c.speed + p.offset) % 1;
+        c.path.getPointAt(p.rev ? 1 - u : u, p.mesh.position);
+      }));
+      dashTex.offset.x -= dt * 0.8;
+      const level = 1.05 + 0.3 * Math.sin(t * 0.3);
+      liquid.scale.y = level;
+      liquid.position.y = 0.37 + level / 2;
+      profibusMat.emissiveIntensity = 0.45 + 0.2 * Math.sin(t * 4);
+      fan.rotation.z -= dt * hzNow * 0.35;
+      if (Math.floor(t) !== lastHz) { lastHz = Math.floor(t); drawHz(42 + 3 * Math.sin(t * 0.25) + Math.random() * 0.4); }
+      leds.forEach(l => {
+        if (l.fixed || t < l.next) return;
+        l.next = t + 0.12 + Math.random() * 0.5;
+        l.mat.color.copy(Math.random() > 0.45 ? l.on : l.off);
+      });
+    }
+    if (controls.autoRotate) {
+      // sway across the front of the current view instead of spinning to the back
+      const { az: c, sway } = views[view], az = controls.getAzimuthalAngle();
+      if (az > c + sway) controls.autoRotateSpeed = 0.6;
+      else if (az < c - sway) controls.autoRotateSpeed = -0.6;
+    }
+    controls.update(dt);
+    renderer.render(scene, camera);
+    labels.render(scene, camera);
+  }
+  function start() {
+    if (running || !visible || document.hidden) return;
+    running = true;
+    clock.getDelta();
+    requestAnimationFrame(frame);
+  }
+  new IntersectionObserver(entries => {
+    visible = entries[0].isIntersecting;
+    start();
+  }).observe(host);
+  document.addEventListener('visibilitychange', start);
+
+  controls.update();
+  renderer.render(scene, camera);
+  labels.render(scene, camera);
+  host.classList.add('ready');
+}
 </script>
 </body>
 </html>
