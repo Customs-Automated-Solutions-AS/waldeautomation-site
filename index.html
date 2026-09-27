@@ -1055,8 +1055,8 @@ form.addEventListener('submit', async (e) => {
         name: name,
         email: email,
         message: message,
-        subject: 'Ny henvendelse fra waldeautomation.no',
-        from_name: 'Walde Automation nettside'
+        subject: 'Ny henvendelse via kontaktskjemaet',
+        from_name: name + ' (kontaktskjema)'
       })
     });
     const data = await res.json();
