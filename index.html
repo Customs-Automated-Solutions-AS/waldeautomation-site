@@ -4,9 +4,22 @@
 <meta charset="UTF-8">
 <script>try { if (localStorage.getItem('walde-theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch (e) {}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Walde Automation</title>
+<title>Walde Automation – styring og automasjon</title>
 <meta name="theme-color" content="#F6F8F6">
-<meta name="description" content="Walde Automation – automasjon, systemintegrasjon og elektroteknisk rådgivning.">
+<meta name="description" content="Walde Automation – PLS-, HMI- og displayprogrammering, industriell kommunikasjon, elektroteknisk rådgivning, apper, nettsider og AI-integrasjon.">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Walde Automation">
+<meta property="og:locale" content="nb_NO">
+<meta property="og:url" content="https://waldeautomation.no/">
+<meta property="og:title" content="Walde Automation – styring og automasjon, fra felt til sky">
+<meta property="og:description" content="PLS-, HMI- og displayprogrammering, industriell kommunikasjon, elektroteknisk rådgivning, apper, nettsider og AI-integrasjon.">
+<meta property="og:image" content="https://waldeautomation.no/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Walde Automation – styring og automasjon, fra felt til sky">
+<meta name="twitter:card" content="summary_large_image">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
 
@@ -237,9 +250,8 @@ h2.section-title {
 .marquee-track span::after { content: ''; width: 4px; height: 4px; background: var(--brand); opacity: 0.6; transform: rotate(45deg); }
 
 /* Om */
-.om-card { padding: 48px; display: grid; grid-template-columns: 1fr; gap: 20px; align-items: start; }
-.om-card p { margin: 0; font-size: 16px; line-height: 1.7; color: var(--muted); }
-.om-card p:first-child { font-size: 18px; color: var(--text); }
+.om-card { padding: 48px; }
+.om-card p { max-width: 64ch; margin: 0; font-size: 18px; line-height: 1.7; color: var(--text); }
 
 /* Teknologistack */
 .stack { display: grid; grid-template-columns: 1fr; padding: 6px 28px; }
@@ -270,7 +282,7 @@ h2.section-title {
     var(--panel);
   box-shadow: var(--panel-shadow);
 }
-.schem { display: block; width: 100%; height: auto; font-family: var(--mono); overflow: visible; }
+.schem { display: block; width: 100%; max-width: 640px; height: auto; margin: 0 auto; font-family: var(--mono); overflow: visible; }
 .schem text { fill: #8A948F; font-size: 10px; }
 .schem .ttl { fill: #C8F5A0; font-size: 11px; letter-spacing: 0.04em; }
 .schem .big { fill: #E4E9E6; font-size: 13px; font-weight: 600; }
@@ -546,7 +558,6 @@ h2.section-title {
   background: rgba(255,255,255,0.07); color: #8A8F8C; transition: background .15s, color .15s;
 }
 .pv.t { background: rgba(98,194,127,0.22); color: #8CE3A8; }
-.hmi-text .tj-num { margin-bottom: 16px; }
 @container (max-width: 760px) {
   .hmi-stage { flex-direction: column; gap: 18px; padding: 44px 14px 18px; }
   .h3-wrap { width: 100%; flex: none; }
@@ -559,10 +570,10 @@ h2.section-title {
   .plc-panel .code-body { font-size: 11px; padding: 14px; }
 }
 @media (min-width: 900px) {
-  .hmi-text { display: grid; grid-template-columns: minmax(0, 0.8fr) 1.2fr; column-gap: 40px; align-items: start; }
-  .hmi-text .tj-num { grid-column: 1; justify-self: start; }
-  .hmi-text .tj-title { grid-column: 1; margin: 0; }
-  .hmi-text .tj-desc { grid-column: 2; grid-row: 1 / span 2; }
+  .tj-text { display: grid; grid-template-columns: minmax(0, 0.8fr) 1.2fr; column-gap: 40px; align-items: start; }
+  .tj-text .tj-num { grid-column: 1; justify-self: start; }
+  .tj-text .tj-title { grid-column: 1; margin: 0; }
+  .tj-text .tj-desc { grid-column: 2; grid-row: 1 / span 2; }
 }
 
 /* App card: SwiftUI code is typed while the preview on the phone builds up */
@@ -619,7 +630,7 @@ h2.section-title {
 
 /* Websites card: one small site shown at desktop, tablet and phone width */
 .web-stage {
-  position: relative; container-type: inline-size; display: flex; gap: 14px; height: 300px; padding: 18px 16px 14px; overflow: hidden;
+  position: relative; container-type: inline-size; display: flex; justify-content: center; gap: 28px; height: 300px; padding: 18px 16px 14px; overflow: hidden;
   border-radius: 14px; border: 1px solid var(--line-2);
   background:
     radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1.5px) 0 0 / 16px 16px,
@@ -627,7 +638,7 @@ h2.section-title {
     var(--panel);
   box-shadow: var(--panel-shadow);
 }
-.web-area { position: relative; flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; }
+.web-area { position: relative; flex: 0 1 420px; min-width: 0; display: flex; flex-direction: column; align-items: center; }
 .web-browser {
   width: 100%; min-width: 128px; height: 232px; flex: none; display: flex; flex-direction: column; overflow: hidden;
   border-radius: 10px; background: #fff; box-shadow: 0 20px 40px -18px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.08);
@@ -689,6 +700,19 @@ h2.section-title {
 .ring b { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--mono); font-size: 13px; font-weight: 600; color: #C8F5A0; }
 .ring span { font-family: var(--mono); font-size: 9px; color: #8A948F; }
 @container (max-width: 400px) { .web-scores { display: none; } }
+
+/* Only the service card in focus animates (set up by JS); the others hold still */
+.tj-grid .wide.idle, .tj-grid .wide.idle * { animation-play-state: paused !important; }
+/* Cards come in step by step as they are scrolled into view: the frame, then number and title,
+   the text, and last the animation (--p is set by JS, 0 to 1) */
+.tj-grid .wide { --k: clamp(0, calc(var(--p, 1) / 0.35), 1); opacity: var(--k); translate: 0 calc((1 - var(--k)) * 40px); }
+.tj-grid .wide :is(.tj-num, .tj-title, .tj-desc, .comm-legend) { opacity: var(--k); translate: 0 calc((1 - var(--k)) * 14px); }
+.tj-grid .wide .tj-num { --k: clamp(0, calc((var(--p, 1) - 0.25) / 0.25), 1); }
+.tj-grid .wide .tj-title { --k: clamp(0, calc((var(--p, 1) - 0.32) / 0.25), 1); }
+.tj-grid .wide :is(.tj-desc, .comm-legend) { --k: clamp(0, calc((var(--p, 1) - 0.42) / 0.28), 1); }
+.tj-grid .wide > :is(.hmi-stage, .comm3d, .schem-wrap, .app-stage, .web-stage, .ai-panel) {
+  --k: clamp(0, calc((var(--p, 1) - 0.55) / 0.4), 1); opacity: var(--k); scale: calc(0.96 + var(--k) * 0.04);
+}
 
 /* AI card: the prompt above an animated workflow */
 .ai-panel { container-type: inline-size; }
@@ -788,12 +812,11 @@ footer { border-top: 1px solid var(--line); position: relative; z-index: 1; }
 .offscreen, .offscreen * { animation-play-state: paused !important; }
 
 @media (min-width: 900px) {
-  .om-card { grid-template-columns: 1.15fr 0.85fr; gap: 56px; }
   .stack { grid-template-columns: 1fr 1fr; column-gap: 48px; }
   .stack-row:nth-child(2) { border-top: 0; }
-  .tj-grid .wide { grid-template-columns: 1fr 1.02fr; gap: 40px; }
+  .tj-grid .wide { grid-template-columns: 1fr; gap: 28px; }
   .tj-grid .comm-card { grid-template-columns: 1fr; }
-  .comm-pane { display: grid; grid-template-columns: auto 1fr; column-gap: 40px; align-items: start; }
+  .comm-pane { display: grid; grid-template-columns: minmax(0, 0.8fr) 1.2fr; column-gap: 40px; align-items: start; }
   .comm-pane .tj-num { grid-column: 1; justify-self: start; }
   .comm-pane .tj-title { grid-column: 1; margin: 0; }
   .comm-pane .tj-desc, .comm-pane .comm-legend { grid-column: 2; }
@@ -879,7 +902,7 @@ footer { border-top: 1px solid var(--line); position: relative; z-index: 1; }
     <div class="hero-grid">
       <div>
         <p class="pill"><span class="pill-dot"></span><span data-i18n="heroEyebrow">Automasjon · Systemintegrasjon · Elektroteknikk</span></p>
-        <h1><span data-i18n="heroTitleA">Automasjon tilpasset</span> <span class="grad" data-i18n="heroTitleB">dine behov</span></h1>
+        <h1><span data-i18n="heroTitleA">Styring og automasjon –</span> <span class="grad" data-i18n="heroTitleB">fra felt til sky</span></h1>
         <p class="lead" data-i18n="heroLead">Walde Automation leverer automasjon, systemintegrasjon og elektroteknisk rådgivning — fra PLS-programmering og industriell kommunikasjon til programvareutvikling.</p>
         <div class="hero-actions">
           <a href="#kontakt" class="btn-primary-lg"><span data-i18n="cta">Ta kontakt</span><span class="arr" aria-hidden="true">→</span></a>
@@ -895,15 +918,14 @@ footer { border-top: 1px solid var(--line); position: relative; z-index: 1; }
       <p class="eyebrow" data-i18n="omEyebrow">Om</p>
       <h2 class="section-title" data-i18n="omTitle">Ingeniørarbeid i grensesnittet mellom fagene</h2>
       <div class="glass om-card">
-        <p data-i18n="omP1">Walde Automation er et enkeltpersonforetak drevet av Mikael Walde, med spesialkompetanse innen industriell automasjon og systemintegrasjon. Arbeidet ligger i grensesnittene mellom mekanikk, elektro, programvare, kommunikasjon og styring — der de vanskeligste og mest verdifulle integrasjonsutfordringene løses.</p>
-        <p data-i18n="omP2">Fokus på edge-cases, feilmodus og vedlikeholdbarhet gir systemer som ikke bare virker, men som oppfører seg forutsigbart og trygt under både normal drift og unormale forhold.</p>
+        <p data-i18n="omP1">Walde Automation er et enkeltpersonforetak drevet av Mikael Walde, med spesialkompetanse innen industriell automasjon og systemintegrasjon. Arbeidet ligger i grensesnittene mellom mekanikk, elektro, programvare, kommunikasjon og styring — der fagene møtes, og der utfordringene ofte oppstår.</p>
       </div>
     </div>
   </section>
 
   <section id="kompetanse">
     <div class="wrap">
-      <p class="eyebrow" data-i18n="kompEyebrow">Teknologistack</p>
+      <p class="eyebrow" data-i18n="kompEyebrow">Kompetanse</p>
       <h2 class="section-title" data-i18n="kompTitle">Verktøy, plattformer og språk</h2>
       <div class="glass stack">
         <div class="stack-row">
@@ -1022,7 +1044,7 @@ footer { border-top: 1px solid var(--line); position: relative; z-index: 1; }
               <div class="code-body" id="plcCode"></div>
             </div>
           </div>
-          <div class="hmi-text">
+          <div class="tj-text">
             <p class="tj-num">01</p>
             <h3 class="tj-title" data-i18n="svc0Title">PLS-, HMI- og displayprogrammering</h3>
             <p class="tj-desc" data-i18n="svc0Desc">Vi programmerer, feilsøker og setter i drift PLS-er, HMI-paneler og displayer fra Schneider, Siemens, Danfoss og EOTE — med tilstandsmaskiner, forriglinger, feilhåndtering, oversiktlige skjermbilder og grundig teknisk dokumentasjon.</p>
@@ -1178,19 +1200,14 @@ footer { border-top: 1px solid var(--line); position: relative; z-index: 1; }
               <path class="f target" d="M482 250h10v28h-10Z" style="--t:6.4s"/>
             </svg>
           </div>
-          <div>
+          <div class="tj-text">
             <p class="tj-num">03</p>
             <h3 class="tj-title" data-i18n="svc3Title">Elektroteknisk rådgivning</h3>
-            <p class="tj-desc" data-i18n="svc3Desc">Rådgivning innen elektroteknikk og styringssystemer — fra 400 V kraftforsyning og motorkurser til 24 V styrestrøm, PLS og sensorer. Også erfaring med elektriske spesialkjøretøy.</p>
+            <p class="tj-desc" data-i18n="svc3Desc">Rådgivning innen elektroteknikk og styringssystemer — fra 400 V kraftforsyning og motorkurser til 24 V styrestrøm, PLS og sensorer, blant annet på elektriske spesialkjøretøy.</p>
           </div>
         </article>
 
         <article class="glass wide">
-          <div>
-            <p class="tj-num">04</p>
-            <h3 class="tj-title" data-i18n="svc4Title">App- &amp; programvareutvikling</h3>
-            <p class="tj-desc" data-i18n="svc4Desc">Moderne Apple-apper i Swift &amp; SwiftUI (App Store) — en sjelden kombinasjon av OT-kompetanse og moderne programvareutvikling.</p>
-          </div>
           <div class="app-stage">
             <div class="code-panel app-code">
               <div class="code-topbar">
@@ -1220,14 +1237,14 @@ footer { border-top: 1px solid var(--line); position: relative; z-index: 1; }
               </div>
             </div>
           </div>
+          <div class="tj-text">
+            <p class="tj-num">04</p>
+            <h3 class="tj-title" data-i18n="svc4Title">App- &amp; programvareutvikling</h3>
+            <p class="tj-desc" data-i18n="svc4Desc">Vi lager apper for iPhone og iPad i Swift og SwiftUI, publisert på App Store.</p>
+          </div>
         </article>
 
         <article class="glass wide">
-          <div>
-            <p class="tj-num">05</p>
-            <h3 class="tj-title" data-i18n="svc5Title">Nettsider</h3>
-            <p class="tj-desc" data-i18n="svc5Desc">Vi lager raske og moderne nettsider som fungerer like godt på mobil som på PC — med fokus på ytelse, universell utforming og synlighet i søk.</p>
-          </div>
           <div class="web-stage" id="webStage" data-device="desktop" aria-hidden="true">
             <div class="web-area">
               <div class="web-browser">
@@ -1257,14 +1274,14 @@ footer { border-top: 1px solid var(--line); position: relative; z-index: 1; }
             </div>
             <div class="web-scores"><div class="ring"><div><svg viewBox="0 0 46 46"><circle class="bg" cx="23" cy="23" r="18"/><circle class="fg" cx="23" cy="23" r="18"/></svg><b>0</b></div><span data-i18n="webPerf">Ytelse</span></div><div class="ring"><div><svg viewBox="0 0 46 46"><circle class="bg" cx="23" cy="23" r="18"/><circle class="fg" cx="23" cy="23" r="18"/></svg><b>0</b></div><span data-i18n="webA11y">Tilgjengelighet</span></div><div class="ring"><div><svg viewBox="0 0 46 46"><circle class="bg" cx="23" cy="23" r="18"/><circle class="fg" cx="23" cy="23" r="18"/></svg><b>0</b></div><span data-i18n="webSeo">SEO</span></div></div>
           </div>
+          <div class="tj-text">
+            <p class="tj-num">05</p>
+            <h3 class="tj-title" data-i18n="svc5Title">Nettsider</h3>
+            <p class="tj-desc" data-i18n="svc5Desc">Vi lager raske og moderne nettsider som fungerer like godt på mobil som på PC — med fokus på ytelse, universell utforming og synlighet i søk.</p>
+          </div>
         </article>
 
         <article class="glass wide">
-          <div>
-            <p class="tj-num">06</p>
-            <h3 class="tj-title" data-i18n="svc6Title">AI-integrasjon</h3>
-            <p class="tj-desc" data-i18n="svc6Desc">Vi kobler AI inn i arbeidsflyten din og automatiserer utvalgte oppgaver — for eksempel sortering av e-post, oppretting av support-tickets og ukentlige rapporter.</p>
-          </div>
           <div class="code-panel ai-panel">
             <div class="code-topbar">
               <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
@@ -1291,6 +1308,11 @@ footer { border-top: 1px solid var(--line); position: relative; z-index: 1; }
                 <span class="fnode" data-node="report"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V11M10 20V5M16 20v-6M2 20h20"/></svg><span data-i18n="flowReport">Rapport</span><b class="cnt">12</b></span>
               </div>
             </div>
+          </div>
+          <div class="tj-text">
+            <p class="tj-num">06</p>
+            <h3 class="tj-title" data-i18n="svc6Title">AI-integrasjon</h3>
+            <p class="tj-desc" data-i18n="svc6Desc">Vi kobler AI inn i arbeidsflyten din og automatiserer utvalgte oppgaver — for eksempel sortering av e-post, oppretting av support-tickets og ukentlige rapporter.</p>
           </div>
         </article>
 
@@ -1337,6 +1359,10 @@ footer { border-top: 1px solid var(--line); position: relative; z-index: 1; }
             <span class="value"><a href="mailto:mi.walde98@gmail.com">mi.walde98@gmail.com</a></span>
           </div>
           <div class="info-row">
+            <span class="label">LinkedIn</span>
+            <span class="value"><a href="https://www.linkedin.com/in/mikael-walde-57bbba177/" target="_blank" rel="noopener"><span data-i18n="linkedinLink">Se profilen</span> ↗</a></span>
+          </div>
+          <div class="info-row">
             <span class="label" data-i18n="companyFormLabel">Selskapsform</span>
             <span class="value" data-i18n="companyFormValue">Enkeltpersonforetak (ENK)</span>
           </div>
@@ -1364,21 +1390,20 @@ const COPY = {
     navOm: 'Om', navKompetanse: 'Kompetanse', navTjenester: 'Tjenester', navProsjekter: 'Prosjekter',
     cta: 'Ta kontakt', ctaSecondary: 'Se tjenester',
     heroEyebrow: 'Automasjon · Systemintegrasjon · Elektroteknikk',
-    heroTitleA: 'Automasjon tilpasset', heroTitleB: 'dine behov',
+    heroTitleA: 'Styring og automasjon –', heroTitleB: 'fra felt til sky',
     heroLead: 'Walde Automation leverer automasjon, systemintegrasjon og elektroteknisk rådgivning — fra PLS-programmering og industriell kommunikasjon til programvareutvikling.',
     omEyebrow: 'Om',
     omTitle: 'Ingeniørarbeid i grensesnittet mellom fagene',
-    omP1: 'Walde Automation er et enkeltpersonforetak drevet av Mikael Walde, med spesialkompetanse innen industriell automasjon og systemintegrasjon. Arbeidet ligger i grensesnittene mellom mekanikk, elektro, programvare, kommunikasjon og styring — der de vanskeligste og mest verdifulle integrasjonsutfordringene løses.',
-    omP2: 'Fokus på edge-cases, feilmodus og vedlikeholdbarhet gir systemer som ikke bare virker, men som oppfører seg forutsigbart og trygt under både normal drift og unormale forhold.',
-    kompEyebrow: 'Teknologistack', kompTitle: 'Verktøy, plattformer og språk',
+    omP1: 'Walde Automation er et enkeltpersonforetak drevet av Mikael Walde, med spesialkompetanse innen industriell automasjon og systemintegrasjon. Arbeidet ligger i grensesnittene mellom mekanikk, elektro, programvare, kommunikasjon og styring — der fagene møtes, og der utfordringene ofte oppstår.',
+    kompEyebrow: 'Kompetanse', kompTitle: 'Verktøy, plattformer og språk',
     langCardTitle: 'Programmeringsspråk & standarder', appCardTitle: 'App, web & AI',
     chipHmi: 'HMI-paneler', chipOperatorPanel: 'Operatørgrensesnitt',
     tjEyebrow: 'Tjenester', tjTitle: 'Dette kan vi hjelpe deg med',
     svc0Title: 'PLS-, HMI- og displayprogrammering', svc0Desc: 'Vi programmerer, feilsøker og setter i drift PLS-er, HMI-paneler og displayer fra Schneider, Siemens, Danfoss og EOTE — med tilstandsmaskiner, forriglinger, feilhåndtering, oversiktlige skjermbilder og grundig teknisk dokumentasjon.',
     svc1Title: 'Industriell kommunikasjon', svc1Desc: 'Modbus TCP/RTU, PROFINET, Profibus DP, OPC UA, S7 og CAN / J1939 — pålitelig kommunikasjon mellom feltutstyr og styringssystemer.',
     svc2Title: 'Systemintegrasjon & OT', svc2Desc: 'OT-arkitektur, nettverkssegmentering, VPN og fjern-idriftsettelse — mekanikk, elektro, programvare og nettverk satt sammen til én robust helhet.',
-    svc3Title: 'Elektroteknisk rådgivning', svc3Desc: 'Rådgivning innen elektroteknikk og styringssystemer — fra 400 V kraftforsyning og motorkurser til 24 V styrestrøm, PLS og sensorer. Også erfaring med elektriske spesialkjøretøy.',
-    svc4Title: 'App- & programvareutvikling', svc4Desc: 'Moderne Apple-apper i Swift & SwiftUI (App Store) — en sjelden kombinasjon av OT-kompetanse og moderne programvareutvikling.',
+    svc3Title: 'Elektroteknisk rådgivning', svc3Desc: 'Rådgivning innen elektroteknikk og styringssystemer — fra 400 V kraftforsyning og motorkurser til 24 V styrestrøm, PLS og sensorer, blant annet på elektriske spesialkjøretøy.',
+    svc4Title: 'App- & programvareutvikling', svc4Desc: 'Vi lager apper for iPhone og iPad i Swift og SwiftUI, publisert på App Store.',
     svc5Title: 'Nettsider', svc5Desc: 'Vi lager raske og moderne nettsider som fungerer like godt på mobil som på PC — med fokus på ytelse, universell utforming og synlighet i søk.',
     svc6Title: 'AI-integrasjon', svc6Desc: 'Vi kobler AI inn i arbeidsflyten din og automatiserer utvalgte oppgaver — for eksempel sortering av e-post, oppretting av support-tickets og ukentlige rapporter.',
     webUrl: 'dinbedrift.no', webLogo: 'Bedrift', webL1: 'Tjenester', webL2: 'Om oss', webL3: 'Kontakt', webHero: 'Moderne nettside', webCta: 'Ta kontakt',
@@ -1404,7 +1429,7 @@ const COPY = {
     kontaktEyebrow: 'Kontakt', kontaktTitle: 'Ta kontakt',
     kontaktLead: 'Ta gjerne kontakt for en uforpliktende prat om ditt prosjekt.',
     labelNavn: 'Navn', labelEpost: 'E-post', labelMelding: 'Melding', sendBtn: 'Send melding',
-    contactPerson: 'Kontaktperson',
+    contactPerson: 'Kontaktperson', linkedinLink: 'Se profilen',
     companyFormLabel: 'Selskapsform', companyFormValue: 'Enkeltpersonforetak (ENK)',
     orgLabel: 'Org.nr',
     privacy: 'Opplysningene brukes kun for å besvare din henvendelse og lagres ikke utover det. Les mer i',
@@ -1416,21 +1441,20 @@ const COPY = {
     navOm: 'About', navKompetanse: 'Expertise', navTjenester: 'Services', navProsjekter: 'Projects',
     cta: 'Get in touch', ctaSecondary: 'View services',
     heroEyebrow: 'Automation · Systems Integration · Electrical Engineering',
-    heroTitleA: 'Automation tailored', heroTitleB: 'to your needs',
+    heroTitleA: 'Control and automation –', heroTitleB: 'from field to cloud',
     heroLead: 'Walde Automation delivers automation, systems integration and electrical engineering consultation — from PLC programming and industrial communication to software development.',
     omEyebrow: 'About',
     omTitle: 'Engineering at the interfaces between disciplines',
-    omP1: 'Walde Automation is a sole proprietorship run by Mikael Walde, specialising in industrial automation and systems integration. The work lives at the interfaces between mechanical, electrical, software, communication and control systems — where the hardest and most valuable integration challenges are solved.',
-    omP2: 'A focus on edge cases, failure modes and maintainability produces systems that don\u2019t just work, but behave predictably and safely under both normal operation and abnormal conditions.',
-    kompEyebrow: 'Technology stack', kompTitle: 'Tools, platforms & languages',
+    omP1: 'Walde Automation is a sole proprietorship run by Mikael Walde, specialising in industrial automation and systems integration. The work lives at the interfaces between mechanical, electrical, software, communication and control systems — where the disciplines meet, and where problems often arise.',
+    kompEyebrow: 'Expertise', kompTitle: 'Tools, platforms & languages',
     langCardTitle: 'Languages & standards', appCardTitle: 'App, web & AI',
     chipHmi: 'HMI panels', chipOperatorPanel: 'Operator interfaces',
     tjEyebrow: 'Services', tjTitle: 'How we can help',
     svc0Title: 'PLC, HMI & Display Programming', svc0Desc: 'We develop, troubleshoot and commission PLCs, HMI panels and displays from Schneider, Siemens, Danfoss and EOTE — with state machines, interlocks, fault handling, clear operator screens and thorough technical documentation.',
     svc1Title: 'Industrial Communication', svc1Desc: 'Modbus TCP/RTU, PROFINET, Profibus DP, OPC UA, S7 and CAN / J1939 — reliable communication between field devices and control systems.',
     svc2Title: 'Systems Integration & OT', svc2Desc: 'OT architecture, network segmentation, VPN and remote commissioning — mechanical, electrical, software and network brought together into one robust whole.',
-    svc3Title: 'Electrical Engineering Consultation', svc3Desc: 'Consulting in electrical engineering and control systems — from 400 V power supply and motor circuits to 24 V control power, PLCs and sensors. Also experience with electric special-purpose vehicles.',
-    svc4Title: 'App & Software Development', svc4Desc: 'Modern Apple apps in Swift & SwiftUI (App Store) — a rare combination of OT expertise and modern software development.',
+    svc3Title: 'Electrical Engineering Consultation', svc3Desc: 'Consulting in electrical engineering and control systems — from 400 V power supply and motor circuits to 24 V control power, PLCs and sensors, including on electric special-purpose vehicles.',
+    svc4Title: 'App & Software Development', svc4Desc: 'We build apps for iPhone and iPad in Swift and SwiftUI, published on the App Store.',
     svc5Title: 'Websites', svc5Desc: 'We build fast, modern websites that work just as well on a phone as on a desktop — with a focus on performance, accessibility and search visibility.',
     svc6Title: 'AI Integration', svc6Desc: 'We connect AI to your workflows and automate selected tasks — such as sorting email, creating support tickets and weekly reports.',
     webUrl: 'yourcompany.com', webLogo: 'Company', webL1: 'Services', webL2: 'About', webL3: 'Contact', webHero: 'A modern website', webCta: 'Contact us',
@@ -1456,7 +1480,7 @@ const COPY = {
     kontaktEyebrow: 'Contact', kontaktTitle: 'Get in touch',
     kontaktLead: 'Feel free to get in touch for a no-obligation chat about your project.',
     labelNavn: 'Name', labelEpost: 'Email', labelMelding: 'Message', sendBtn: 'Send message',
-    contactPerson: 'Contact',
+    contactPerson: 'Contact', linkedinLink: 'View profile',
     companyFormLabel: 'Company form', companyFormValue: 'Sole proprietorship (ENK)',
     orgLabel: 'Org. no.',
     privacy: 'Your information is used only to answer your enquiry and is not stored beyond that. Read more in the',
@@ -1555,32 +1579,37 @@ function typedHtml(segs, n) {
   }
   return out;
 }
+// A service card is idle while another card is in focus
+const cardIdle = card => card.classList.contains('idle');
+// Tracks whether el is on screen and its service card is in focus
 function watchVisible(el, onChange) {
-  const state = { visible: true };
+  const card = el.closest('.tj-grid .wide');
+  const state = { inView: true, get visible() { return this.inView && !(card && cardIdle(card)); } };
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(entries => {
-      state.visible = entries[0].isIntersecting;
+      state.inView = entries[0].isIntersecting;
       if (onChange) onChange(state.visible);
     }).observe(el);
   }
+  if (card && onChange) card.addEventListener('wake', () => onChange(state.visible));
   return state;
 }
 // Runs step(dt) every frame, but only while el is on screen and the tab is visible
 function animateWhileVisible(el, step) {
-  let running = false, visible = true, last = 0;
+  let running = false, last = 0;
+  const vis = watchVisible(el, () => start());
   function frame(now) {
-    if (!visible || document.hidden) { running = false; return; }
+    if (!vis.visible || document.hidden) { running = false; return; }
     step(Math.min(0.1, (now - last) / 1000));
     last = now;
     requestAnimationFrame(frame);
   }
   function start() {
-    if (running || !visible || document.hidden) return;
+    if (running || !vis.visible || document.hidden) return;
     running = true;
     last = performance.now();
     requestAnimationFrame(frame);
   }
-  watchVisible(el, v => { visible = v; start(); });
   document.addEventListener('visibilitychange', start);
   start();
 }
@@ -1807,8 +1836,10 @@ function restartAiTyper() {
   const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   el.textContent = '';
   if (reduce) { el.textContent = COPY[currentLang].aiTasks[0]; return; }
+  const card = el.closest('.tj-grid .wide');
   let li = 0, ci = 0, deleting = false;
   function tick() {
+    if (card && cardIdle(card)) { aiTimer = setTimeout(tick, 300); return; }
     const lines = COPY[currentLang].aiTasks;
     const full = lines[li % lines.length];
     if (!deleting) {
@@ -2158,6 +2189,50 @@ function glideTo(target) {
   });
 })();
 
+// Services: each card comes in step by step as you scroll to it, and only the card in focus
+// animates, so several animations never run side by side
+(function setupServiceFocus() {
+  const cards = [...document.querySelectorAll('.tj-grid > .wide')];
+  if (!cards.length) return;
+  const host = cards[0].offsetParent;
+  const clamp01 = v => Math.min(1, Math.max(0, v));
+  let focus = null;
+  function setFocus(best) {
+    if (best === focus) return;
+    focus = best;
+    cards.forEach((c, i) => {
+      const idle = i !== focus;
+      if (idle === cardIdle(c)) return;
+      c.classList.toggle('idle', idle);
+      if (!idle) c.dispatchEvent(new Event('wake'));
+    });
+  }
+  function update() {
+    const vh = window.innerHeight, mid = vh / 2, base = host.getBoundingClientRect().top;
+    let best = -1, bestD = Infinity;
+    cards.forEach((c, i) => {
+      // Layout position, unaffected by the card's own lift and scale
+      const top = base + c.offsetTop, bottom = top + c.offsetHeight;
+      if (!reduceMotion) {
+        // 0 while the card is below the screen, 1 once its top is a little above the middle
+        c.style.setProperty('--p', clamp01((vh - top) / (vh * 0.6)).toFixed(3));
+      }
+      if (bottom < 0 || top > vh) return;
+      const d = top <= mid && bottom >= mid ? 0 : Math.min(Math.abs(top - mid), Math.abs(bottom - mid));
+      if (d < bestD) { bestD = d; best = i; }
+    });
+    setFocus(best);
+  }
+  let queued = false;
+  window.addEventListener('scroll', () => {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(() => { queued = false; update(); });
+  }, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+})();
+
 // Gentle fade-up as content scrolls into view
 (function setupReveal() {
   const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -2169,7 +2244,7 @@ function glideTo(target) {
       io.unobserve(entry.target);
     });
   }, { rootMargin: '0px 0px -8% 0px' });
-  document.querySelectorAll('section:not(.hero) .eyebrow, section:not(.hero) .section-title, .om-card, .stack, .tj-grid .wide, .prosj-card, .kontakt-form-card, .kontakt-info').forEach(el => {
+  document.querySelectorAll('section:not(.hero) .eyebrow, section:not(.hero) .section-title, .om-card, .stack, .prosj-card, .kontakt-form-card, .kontakt-info').forEach(el => {
     const i = Array.prototype.indexOf.call(el.parentNode.children, el);
     el.classList.add('reveal');
     el.style.setProperty('--d', (i % 3) * 70 + 'ms');
@@ -2716,8 +2791,10 @@ async function initComm3d(host) {
 
   // Render loop, only while the card is on screen
   let visible = false, running = false, lastHz = -1;
+  const card = host.closest('.wide');
+  const idle = () => card && cardIdle(card);
   function frame() {
-    if (!visible || document.hidden) { running = false; return; }
+    if (!visible || document.hidden || idle()) { running = false; return; }
     requestAnimationFrame(frame);
     const dt = Math.min(clock.getDelta(), 0.05);
     const t = clock.elapsedTime;
@@ -2770,7 +2847,7 @@ async function initComm3d(host) {
     labels.render(scene, camera);
   }
   function start() {
-    if (running || !visible || document.hidden) return;
+    if (running || !visible || document.hidden || idle()) return;
     running = true;
     clock.getDelta();
     requestAnimationFrame(frame);
@@ -2780,6 +2857,7 @@ async function initComm3d(host) {
     start();
   }).observe(host);
   document.addEventListener('visibilitychange', start);
+  if (card) card.addEventListener('wake', start);
 
   controls.update();
   renderer.render(scene, camera);
