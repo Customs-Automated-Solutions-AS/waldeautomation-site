@@ -437,6 +437,10 @@ h2.section-title {
 .hint-part svg { flex: none; width: 13px; height: 13px; }
 .hint-rot svg { animation: hintRock 2.4s ease-in-out infinite; }
 .hint-tap svg { animation: hintTap 1.6s ease-in-out infinite; }
+/* The invitation to press the buttons is the main hint */
+@keyframes hintGlow { 0%,100% { box-shadow: 0 0 0 0 rgba(98,194,127,0.55); } 50% { box-shadow: 0 0 0 6px rgba(98,194,127,0); } }
+.hint-tap { padding: 5px 12px 5px 9px; font-size: 12px; font-weight: 600; color: #07110B; background: #62C27F; border-color: #62C27F; animation: hintGlow 2s ease-in-out infinite; }
+.hint-tap svg { width: 14px; height: 14px; }
 .hint-part.done { opacity: 0; }
 .h3.tap-hint .h3-btn.start::after {
   content: ''; position: absolute; inset: -3px; border-radius: 6px; border: 2px solid #62C27F; pointer-events: none;
@@ -965,8 +969,8 @@ footer { border-top: 1px solid var(--line); position: relative; z-index: 1; }
         <article class="glass wide hmi-card">
           <div class="hmi-stage" id="hmiStage">
             <div class="hmi-hint" aria-hidden="true">
+              <span class="hint-part hint-tap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 11V4.5a1.5 1.5 0 0 1 3 0V10"/><path d="M13 9.5a1.5 1.5 0 0 1 3 0V11"/><path d="M16 10.5a1.5 1.5 0 0 1 3 0v3.5a7 7 0 0 1-7 7h-.6a6 6 0 0 1-4.6-2.2L4 15.3a1.5 1.5 0 0 1 2.3-1.9L10 17"/></svg><span data-i18n="hmiTapHint">Prøv selv – trykk på knappene</span></span>
               <span class="hint-part hint-rot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3.5v5h-5"/></svg><span data-i18n="dragHint">Dra for å rotere</span></span>
-              <span class="hint-part hint-tap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 11V4.5a1.5 1.5 0 0 1 3 0V10"/><path d="M13 9.5a1.5 1.5 0 0 1 3 0V11"/><path d="M16 10.5a1.5 1.5 0 0 1 3 0v3.5a7 7 0 0 1-7 7h-.6a6 6 0 0 1-4.6-2.2L4 15.3a1.5 1.5 0 0 1 2.3-1.9L10 17"/></svg><span data-i18n="hmiTapHint">Trykk på skjermen</span></span>
             </div>
             <div class="h3-wrap">
               <div class="h3" id="hmi3d">
@@ -1411,7 +1415,7 @@ const COPY = {
     aiTasks: ['les gjennom kundetilbakemeldinger', 'opprett support-tickets automatisk', 'kjør hver tirsdag kl. 14:00', 'oppsummer ukens henvendelser', 'kategoriser innkommende e-post'],
     dragHint: 'Dra for å rotere', legendField: 'Feltkabler', legendVpn: 'VPN-tunnel', legendMotor: 'Motorkabel',
     viewField: 'Feltnivå', viewOt: 'Sky & fjerntilgang',
-    plcComment: '// M1: start/stopp med selvhold', hmiTapHint: 'Trykk på skjermen',
+    plcComment: '// M1: start/stopp med selvhold', hmiTapHint: 'Prøv selv – trykk på knappene',
     hmiTitle: 'M1 · Transportbånd', hmiBelt: 'Transportbånd', hmiCurrent: 'Strøm', hmiSpeed: 'Turtall', hmiHours: 'Driftstimer',
     hmiTabProc: 'Prosess', hmiTabAlarm: 'Alarmer', hmiTime: 'Tid', hmiMsg: 'Melding', hmiAck: 'Kvitter',
     hmiRunning: 'I DRIFT', hmiStopped: 'STOPPET', hmiFault: 'FEIL', hmiActive: 'Aktiv', hmiAcked: 'Kvittert',
@@ -1462,7 +1466,7 @@ const COPY = {
     aiTasks: ['read through customer feedback', 'create support tickets automatically', 'run every Tuesday at 2:00 PM', 'summarise this week\u2019s enquiries', 'categorise incoming email'],
     dragHint: 'Drag to rotate', legendField: 'Field wiring', legendVpn: 'VPN tunnel', legendMotor: 'Motor cable',
     viewField: 'Field level', viewOt: 'Cloud & remote access',
-    plcComment: '// M1: start/stop with seal-in', hmiTapHint: 'Tap the screen',
+    plcComment: '// M1: start/stop with seal-in', hmiTapHint: 'Try it – tap the buttons',
     hmiTitle: 'M1 · Conveyor', hmiBelt: 'Conveyor', hmiCurrent: 'Current', hmiSpeed: 'Speed', hmiHours: 'Run hours',
     hmiTabProc: 'Process', hmiTabAlarm: 'Alarms', hmiTime: 'Time', hmiMsg: 'Message', hmiAck: 'Acknowledge',
     hmiRunning: 'RUNNING', hmiStopped: 'STOPPED', hmiFault: 'FAULT', hmiActive: 'Active', hmiAcked: 'Acknowledged',
