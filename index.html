@@ -397,6 +397,338 @@ h2.section-title {
 /* Diagrams and code sit on a dark panel, so they use the brighter green */
 .code-panel { --accent: #62C27F; --accent-light: #9BE0B0; }
 
+@keyframes spin { to { rotate: 360deg; } }
+@keyframes pulseDot { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+@keyframes wave { to { translate: -14px 0; } }
+
+/* PLC / HMI card: a rotatable operator panel wired to a short piece of PLC code */
+@keyframes blink { 0%,60% { opacity: 1; } 61%,100% { opacity: .5; } }
+.tj-grid .wide.hmi-card { grid-template-columns: 1fr; gap: 28px; container-type: inline-size; }
+.hmi-stage {
+  position: relative; display: flex; align-items: center; justify-content: center; gap: 28px;
+  min-height: 430px; padding: 44px 28px 32px; overflow: hidden; border-radius: 14px; border: 1px solid var(--line-2);
+  background:
+    radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1.5px) 0 0 / 16px 16px,
+    radial-gradient(ellipse at 38% 30%, rgba(76,169,104,0.16), transparent 60%),
+    var(--panel);
+  box-shadow: var(--panel-shadow);
+  cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none;
+}
+.hmi-stage.dragging { cursor: grabbing; }
+@keyframes hintRock { 0%,100% { rotate: -25deg; } 50% { rotate: 25deg; } }
+@keyframes hintTap { 0%,55%,100% { scale: 1; } 25% { scale: .78; } }
+@keyframes tapRing { 0% { opacity: .9; scale: 1; } 100% { opacity: 0; scale: 1.2 1.6; } }
+.hmi-hint { position: absolute; left: 12px; right: 12px; top: 12px; z-index: 2; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; pointer-events: none; }
+.hint-part {
+  display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px 4px 8px; border-radius: 999px; white-space: nowrap;
+  font-family: var(--mono); font-size: 11px; color: #C8F5A0;
+  background: rgba(8,12,10,0.72); border: 1px solid rgba(98,194,127,0.45); transition: opacity .4s;
+}
+.hint-part svg { flex: none; width: 13px; height: 13px; }
+.hint-rot svg { animation: hintRock 2.4s ease-in-out infinite; }
+.hint-tap svg { animation: hintTap 1.6s ease-in-out infinite; }
+.hint-part.done { opacity: 0; }
+.h3.tap-hint .h3-btn.start::after {
+  content: ''; position: absolute; inset: -3px; border-radius: 6px; border: 2px solid #62C27F; pointer-events: none;
+  animation: tapRing 1.6s ease-out infinite;
+}
+.h3-wrap { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: center; height: calc(310px * var(--s, 1) + 30px); perspective: 1500px; }
+.h3 { position: relative; flex: none; width: 480px; height: 310px; transform-style: preserve-3d; scale: var(--s, 1); transform: rotateX(8deg) rotateY(-18deg); }
+.h3-face { position: absolute; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.h3-front {
+  inset: 0; padding: 14px; border-radius: 12px; transform: translateZ(10px);
+  background: linear-gradient(160deg, #3A3E42, #1E2124 55%, #25282B);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.07), inset 0 1px 0 rgba(255,255,255,0.14);
+}
+.h3-led { position: absolute; right: 16px; bottom: 5px; width: 4px; height: 4px; border-radius: 50%; background: #62C27F; box-shadow: 0 0 6px #62C27F; }
+.h3-back {
+  inset: 0; border-radius: 12px; transform: rotateY(180deg) translateZ(10px);
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.45) 0 4px, transparent 4px 10px) 300px 26px / 150px 54px no-repeat,
+    linear-gradient(160deg, #303336, #1B1D20);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
+}
+.h3-side { background: linear-gradient(#2A2D30, #141618); }
+.h3-l, .h3-r { top: 8px; bottom: 8px; left: 230px; width: 20px; }
+.h3-l { transform: rotateY(-90deg) translateZ(239px); }
+.h3-r { transform: rotateY(90deg) translateZ(239px); }
+.h3-t, .h3-b { left: 8px; right: 8px; top: 145px; height: 20px; }
+.h3-t { transform: rotateX(90deg) translateZ(154px); }
+.h3-b { transform: rotateX(-90deg) translateZ(154px); }
+.h3-label {
+  position: absolute; left: 34px; top: 30px; width: 170px; padding: 10px 12px; border-radius: 4px;
+  background: #E9ECEA; color: #2A302C; font-family: var(--mono); font-size: 9px; line-height: 1.55;
+}
+.h3-label b { display: block; font-size: 11px; letter-spacing: 0.04em; }
+.h3-label i { display: block; height: 16px; margin-top: 6px; background: repeating-linear-gradient(90deg, #222 0 1px, transparent 1px 3px, #222 3px 5px, transparent 5px 6px); }
+.h3-ports { position: absolute; left: 34px; bottom: 30px; display: flex; gap: 14px; font-family: var(--mono); font-size: 8.5px; color: #9AA3A0; text-align: center; }
+.h3-port { display: block; width: 34px; height: 26px; margin-bottom: 4px; border-radius: 3px; background: #0D0E0F; border: 2px solid #8E969A; box-shadow: inset 0 -6px 0 #1C1E20; }
+.h3-port.pwr { width: 44px; background: #2F7D46; border-color: #25653A; box-shadow: inset 0 0 0 4px #25653A; }
+.h3-screen {
+  position: relative; height: 100%; display: flex; flex-direction: column; overflow: hidden; border-radius: 3px;
+  background: #ECEFF1; color: #1E2A33; font-family: var(--sans); box-shadow: 0 0 0 1px #0B0C0D;
+}
+.h3-screen::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(125deg, rgba(255,255,255,0.18), transparent 38%); }
+.h3-head { display: flex; align-items: center; gap: 12px; height: 28px; padding: 0 10px; background: #1F2B35; color: #E8EDF1; font-size: 11px; font-weight: 600; }
+.h3-head .h3-title { flex: 1; }
+.h3-bell { position: relative; display: inline-flex; color: #7F909C; }
+.h3-bell svg { width: 14px; height: 14px; }
+.h3-bell b { position: absolute; top: -5px; right: -8px; display: none; min-width: 13px; height: 13px; padding: 0 3px; border-radius: 7px; background: #E0463A; color: #fff; font-size: 8.5px; line-height: 13px; text-align: center; }
+.h3.alarm .h3-bell { color: #FF7064; animation: blink .9s linear infinite; }
+.h3.alarm .h3-bell b { display: block; }
+.h3-clock { font-family: var(--mono); font-size: 10.5px; font-weight: 500; color: #A9B6C0; font-variant-numeric: tabular-nums; }
+.h3-body { position: relative; flex: 1; }
+.h3-view { position: absolute; inset: 0; display: none; padding: 10px; gap: 10px; }
+.h3-view.on { display: flex; }
+.h3-mimic { position: relative; flex: 1; min-width: 0; border-radius: 5px; background: #fff; border: 1px solid #D3D9DE; }
+.h3-mimic svg { display: block; width: 100%; height: 100%; }
+.h3-mimic text { font-family: var(--mono); font-size: 9px; fill: #52606B; }
+.h3 .mt { fill: #E9EDF0; stroke: #52606B; stroke-width: 1.5; transition: fill .3s; }
+.h3 .mt-t { font-family: var(--sans); font-size: 12px; font-weight: 700; fill: #33414C; transition: fill .3s; }
+.h3 .mt-t.sm { font-size: 8px; font-weight: 600; }
+.h3.run .mt { fill: #3E9B5F; stroke: #2C7446; }
+.h3.fault .mt { fill: #D64534; stroke: #A5301F; }
+.h3.run .mt-t, .h3.fault .mt-t { fill: #fff; }
+.h3 .rotor { fill: none; stroke: #9AA6AF; stroke-width: 1.4; stroke-dasharray: 3 5; transform-box: fill-box; transform-origin: center; }
+.h3.run .rotor { stroke: #3E9B5F; animation: spin 1.2s linear infinite; }
+.h3 .belt { fill: #D9DEE2; stroke: #7E8A94; stroke-width: 1.2; }
+.h3 .roll { fill: #fff; stroke: #7E8A94; stroke-width: 1.2; }
+.h3 .shaft { stroke: #52606B; stroke-width: 3; }
+.h3 .box { fill: #CFA56A; stroke: #A67C45; stroke-width: 1; }
+.h3 .chip { fill: #DDE2E6; transition: fill .3s; }
+.h3 .chip-t { font-family: var(--sans); font-size: 9px; font-weight: 700; letter-spacing: 0.06em; fill: #52606B; transition: fill .3s; }
+.h3.run .chip { fill: #DDF1E4; } .h3.run .chip-t { fill: #2C7446; }
+.h3.fault .chip { fill: #FBE0DC; } .h3.fault .chip-t { fill: #B3321F; }
+.h3-vals { flex: none; width: 136px; display: flex; flex-direction: column; gap: 6px; }
+.h3-field span { display: block; margin-bottom: 2px; font-size: 8.5px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #6A7782; }
+.h3-field b { display: block; padding: 3px 7px; border-radius: 3px; background: #fff; border: 1px solid #BFC7CE; font-family: var(--mono); font-size: 12px; font-weight: 500; text-align: right; font-variant-numeric: tabular-nums; }
+.h3-btns { display: flex; gap: 6px; margin-top: auto; }
+.h3-btn {
+  position: relative; flex: 1; height: 32px; border: 0; border-radius: 4px; cursor: pointer; font: 700 11px var(--sans); letter-spacing: 0.06em; color: #fff;
+  box-shadow: inset 0 -3px 0 rgba(0,0,0,0.22); transition: filter .15s, box-shadow .1s, translate .1s;
+}
+.h3-btn:hover { filter: brightness(1.08); }
+.h3-btn.pressed, .h3-btn:active { box-shadow: inset 0 2px 3px rgba(0,0,0,0.35); translate: 0 1px; filter: brightness(0.92); }
+.h3-btn.start { background: #2E8B57; }
+.h3-btn.stop { background: #C8372D; }
+.h3-btn.ack { flex: none; padding: 0 14px; background: #3B4A56; }
+.h3-btn.ack:disabled { opacity: .45; cursor: default; }
+.h3-alarms { flex-direction: column; }
+.h3-table { flex: 1; overflow: hidden; border-radius: 5px; background: #fff; border: 1px solid #D3D9DE; font-size: 10px; }
+.h3-row { display: grid; grid-template-columns: 62px 1fr auto; gap: 8px; align-items: center; height: 24px; padding: 0 8px; border-bottom: 1px solid #E6EAED; }
+.h3-row span:first-child { font-family: var(--mono); font-size: 9.5px; color: #52606B; }
+.h3-th { height: 22px; background: #E4E8EB; font-size: 9px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #52606B; }
+.h3-th span:first-child { font-family: var(--sans); font-size: 9px; }
+.h3-row.act { background: #FDECEA; color: #9F2A1B; font-weight: 600; }
+.h3-row.act span:last-child { color: #fff; background: #D64534; padding: 1px 6px; border-radius: 3px; animation: blink .9s linear infinite; }
+.h3-row.ack span:last-child { color: #6A7782; }
+.h3-foot { display: flex; align-items: center; justify-content: space-between; font-size: 10px; color: #52606B; }
+.h3-nav { display: flex; gap: 6px; height: 36px; padding: 5px 8px; background: #DDE2E6; border-top: 1px solid #C6CDD3; }
+.h3-tab {
+  display: inline-flex; align-items: center; gap: 6px; padding: 0 14px; border: 0; border-radius: 4px; cursor: pointer;
+  background: transparent; color: #33414C; font: 600 11px var(--sans);
+}
+.h3-tab:hover { background: rgba(255,255,255,0.5); }
+.h3-tab.on { background: #fff; color: #00707A; box-shadow: inset 0 -2px 0 #00929E; }
+.h3-tab b { display: none; min-width: 14px; height: 14px; padding: 0 4px; border-radius: 7px; background: #E0463A; color: #fff; font-size: 9px; line-height: 14px; }
+.h3.alarm .h3-tab b { display: inline-block; }
+.hmi-stage .plc-panel { flex: none; width: 300px; cursor: auto; }
+.plc-panel .code-body { height: 150px; line-height: 1.6; }
+.plc-mode {
+  margin-left: auto; display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border-radius: 999px;
+  font-family: var(--mono); font-size: 10px; font-weight: 600; letter-spacing: 0.12em; color: #8CE3A8;
+  background: rgba(98,194,127,0.12); border: 1px solid rgba(98,194,127,0.28); opacity: 0; transition: opacity .4s;
+}
+.plc-mode::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #62C27F; box-shadow: 0 0 8px #62C27F; animation: pulseDot 1.4s ease-in-out infinite; }
+.plc-panel.online .plc-mode { opacity: 1; }
+.plc-line { min-height: 1.6em; }
+.pv {
+  display: inline-block; min-width: 4.6ch; margin: 0 3px 0 5px; padding: 0 4px; border-radius: 3px;
+  font-size: 10.5px; line-height: 15px; text-align: center; vertical-align: 1px; font-variant-numeric: tabular-nums;
+  background: rgba(255,255,255,0.07); color: #8A8F8C; transition: background .15s, color .15s;
+}
+.pv.t { background: rgba(98,194,127,0.22); color: #8CE3A8; }
+.hmi-text .tj-num { margin-bottom: 16px; }
+@container (max-width: 760px) {
+  .hmi-stage { flex-direction: column; gap: 18px; padding: 44px 14px 18px; }
+  .h3-wrap { width: 100%; flex: none; }
+  .hmi-stage .plc-panel { width: 100%; max-width: 420px; }
+}
+@container (max-width: 400px) {
+  .hmi-stage { padding-top: 76px; }
+}
+@container (max-width: 380px) {
+  .plc-panel .code-body { font-size: 11px; padding: 14px; }
+}
+@media (min-width: 900px) {
+  .hmi-text { display: grid; grid-template-columns: minmax(0, 0.8fr) 1.2fr; column-gap: 40px; align-items: start; }
+  .hmi-text .tj-num { grid-column: 1; justify-self: start; }
+  .hmi-text .tj-title { grid-column: 1; margin: 0; }
+  .hmi-text .tj-desc { grid-column: 2; grid-row: 1 / span 2; }
+}
+
+/* App card: SwiftUI code is typed while the preview on the phone builds up */
+.app-stage {
+  position: relative; container-type: inline-size; height: 340px; overflow: hidden;
+  display: flex; justify-content: center; gap: 12px; padding: 0 12px;
+  border-radius: 14px; border: 1px solid var(--line-2);
+  background:
+    radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1.5px) 0 0 / 16px 16px,
+    radial-gradient(ellipse at 72% 0%, rgba(76,169,104,0.18), transparent 65%),
+    var(--panel);
+  box-shadow: var(--panel-shadow);
+}
+.app-code { align-self: center; flex: none; width: 248px; background: #121714; border-color: rgba(255,255,255,0.1); }
+.app-code .code-body { height: 204px; padding: 12px; font-size: 10px; line-height: 1.6; }
+.app-live {
+  margin-left: auto; display: inline-flex; align-items: center; gap: 5px; font-family: var(--mono); font-size: 10px; color: #8CE3A8;
+}
+.app-live::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #62C27F; box-shadow: 0 0 8px #62C27F; animation: pulseDot 1.4s ease-in-out infinite; }
+.phone {
+  position: relative; flex: none; width: 196px; height: 416px; margin-top: 26px; padding: 7px;
+  border-radius: 38px; background: #0A0B0A; border: 1px solid #2C312E;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05), 0 30px 60px -20px rgba(0,0,0,0.85), 0 0 70px -16px rgba(76,169,104,0.35);
+}
+.phone-screen {
+  position: relative; height: 100%; overflow: hidden; border-radius: 31px;
+  background: #fff; color: #111; font-family: -apple-system, BlinkMacSystemFont, var(--sans); font-size: 10px; line-height: 1.25;
+}
+.phone-island { position: absolute; z-index: 5; top: 8px; left: 50%; translate: -50% 0; width: 54px; height: 17px; border-radius: 999px; background: #000; }
+.phone-status { display: flex; justify-content: space-between; align-items: center; height: 34px; padding: 4px 14px 0 20px; font-size: 10.5px; font-weight: 600; }
+.phone-icons { display: inline-flex; align-items: center; gap: 3px; }
+.phone-icons svg { height: 8px; width: auto; fill: currentColor; }
+.pvw {
+  position: absolute; left: 0; right: 0; top: 34px; height: 262px; padding: 0 14px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 9px; text-align: center;
+  transition: opacity .4s;
+}
+.pvw.fade { opacity: 0; }
+.pvw > * { display: none; }
+.pvw.s-icon .pvw-icon, .pvw.s-title .pvw-title, .pvw.s-sub .pvw-sub, .pvw.s-btn .pvw-btn { display: block; animation: pvPop .35s var(--ease); }
+@keyframes pvPop { from { opacity: 0; scale: .8; } }
+@keyframes pvTap { 50% { scale: .92; filter: brightness(.9); } }
+.pvw-icon { width: 11px; height: 11px; color: #111; transition: width .5s var(--ease), height .5s var(--ease), color .4s; }
+.pvw.s-iconSize .pvw-icon { width: 38px; height: 38px; }
+.pvw.s-iconColor .pvw-icon { color: #34C759; }
+.pvw-title { font-size: 11px; transition: font-size .45s var(--ease); }
+.pvw.s-titleFont .pvw-title { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
+.pvw-sub { font-size: 11px; color: #111; transition: color .4s; }
+.pvw.s-subColor .pvw-sub { color: #8A8A8E; }
+.pvw-btn { margin-top: 4px; padding: 6px 14px; border-radius: 999px; font-size: 11px; color: #007AFF; transition: background .4s, color .4s; }
+.pvw.s-btnStyle .pvw-btn { background: #007AFF; color: #fff; font-weight: 600; }
+.pvw.tap .pvw-btn { animation: pvTap .3s ease; }
+@container (max-width: 458px) { .app-code { display: none; } }
+
+/* Websites card: one small site shown at desktop, tablet and phone width */
+.web-stage {
+  position: relative; container-type: inline-size; display: flex; gap: 14px; height: 300px; padding: 18px 16px 14px; overflow: hidden;
+  border-radius: 14px; border: 1px solid var(--line-2);
+  background:
+    radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1.5px) 0 0 / 16px 16px,
+    radial-gradient(ellipse at 40% 0%, rgba(76,169,104,0.16), transparent 65%),
+    var(--panel);
+  box-shadow: var(--panel-shadow);
+}
+.web-area { position: relative; flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; }
+.web-browser {
+  width: 100%; min-width: 128px; height: 232px; flex: none; display: flex; flex-direction: column; overflow: hidden;
+  border-radius: 10px; background: #fff; box-shadow: 0 20px 40px -18px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.08);
+  transition: width .9s var(--ease), border-radius .6s var(--ease);
+}
+.web-browser.as-phone { border-radius: 20px; }
+.web-bar { flex: none; display: flex; align-items: center; gap: 4px; height: 24px; padding: 0 8px; background: #F1F3F2; border-bottom: 1px solid #E2E6E4; }
+.web-bar .dot { width: 7px; height: 7px; background: #D3D8D5; }
+.web-url {
+  flex: 1; min-width: 0; margin-left: 5px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; height: 15px; overflow: hidden;
+  border-radius: 5px; background: #fff; border: 1px solid #E2E6E4; font-family: var(--sans); font-size: 8.5px; color: #6B7570; white-space: nowrap;
+}
+.web-url svg { flex: none; width: 8px; height: 8px; }
+.web-page { container-type: inline-size; flex: 1; padding: 8px 10px; overflow: hidden; font-family: var(--sans); color: #17201B; }
+.wp-nav { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 12px; font-size: 8px; }
+.wp-logo { display: inline-flex; align-items: center; gap: 4px; font-size: 9px; font-weight: 700; }
+.wp-logo i { width: 10px; height: 10px; border-radius: 3px; background: #4CA968; }
+.wp-links { display: flex; gap: 10px; color: #4A5550; white-space: nowrap; }
+.wp-burger { display: none; flex-direction: column; gap: 2px; }
+.wp-burger i { width: 10px; height: 1.5px; border-radius: 1px; background: #17201B; }
+.wp-hero { display: grid; grid-template-columns: 1.1fr 1fr; gap: 10px; align-items: center; margin-bottom: 12px; }
+.wp-copy b { display: block; margin-bottom: 6px; font-size: 14px; line-height: 1.1; letter-spacing: -0.02em; }
+.wp-copy i { display: block; height: 4px; margin-bottom: 4px; border-radius: 2px; background: #E1E6E3; }
+.wp-copy i.short { width: 70%; }
+.wp-btn { display: inline-block; margin-top: 5px; padding: 4px 8px; border-radius: 999px; background: #277D45; color: #fff; font-size: 7.5px; font-weight: 600; white-space: nowrap; }
+.wp-img { display: grid; place-items: center; overflow: hidden; aspect-ratio: 4 / 3; border-radius: 6px; background: linear-gradient(135deg, #D6EFDE, #A3D6B3 60%, #72BA89); }
+.wp-img svg { width: 62%; height: auto; }
+.wp-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+.wp-cards > div { padding: 7px; border-radius: 6px; background: #F4F6F5; border: 1px solid #E6EAE8; }
+.wp-cards span { display: block; width: 12px; height: 12px; margin-bottom: 6px; border-radius: 4px; background: #D6EEDD; }
+.wp-cards i { display: block; height: 3.5px; margin-bottom: 3px; border-radius: 2px; background: #DDE2DF; }
+.wp-cards i.short { width: 60%; }
+@container (max-width: 250px) {
+  .wp-hero { grid-template-columns: 1fr; }
+  .wp-img { aspect-ratio: 16 / 7; }
+  .wp-cards { grid-template-columns: 1fr 1fr; }
+  .wp-cards > div:nth-child(3) { display: none; }
+}
+@container (max-width: 180px) {
+  .wp-links { display: none; }
+  .wp-burger { display: flex; }
+  .wp-cards { grid-template-columns: 1fr; }
+  .wp-cards > div:nth-child(3) { display: block; }
+}
+.web-device {
+  margin-top: 10px; display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; white-space: nowrap;
+  font-family: var(--mono); font-size: 10.5px; color: #C8F5A0; background: rgba(8,12,10,0.72); border: 1px solid rgba(98,194,127,0.4);
+}
+.web-device em { font-style: normal; color: #7B8680; }
+.web-device svg { display: none; width: 12px; height: 12px; }
+.web-stage[data-device="desktop"] .ic-desktop, .web-stage[data-device="tablet"] .ic-tablet, .web-stage[data-device="phone"] .ic-phone { display: block; }
+.web-scores { flex: none; width: 92px; display: flex; flex-direction: column; justify-content: center; gap: 12px; }
+.ring { display: grid; justify-items: center; gap: 4px; text-align: center; }
+.ring > div { position: relative; width: 46px; height: 46px; }
+.ring svg { display: block; width: 100%; height: 100%; rotate: -90deg; }
+.ring circle { fill: none; stroke-width: 4; }
+.ring .bg { stroke: rgba(255,255,255,0.08); }
+.ring .fg { stroke: #62C27F; stroke-linecap: round; stroke-dasharray: 113.1; stroke-dashoffset: 113.1; transition: stroke-dashoffset 1.2s var(--ease); }
+.ring b { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--mono); font-size: 13px; font-weight: 600; color: #C8F5A0; }
+.ring span { font-family: var(--mono); font-size: 9px; color: #8A948F; }
+@container (max-width: 400px) { .web-scores { display: none; } }
+
+/* AI card: the prompt above an animated workflow */
+.ai-panel { container-type: inline-size; }
+.ai-panel .ai-body { border-bottom: 1px solid rgba(255,255,255,0.06); }
+.flow {
+  position: relative; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+  gap: 0 28px; padding: 22px 18px 24px;
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1.5px) 0 0 / 16px 16px;
+}
+.flow-wires { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.flow-wires path { fill: none; stroke: rgba(255,255,255,0.13); stroke-width: 1.2; transition: stroke .4s; }
+.flow-wires path.hot { stroke: rgba(98,194,127,0.55); }
+.flow-wires circle { fill: #9BF0B8; filter: drop-shadow(0 0 4px #62C27F); }
+.flow-col { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 10px; }
+.flow-col.src { align-items: flex-start; }
+.flow-col.out { align-items: flex-end; }
+.fnode {
+  display: inline-flex; align-items: center; gap: 7px; padding: 6px 10px; border-radius: 9px; white-space: nowrap;
+  background: #151A17; border: 1px solid rgba(255,255,255,0.1); font-family: var(--mono); font-size: 11px; color: #C9D1CC;
+  transition: border-color .5s, box-shadow .5s;
+}
+.fnode svg { flex: none; width: 13px; height: 13px; color: #7B8680; }
+.fnode.ping { border-color: rgba(98,194,127,0.65); box-shadow: 0 0 0 3px rgba(98,194,127,0.12); transition: none; }
+.fnode .cnt { min-width: 3.2ch; padding: 0 5px; border-radius: 4px; background: rgba(98,194,127,0.14); color: #8CE3A8; font-size: 10px; font-weight: 500; text-align: center; font-variant-numeric: tabular-nums; }
+.fnode.ai { flex-direction: column; justify-content: center; gap: 4px; width: 70px; height: 70px; border-radius: 18px; color: #E4E9E6; font-weight: 600; }
+.fnode.ai svg { width: 22px; height: 22px; color: #8CE3A8; transition: scale .4s var(--ease); }
+.fnode.ai.busy { border-color: rgba(98,194,127,0.7); box-shadow: 0 0 0 4px rgba(98,194,127,0.1), 0 0 28px rgba(98,194,127,0.35); }
+.fnode.ai.busy svg { scale: 1.18; }
+@container (max-width: 380px) {
+  .flow { gap: 0 12px; padding: 18px 14px 20px; }
+  .flow-col { gap: 8px; }
+  .fnode { gap: 6px; padding: 5px 7px; font-size: 10px; }
+  .fnode svg { width: 11px; height: 11px; }
+  .fnode .cnt { display: none; }
+  .fnode.ai { width: 54px; height: 54px; border-radius: 14px; }
+  .fnode.ai svg { width: 18px; height: 18px; }
+}
+
 /* Prosjekter */
 .prosj-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
 .prosj-card { padding: 8px 8px 26px; }
@@ -527,7 +859,6 @@ footer { border-top: 1px solid var(--line); position: relative; z-index: 1; }
         <a href="#om" data-i18n="navOm">Om</a>
         <a href="#kompetanse" data-i18n="navKompetanse">Kompetanse</a>
         <a href="#tjenester" data-i18n="navTjenester">Tjenester</a>
-        <a href="#prosjekter" data-i18n="navProsjekter">Prosjekter</a>
         <div class="nav-tools">
           <button class="theme-toggle" id="themeToggle" type="button" aria-label="Lys / mørk modus" title="Lys / mørk modus">
             <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
@@ -551,7 +882,7 @@ footer { border-top: 1px solid var(--line); position: relative; z-index: 1; }
       <div>
         <p class="pill"><span class="pill-dot"></span><span data-i18n="heroEyebrow">Automasjon · Systemintegrasjon · Elektroteknikk</span></p>
         <h1><span data-i18n="heroTitleA">Automasjon tilpasset</span> <span class="grad" data-i18n="heroTitleB">dine behov</span></h1>
-        <p class="lead" data-i18n="heroLead">Walde Automation leverer automasjon, systemintegrasjon og elektroteknisk rådgivning — fra PLC-programmering og industriell kommunikasjon til programvareutvikling.</p>
+        <p class="lead" data-i18n="heroLead">Walde Automation leverer automasjon, systemintegrasjon og elektroteknisk rådgivning — fra PLS-programmering og industriell kommunikasjon til programvareutvikling.</p>
         <div class="hero-actions">
           <a href="#kontakt" class="btn-primary-lg"><span data-i18n="cta">Ta kontakt</span><span class="arr" aria-hidden="true">→</span></a>
           <a href="#tjenester" class="btn-secondary" data-i18n="ctaSecondary">Se tjenester</a>
@@ -612,21 +943,95 @@ footer { border-top: 1px solid var(--line); position: relative; z-index: 1; }
   <section id="tjenester">
     <div class="wrap">
       <p class="eyebrow" data-i18n="tjEyebrow">Tjenester</p>
-      <h2 class="section-title" data-i18n="tjTitle">Hva jeg leverer</h2>
+      <h2 class="section-title" data-i18n="tjTitle">Dette kan vi hjelpe deg med</h2>
       <div class="tj-grid">
 
-        <article class="glass wide">
-          <div>
-            <p class="tj-num">01</p>
-            <h3 class="tj-title" data-i18n="svc0Title">PLC-programmering</h3>
-            <p class="tj-desc" data-i18n="svc0Desc">Utvikling, feilsøking og idriftsettelse av PLC-programvare på Schneider, Siemens og Danfoss — med tilstandsmaskiner, feilhåndtering, interlocks og teknisk dokumentasjon.</p>
-          </div>
-          <div class="code-panel">
-            <div class="code-topbar">
-              <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
-              <span class="code-label">StartPump.ST</span>
+        <article class="glass wide hmi-card">
+          <div class="hmi-stage" id="hmiStage">
+            <div class="hmi-hint" aria-hidden="true">
+              <span class="hint-part hint-rot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3.5v5h-5"/></svg><span data-i18n="dragHint">Dra for å rotere</span></span>
+              <span class="hint-part hint-tap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 11V4.5a1.5 1.5 0 0 1 3 0V10"/><path d="M13 9.5a1.5 1.5 0 0 1 3 0V11"/><path d="M16 10.5a1.5 1.5 0 0 1 3 0v3.5a7 7 0 0 1-7 7h-.6a6 6 0 0 1-4.6-2.2L4 15.3a1.5 1.5 0 0 1 2.3-1.9L10 17"/></svg><span data-i18n="hmiTapHint">Trykk på skjermen</span></span>
             </div>
-            <div class="code-body" id="plcCode"></div>
+            <div class="h3-wrap">
+              <div class="h3" id="hmi3d">
+                <div class="h3-face h3-front">
+                  <div class="h3-screen">
+                    <div class="h3-head">
+                      <span class="h3-title" data-i18n="hmiTitle">M1 · Transportbånd</span>
+                      <span class="h3-bell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg><b>1</b></span>
+                      <span class="h3-clock">--:--:--</span>
+                    </div>
+                    <div class="h3-body">
+                      <div class="h3-view h3-proc on" data-view="proc">
+                        <div class="h3-mimic">
+                          <svg viewBox="0 0 286 198">
+                            <defs><clipPath id="h3Belt"><rect x="94" y="30" width="176" height="52"/></clipPath></defs>
+                            <circle class="rotor" cx="48" cy="92" r="29"/>
+                            <line class="shaft" x1="70" y1="92" x2="100" y2="92"/>
+                            <circle class="mt" cx="48" cy="92" r="22"/>
+                            <text class="mt-t" x="48" y="92" text-anchor="middle">M</text>
+                            <text class="mt-t sm" x="48" y="104" text-anchor="middle">3~</text>
+                            <rect class="belt" x="94" y="80" width="176" height="24" rx="12"/>
+                            <circle class="roll" cx="106" cy="92" r="8"/>
+                            <circle class="roll" cx="157" cy="92" r="4"/>
+                            <circle class="roll" cx="207" cy="92" r="4"/>
+                            <circle class="roll" cx="258" cy="92" r="8"/>
+                            <g clip-path="url(#h3Belt)"><rect class="box" x="110" y="63" width="24" height="17" rx="2"/><rect class="box" x="170" y="63" width="24" height="17" rx="2"/><rect class="box" x="230" y="63" width="24" height="17" rx="2"/></g>
+                            <text x="48" y="138" text-anchor="middle">M1</text>
+                            <text x="182" y="124" text-anchor="middle" data-i18n="hmiBelt">Transportbånd</text>
+                            <rect class="chip" x="12" y="158" width="72" height="20" rx="10"/>
+                            <text class="chip-t" x="48" y="171.5" text-anchor="middle">STOPPET</text>
+                          </svg>
+                        </div>
+                        <div class="h3-vals">
+                          <div class="h3-field"><span data-i18n="hmiCurrent">Strøm</span><b data-h="amp">0,0 A</b></div>
+                          <div class="h3-field"><span data-i18n="hmiSpeed">Turtall</span><b data-h="rpm">0 rpm</b></div>
+                          <div class="h3-field"><span data-i18n="hmiHours">Driftstimer</span><b data-h="hours">1 284 h</b></div>
+                          <div class="h3-btns"><button type="button" class="h3-btn start" data-cmd="start">START</button><button type="button" class="h3-btn stop" data-cmd="stop">STOP</button></div>
+                        </div>
+                      </div>
+                      <div class="h3-view h3-alarms" data-view="alarm">
+                        <div class="h3-table">
+                          <div class="h3-row h3-th"><span data-i18n="hmiTime">Tid</span><span data-i18n="hmiMsg">Melding</span><span>Status</span></div>
+                          <div class="h3-rows"></div>
+                        </div>
+                        <div class="h3-foot"><span class="h3-count"></span><button type="button" class="h3-btn ack" data-cmd="ack" data-i18n="hmiAck">Kvitter</button></div>
+                      </div>
+                    </div>
+                    <div class="h3-nav">
+                      <button type="button" class="h3-tab on" data-tab="proc"><span data-i18n="hmiTabProc">Prosess</span></button>
+                      <button type="button" class="h3-tab" data-tab="alarm"><span data-i18n="hmiTabAlarm">Alarmer</span><b>1</b></button>
+                    </div>
+                  </div>
+                  <span class="h3-led"></span>
+                </div>
+                <div class="h3-face h3-back">
+                  <div class="h3-label"><b>HMI 7" TOUCH</b>24 V DC · 0,5 A<br>IP65 (front) · PROFINET<i></i></div>
+                  <div class="h3-ports">
+                    <span><i class="h3-port"></i>X1 P1</span>
+                    <span><i class="h3-port"></i>X1 P2</span>
+                    <span><i class="h3-port pwr"></i>X80 24V</span>
+                  </div>
+                </div>
+                <div class="h3-face h3-side h3-l"></div>
+                <div class="h3-face h3-side h3-r"></div>
+                <div class="h3-face h3-side h3-t"></div>
+                <div class="h3-face h3-side h3-b"></div>
+              </div>
+            </div>
+            <div class="code-panel plc-panel" id="plcPanel">
+              <div class="code-topbar">
+                <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+                <span class="code-label">M1_Motor.ST</span>
+                <span class="plc-mode">ONLINE</span>
+              </div>
+              <div class="code-body" id="plcCode"></div>
+            </div>
+          </div>
+          <div class="hmi-text">
+            <p class="tj-num">01</p>
+            <h3 class="tj-title" data-i18n="svc0Title">PLS-, HMI- og displayprogrammering</h3>
+            <p class="tj-desc" data-i18n="svc0Desc">Vi programmerer, feilsøker og setter i drift PLS-er, HMI-paneler og displayer fra Schneider, Siemens, Danfoss og EOTE — med tilstandsmaskiner, forriglinger, feilhåndtering, oversiktlige skjermbilder og grundig teknisk dokumentasjon.</p>
           </div>
         </article>
 
@@ -792,22 +1197,81 @@ footer { border-top: 1px solid var(--line); position: relative; z-index: 1; }
             <h3 class="tj-title" data-i18n="svc4Title">App- &amp; programvareutvikling</h3>
             <p class="tj-desc" data-i18n="svc4Desc">Moderne Apple-apper i Swift &amp; SwiftUI (App Store) — en sjelden kombinasjon av OT-kompetanse og moderne programvareutvikling.</p>
           </div>
-          <div class="code-panel">
-            <div class="code-topbar">
-              <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
-              <span class="code-label">ContentView.swift</span>
+          <div class="app-stage">
+            <div class="code-panel app-code">
+              <div class="code-topbar">
+                <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+                <span class="code-label">TodayView.swift</span>
+                <span class="app-live">Preview</span>
+              </div>
+              <div class="code-body code-swift" id="swiftCode"></div>
             </div>
-            <div class="code-body code-swift" id="swiftCode"></div>
+            <div class="phone" role="img" aria-label="iPhone som viser en SwiftUI-forhåndsvisning som bygges opp mens koden skrives">
+              <div class="phone-screen">
+                <div class="phone-island"></div>
+                <div class="phone-status">
+                  <span>9:41</span>
+                  <span class="phone-icons">
+                    <svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+                    <svg viewBox="0 0 16 12"><path d="M8 11.6 5.7 9.2a3.3 3.3 0 0 1 4.6 0zM3.6 7.1a6.3 6.3 0 0 1 8.8 0L11 8.5a4.3 4.3 0 0 0-6 0zM1.4 4.9a9.4 9.4 0 0 1 13.2 0l-1.4 1.4a7.4 7.4 0 0 0-10.4 0z"/></svg>
+                    <svg viewBox="0 0 26 12"><rect x="0.5" y="0.5" width="22" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="16" height="8" rx="1.8"/><rect x="23.6" y="4" width="1.8" height="4" rx=".8" opacity=".4"/></svg>
+                  </span>
+                </div>
+                <div class="pvw" id="appPreview">
+                  <svg class="pvw-icon" viewBox="0 0 24 24"><path d="M13.5 2 4.5 13.5h6.2L9.8 22l9-11.5h-6.2z" fill="currentColor"/></svg>
+                  <div class="pvw-title"></div>
+                  <div class="pvw-sub"></div>
+                  <div class="pvw-btn"></div>
+                </div>
+              </div>
+            </div>
           </div>
         </article>
 
         <article class="glass wide">
           <div>
             <p class="tj-num">05</p>
-            <h3 class="tj-title" data-i18n="svc5Title">Nettsider &amp; AI-integrasjon</h3>
-            <p class="tj-desc" data-i18n="svc5Desc">Utvikling av nettsider og AI-integrasjoner for bedrifter — for å automatisere utvalgte oppgaver og arbeidsflyter.</p>
+            <h3 class="tj-title" data-i18n="svc5Title">Nettsider</h3>
+            <p class="tj-desc" data-i18n="svc5Desc">Vi lager raske og moderne nettsider som fungerer like godt på mobil som på PC — med fokus på ytelse, universell utforming og synlighet i søk.</p>
           </div>
-          <div class="code-panel">
+          <div class="web-stage" id="webStage" data-device="desktop" aria-hidden="true">
+            <div class="web-area">
+              <div class="web-browser">
+                <div class="web-bar">
+                  <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                  <span class="web-url"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span data-i18n="webUrl">dinbedrift.no</span></span>
+                </div>
+                <div class="web-page">
+                  <div class="wp-nav">
+                    <span class="wp-logo"><i></i><span data-i18n="webLogo">Bedrift</span></span>
+                    <span class="wp-links"><span data-i18n="webL1">Tjenester</span><span data-i18n="webL2">Om oss</span><span data-i18n="webL3">Kontakt</span></span>
+                    <span class="wp-burger"><i></i><i></i><i></i></span>
+                  </div>
+                  <div class="wp-hero">
+                    <div class="wp-copy"><b data-i18n="webHero">Moderne nettside</b><i></i><i class="short"></i><span class="wp-btn" data-i18n="webCta">Ta kontakt</span></div>
+                    <div class="wp-img"><svg viewBox="0 0 60 36"><circle cx="45" cy="9" r="5" fill="#F4D35E"/><path d="M0 36 18 14l10 12 8-8 24 18z" fill="#2F7D4A" opacity=".85"/><path d="M14 36 30 20l16 16z" fill="#1F5E36"/></svg></div>
+                  </div>
+                  <div class="wp-cards"><div><span></span><i></i><i class="short"></i></div><div><span></span><i></i><i class="short"></i></div><div><span></span><i></i><i class="short"></i></div></div>
+                </div>
+              </div>
+              <span class="web-device">
+                <svg class="ic-desktop" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                <svg class="ic-tablet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M11 18h2"/></svg>
+                <svg class="ic-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg>
+                <span data-i18n="webDesktop">Desktop</span><em>1280 px</em>
+              </span>
+            </div>
+            <div class="web-scores"><div class="ring"><div><svg viewBox="0 0 46 46"><circle class="bg" cx="23" cy="23" r="18"/><circle class="fg" cx="23" cy="23" r="18"/></svg><b>0</b></div><span data-i18n="webPerf">Ytelse</span></div><div class="ring"><div><svg viewBox="0 0 46 46"><circle class="bg" cx="23" cy="23" r="18"/><circle class="fg" cx="23" cy="23" r="18"/></svg><b>0</b></div><span data-i18n="webA11y">Tilgjengelighet</span></div><div class="ring"><div><svg viewBox="0 0 46 46"><circle class="bg" cx="23" cy="23" r="18"/><circle class="fg" cx="23" cy="23" r="18"/></svg><b>0</b></div><span data-i18n="webSeo">SEO</span></div></div>
+          </div>
+        </article>
+
+        <article class="glass wide">
+          <div>
+            <p class="tj-num">06</p>
+            <h3 class="tj-title" data-i18n="svc6Title">AI-integrasjon</h3>
+            <p class="tj-desc" data-i18n="svc6Desc">Vi kobler AI inn i arbeidsflyten din og automatiserer utvalgte oppgaver — for eksempel sortering av e-post, oppretting av support-tickets og ukentlige rapporter.</p>
+          </div>
+          <div class="code-panel ai-panel">
             <div class="code-topbar">
               <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
               <span class="code-label" style="display:inline-flex;align-items:center;gap:6px;">
@@ -817,36 +1281,25 @@ footer { border-top: 1px solid var(--line); position: relative; z-index: 1; }
             <div class="ai-body">
               <span style="color:var(--accent);margin-right:8px;">❯</span><span id="aiText" style="color:#E4E4E7;"></span><span class="caret"></span>
             </div>
+            <div class="flow" id="aiFlow" aria-hidden="true">
+              <svg class="flow-wires"></svg>
+              <div class="flow-col src">
+                <span class="fnode" data-node="mail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 7 8.5 6 8.5-6"/></svg><span data-i18n="flowMail">E-post</span></span>
+                <span class="fnode" data-node="form"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg><span data-i18n="flowForm">Skjema</span></span>
+                <span class="fnode" data-node="cron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span data-i18n="flowCron">Tir 14:00</span></span>
+              </div>
+              <div class="flow-col mid">
+                <span class="fnode ai" data-node="ai"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 3.5l1.9 5.1 5.1 1.9-5.1 1.9L11 17.5l-1.9-5.1L4 10.5l5.1-1.9z"/><path d="M18.5 14.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/></svg><span>AI</span></span>
+              </div>
+              <div class="flow-col out">
+                <span class="fnode" data-node="ticket"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16v3a2 2 0 0 0 0 4v3H4v-3a2 2 0 0 0 0-4z"/><path d="M14 8v8" stroke-dasharray="1.5 2"/></svg><span data-i18n="flowTicket">Ticket</span><b class="cnt">124</b></span>
+                <span class="fnode" data-node="crm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.3c1.8.8 3 2.9 3 5.7"/></svg><span>CRM</span><b class="cnt">318</b></span>
+                <span class="fnode" data-node="report"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V11M10 20V5M16 20v-6M2 20h20"/></svg><span data-i18n="flowReport">Rapport</span><b class="cnt">12</b></span>
+              </div>
+            </div>
           </div>
         </article>
 
-      </div>
-    </div>
-  </section>
-
-  <section id="prosjekter">
-    <div class="wrap">
-      <p class="eyebrow" data-i18n="prosjEyebrow">Referanseprosjekter</p>
-      <h2 class="section-title" data-i18n="prosjTitle">Utvalgte prosjekter</h2>
-      <div class="prosj-grid">
-        <article class="glass prosj-card">
-          <div class="prosj-thumb" data-i18n="projPhoto">Prosjektbilde</div>
-          <p class="prosj-meta" data-i18n="proj1Meta">Prosessindustri · Årstall</p>
-          <h3 class="prosj-title" data-i18n="proj1Title">Pumpestyring</h3>
-          <p class="prosj-desc" data-i18n="projDesc">Kort beskrivelse av prosjektet kommer her.</p>
-        </article>
-        <article class="glass prosj-card">
-          <div class="prosj-thumb" data-i18n="projPhoto">Prosjektbilde</div>
-          <p class="prosj-meta" data-i18n="proj2Meta">Vann &amp; avløp · Årstall</p>
-          <h3 class="prosj-title" data-i18n="proj2Title">Vannbehandling</h3>
-          <p class="prosj-desc" data-i18n="projDesc">Kort beskrivelse av prosjektet kommer her.</p>
-        </article>
-        <article class="glass prosj-card">
-          <div class="prosj-thumb" data-i18n="projPhoto">Prosjektbilde</div>
-          <p class="prosj-meta" data-i18n="proj3Meta">Industri · Årstall</p>
-          <h3 class="prosj-title" data-i18n="proj3Title">Styringssystem</h3>
-          <p class="prosj-desc" data-i18n="projDesc">Kort beskrivelse av prosjektet kommer her.</p>
-        </article>
       </div>
     </div>
   </section>
@@ -918,7 +1371,7 @@ const COPY = {
     cta: 'Ta kontakt', ctaSecondary: 'Se tjenester',
     heroEyebrow: 'Automasjon · Systemintegrasjon · Elektroteknikk',
     heroTitleA: 'Automasjon tilpasset', heroTitleB: 'dine behov',
-    heroLead: 'Walde Automation leverer automasjon, systemintegrasjon og elektroteknisk rådgivning — fra PLC-programmering og industriell kommunikasjon til programvareutvikling.',
+    heroLead: 'Walde Automation leverer automasjon, systemintegrasjon og elektroteknisk rådgivning — fra PLS-programmering og industriell kommunikasjon til programvareutvikling.',
     omEyebrow: 'Om',
     omTitle: 'Ingeniørarbeid i grensesnittet mellom fagene',
     omP1: 'Walde Automation er et enkeltpersonforetak drevet av Mikael Walde, med spesialkompetanse innen industriell automasjon og systemintegrasjon. Arbeidet ligger i grensesnittene mellom mekanikk, elektro, programvare, kommunikasjon og styring — der de vanskeligste og mest verdifulle integrasjonsutfordringene løses.',
@@ -926,16 +1379,26 @@ const COPY = {
     kompEyebrow: 'Teknologistack', kompTitle: 'Verktøy, plattformer og språk',
     langCardTitle: 'Programmeringsspråk & standarder', appCardTitle: 'App, web & AI',
     chipHmi: 'HMI-paneler', chipOperatorPanel: 'Operatørgrensesnitt',
-    tjEyebrow: 'Tjenester', tjTitle: 'Hva jeg leverer',
-    svc0Title: 'PLC-programmering', svc0Desc: 'Utvikling, feilsøking og idriftsettelse av PLC-programvare på Schneider, Siemens og Danfoss — med tilstandsmaskiner, feilhåndtering, interlocks og teknisk dokumentasjon.',
+    tjEyebrow: 'Tjenester', tjTitle: 'Dette kan vi hjelpe deg med',
+    svc0Title: 'PLS-, HMI- og displayprogrammering', svc0Desc: 'Vi programmerer, feilsøker og setter i drift PLS-er, HMI-paneler og displayer fra Schneider, Siemens, Danfoss og EOTE — med tilstandsmaskiner, forriglinger, feilhåndtering, oversiktlige skjermbilder og grundig teknisk dokumentasjon.',
     svc1Title: 'Industriell kommunikasjon', svc1Desc: 'Modbus TCP/RTU, PROFINET, Profibus DP, OPC UA, S7 og CAN / J1939 — pålitelig kommunikasjon mellom feltutstyr og styringssystemer.',
     svc2Title: 'Systemintegrasjon & OT', svc2Desc: 'OT-arkitektur, nettverkssegmentering, VPN og fjern-idriftsettelse — mekanikk, elektro, programvare og nettverk satt sammen til én robust helhet.',
     svc3Title: 'Elektroteknisk rådgivning', svc3Desc: 'Rådgivning innen elektroteknikk og styringssystemer — fra 400 V kraftforsyning og motorkurser til 24 V styrestrøm, PLS og sensorer. Også erfaring med elektriske spesialkjøretøy.',
     svc4Title: 'App- & programvareutvikling', svc4Desc: 'Moderne Apple-apper i Swift & SwiftUI (App Store) — en sjelden kombinasjon av OT-kompetanse og moderne programvareutvikling.',
-    svc5Title: 'Nettsider & AI-integrasjon', svc5Desc: 'Utvikling av nettsider og AI-integrasjoner for bedrifter — for å automatisere utvalgte oppgaver og arbeidsflyter.',
+    svc5Title: 'Nettsider', svc5Desc: 'Vi lager raske og moderne nettsider som fungerer like godt på mobil som på PC — med fokus på ytelse, universell utforming og synlighet i søk.',
+    svc6Title: 'AI-integrasjon', svc6Desc: 'Vi kobler AI inn i arbeidsflyten din og automatiserer utvalgte oppgaver — for eksempel sortering av e-post, oppretting av support-tickets og ukentlige rapporter.',
+    webUrl: 'dinbedrift.no', webLogo: 'Bedrift', webL1: 'Tjenester', webL2: 'Om oss', webL3: 'Kontakt', webHero: 'Moderne nettside', webCta: 'Ta kontakt',
+    webDesktop: 'Desktop', webTablet: 'Nettbrett', webMobile: 'Mobil', webPerf: 'Ytelse', webA11y: 'Tilgjengelighet', webSeo: 'SEO',
     aiTasks: ['les gjennom kundetilbakemeldinger', 'opprett support-tickets automatisk', 'kjør hver tirsdag kl. 14:00', 'oppsummer ukens henvendelser', 'kategoriser innkommende e-post'],
     dragHint: 'Dra for å rotere', legendField: 'Feltkabler', legendVpn: 'VPN-tunnel', legendMotor: 'Motorkabel',
     viewField: 'Feltnivå', viewOt: 'Sky & fjerntilgang',
+    plcComment: '// M1: start/stopp med selvhold', hmiTapHint: 'Trykk på skjermen',
+    hmiTitle: 'M1 · Transportbånd', hmiBelt: 'Transportbånd', hmiCurrent: 'Strøm', hmiSpeed: 'Turtall', hmiHours: 'Driftstimer',
+    hmiTabProc: 'Prosess', hmiTabAlarm: 'Alarmer', hmiTime: 'Tid', hmiMsg: 'Melding', hmiAck: 'Kvitter',
+    hmiRunning: 'I DRIFT', hmiStopped: 'STOPPET', hmiFault: 'FEIL', hmiActive: 'Aktiv', hmiAcked: 'Kvittert',
+    hmiActiveCount: '{n} aktiv alarm', hmiNoAlarms: 'Ingen aktive alarmer', hmiAlmQ1: 'Q1 motorvern utløst', hmiAlmEstop: 'Nødstopp aktivert',
+    appDone: 'Alt klart!', appDoneSub: '3 av 3 fullført', appNewTask: 'Ny oppgave',
+    flowMail: 'E-post', flowForm: 'Skjema', flowCron: 'Tir 14:00', flowTicket: 'Ticket', flowReport: 'Rapport',
     tagRouter: '4G-ruter / VPN', tagVpn: 'VPN · 4G', tagCloud: 'Sky', tagServer: 'SCADA-server', tagRemote: 'Fjerntilgang',
    
     prosjEyebrow: 'Referanseprosjekter', prosjTitle: 'Utvalgte prosjekter',
@@ -968,16 +1431,26 @@ const COPY = {
     kompEyebrow: 'Technology stack', kompTitle: 'Tools, platforms & languages',
     langCardTitle: 'Languages & standards', appCardTitle: 'App, web & AI',
     chipHmi: 'HMI panels', chipOperatorPanel: 'Operator interfaces',
-    tjEyebrow: 'Services', tjTitle: 'What I deliver',
-    svc0Title: 'PLC Programming', svc0Desc: 'Development, troubleshooting and commissioning of PLC software on Schneider, Siemens and Danfoss — with state machines, fault handling, interlocks and technical documentation.',
+    tjEyebrow: 'Services', tjTitle: 'How we can help',
+    svc0Title: 'PLC, HMI & Display Programming', svc0Desc: 'We develop, troubleshoot and commission PLCs, HMI panels and displays from Schneider, Siemens, Danfoss and EOTE — with state machines, interlocks, fault handling, clear operator screens and thorough technical documentation.',
     svc1Title: 'Industrial Communication', svc1Desc: 'Modbus TCP/RTU, PROFINET, Profibus DP, OPC UA, S7 and CAN / J1939 — reliable communication between field devices and control systems.',
     svc2Title: 'Systems Integration & OT', svc2Desc: 'OT architecture, network segmentation, VPN and remote commissioning — mechanical, electrical, software and network brought together into one robust whole.',
     svc3Title: 'Electrical Engineering Consultation', svc3Desc: 'Consulting in electrical engineering and control systems — from 400 V power supply and motor circuits to 24 V control power, PLCs and sensors. Also experience with electric special-purpose vehicles.',
     svc4Title: 'App & Software Development', svc4Desc: 'Modern Apple apps in Swift & SwiftUI (App Store) — a rare combination of OT expertise and modern software development.',
-    svc5Title: 'Websites & AI Integration', svc5Desc: 'Building websites and AI integrations for businesses — to automate selected tasks and workflows.',
+    svc5Title: 'Websites', svc5Desc: 'We build fast, modern websites that work just as well on a phone as on a desktop — with a focus on performance, accessibility and search visibility.',
+    svc6Title: 'AI Integration', svc6Desc: 'We connect AI to your workflows and automate selected tasks — such as sorting email, creating support tickets and weekly reports.',
+    webUrl: 'yourcompany.com', webLogo: 'Company', webL1: 'Services', webL2: 'About', webL3: 'Contact', webHero: 'A modern website', webCta: 'Contact us',
+    webDesktop: 'Desktop', webTablet: 'Tablet', webMobile: 'Mobile', webPerf: 'Performance', webA11y: 'Accessibility', webSeo: 'SEO',
     aiTasks: ['read through customer feedback', 'create support tickets automatically', 'run every Tuesday at 2:00 PM', 'summarise this week\u2019s enquiries', 'categorise incoming email'],
     dragHint: 'Drag to rotate', legendField: 'Field wiring', legendVpn: 'VPN tunnel', legendMotor: 'Motor cable',
     viewField: 'Field level', viewOt: 'Cloud & remote access',
+    plcComment: '// M1: start/stop with seal-in', hmiTapHint: 'Tap the screen',
+    hmiTitle: 'M1 · Conveyor', hmiBelt: 'Conveyor', hmiCurrent: 'Current', hmiSpeed: 'Speed', hmiHours: 'Run hours',
+    hmiTabProc: 'Process', hmiTabAlarm: 'Alarms', hmiTime: 'Time', hmiMsg: 'Message', hmiAck: 'Acknowledge',
+    hmiRunning: 'RUNNING', hmiStopped: 'STOPPED', hmiFault: 'FAULT', hmiActive: 'Active', hmiAcked: 'Acknowledged',
+    hmiActiveCount: '{n} active alarm', hmiNoAlarms: 'No active alarms', hmiAlmQ1: 'Q1 motor protection tripped', hmiAlmEstop: 'Emergency stop activated',
+    appDone: 'All done!', appDoneSub: '3 of 3 completed', appNewTask: 'New task',
+    flowMail: 'Email', flowForm: 'Form', flowCron: 'Tue 2 PM', flowTicket: 'Ticket', flowReport: 'Report',
     tagRouter: '4G router / VPN', tagVpn: 'VPN · 4G', tagCloud: 'Cloud', tagServer: 'SCADA server', tagRemote: 'Remote access',
    
     prosjEyebrow: 'Reference projects', prosjTitle: 'Selected projects',
@@ -1014,6 +1487,7 @@ function applyLang(lang) {
   document.getElementById('langEn').classList.toggle('active', lang === 'en');
   document.documentElement.lang = lang;
   restartAiTyper();
+  restartAppPreview();
 }
 
 document.getElementById('langNo').addEventListener('click', () => applyLang('no'));
@@ -1073,22 +1547,12 @@ function showStatus(msg, type) {
   status.className = 'form-status ' + type;
 }
 
-// PLC code typing animation
-const plcSegs = [
-  { c: '#7FC8FF', t: 'FUNCTION' }, { c: '#E4E4E7', t: ' StartPump' }, { c: '#71717A', t: ' : ' }, { c: 'var(--accent)', t: 'BOOL' }, { c: '#E4E4E7', t: '\n' },
-  { c: '#7FC8FF', t: 'VAR_INPUT' }, { c: '#E4E4E7', t: '\n    ' },
-  { c: '#E4E4E7', t: 'Level, SetPoint' }, { c: '#71717A', t: ' : ' }, { c: 'var(--accent)', t: 'REAL' }, { c: '#71717A', t: ';' }, { c: '#E4E4E7', t: '\n' },
-  { c: '#7FC8FF', t: 'END_VAR' }, { c: '#E4E4E7', t: '\n\n' },
-  { c: '#C9A6FF', t: 'IF' }, { c: '#E4E4E7', t: ' Level ' }, { c: '#71717A', t: '<' }, { c: '#E4E4E7', t: ' SetPoint ' }, { c: '#C9A6FF', t: 'THEN' }, { c: '#E4E4E7', t: '\n    ' },
-  { c: '#E4E4E7', t: 'StartPump' }, { c: '#71717A', t: ' := ' }, { c: '#F4B860', t: 'TRUE' }, { c: '#71717A', t: ';' }, { c: '#E4E4E7', t: '\n' },
-  { c: '#C9A6FF', t: 'ELSE' }, { c: '#E4E4E7', t: '\n    ' },
-  { c: '#E4E4E7', t: 'StartPump' }, { c: '#71717A', t: ' := ' }, { c: '#F4B860', t: 'FALSE' }, { c: '#71717A', t: ';' }, { c: '#E4E4E7', t: '\n' },
-  { c: '#C9A6FF', t: 'END_IF' }, { c: '#71717A', t: ';' }
-];
+// Shared helpers for the service card animations
+const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
-function buildCode(n) {
+function typedHtml(segs, n) {
   let out = '', count = 0;
-  for (const sg of plcSegs) {
+  for (const sg of segs) {
     if (count >= n) break;
     const take = Math.min(sg.t.length, n - count);
     out += '<span style="color:' + sg.c + '">' + esc(sg.t.slice(0, take)) + '</span>';
@@ -1097,23 +1561,248 @@ function buildCode(n) {
   }
   return out;
 }
-(function startCodeTyper() {
-  const el = document.getElementById('plcCode');
-  const total = plcSegs.reduce((a, s) => a + s.t.length, 0);
-  const caretHtml = '<span class="caret"></span>';
-  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduce) { el.innerHTML = buildCode(total) + caretHtml; return; }
-  let n = 0;
-  function tick() {
-    n++;
-    el.innerHTML = buildCode(n) + caretHtml;
-    if (n >= total) {
-      setTimeout(() => { n = 0; el.innerHTML = caretHtml; setTimeout(tick, 650); }, 3600);
-      return;
-    }
-    setTimeout(tick, 20 + Math.random() * 26);
+function watchVisible(el, onChange) {
+  const state = { visible: true };
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(entries => {
+      state.visible = entries[0].isIntersecting;
+      if (onChange) onChange(state.visible);
+    }).observe(el);
   }
-  setTimeout(tick, 500);
+  return state;
+}
+// Runs step(dt) every frame, but only while el is on screen and the tab is visible
+function animateWhileVisible(el, step) {
+  let running = false, visible = true, last = 0;
+  function frame(now) {
+    if (!visible || document.hidden) { running = false; return; }
+    step(Math.min(0.1, (now - last) / 1000));
+    last = now;
+    requestAnimationFrame(frame);
+  }
+  function start() {
+    if (running || !visible || document.hidden) return;
+    running = true;
+    last = performance.now();
+    requestAnimationFrame(frame);
+  }
+  watchVisible(el, v => { visible = v; start(); });
+  document.addEventListener('visibilitychange', start);
+  start();
+}
+
+// PLC / HMI card: an operator panel you can rotate and use. START / STOP on the panel drive a
+// seal-in circuit, shown online with live values in the PLC code next to it. When nobody is
+// using the panel, a short demo runs (start, stop, a Q1 trip, acknowledge).
+(function setupPlcHmi() {
+  const stage = document.getElementById('hmiStage');
+  const box = document.getElementById('hmi3d');
+  const el = document.getElementById('plcCode');
+  const panel = document.getElementById('plcPanel');
+  if (!stage || !box || !el || !panel) return;
+  const q = sel => box.querySelector(sel);
+  const tr = key => COPY[currentLang][key];
+  const num = (v, d) => { const s = v.toFixed(d); return currentLang === 'no' ? s.replace('.', ',') : s; };
+
+  // PLC code: typed once, then it stays online
+  const K = '#7FC8FF', W = '#E4E4E7', P = '#71717A', G = '#6B7A72';
+  const segs = () => [
+    { c: G, t: tr('plcComment') + '\n' },
+    { c: W, t: 'Run', v: 'run' }, { c: P, t: ' := (' }, { c: W, t: 'Start', v: 'start' }, { c: W, t: '\n     ' },
+    { c: K, t: 'OR' }, { c: W, t: ' Run', v: 'run' }, { c: P, t: ')' }, { c: W, t: '\n    ' },
+    { c: K, t: 'AND NOT' }, { c: W, t: ' Stop', v: 'stop' }, { c: W, t: '\n    ' },
+    { c: K, t: 'AND NOT' }, { c: W, t: ' Fault', v: 'fault' }, { c: P, t: ';' }
+  ];
+  function onlineHtml() {
+    const lines = [[]];
+    for (const sg of segs()) {
+      sg.t.split('\n').forEach((part, i) => {
+        if (i) lines.push([]);
+        if (part) lines[lines.length - 1].push('<span style="color:' + sg.c + '">' + esc(part) + '</span>');
+      });
+      if (sg.v) lines[lines.length - 1].push('<span class="pv" data-v="' + sg.v + '">FALSE</span>');
+    }
+    return lines.map(l => '<div class="plc-line">' + l.join('') + '</div>').join('');
+  }
+  let online = false;
+  function goOnline() { online = true; panel.classList.add('online'); el.innerHTML = onlineHtml(); }
+  function setPills(key, v) {
+    el.querySelectorAll('[data-v="' + key + '"]').forEach(b => { b.textContent = v ? 'TRUE' : 'FALSE'; b.classList.toggle('t', v); });
+  }
+
+  // Motor logic and HMI state
+  let now = 0, run = false, fault = false, startUntil = -1, stopUntil = -1;
+  let amp = 0, rpm = 0, beltOff = 0, lastUser = -99;
+  const t0 = Date.now();
+  const alarms = [
+    { at: new Date(t0 - 47 * 60000 - 12000), key: 'hmiAlmQ1', active: false },
+    { at: new Date(t0 - 2 * 3600000 - 331000), key: 'hmiAlmEstop', active: false }
+  ];
+  const ampEl = q('[data-h="amp"]'), rpmEl = q('[data-h="rpm"]'), hoursEl = q('[data-h="hours"]');
+  const chipEl = q('.chip-t'), clockEl = q('.h3-clock'), rowsEl = q('.h3-rows'), countEl = q('.h3-count');
+  const ackBtn = q('[data-cmd="ack"]'), boxes = box.querySelectorAll('.box');
+  const hhmmss = d => d.toTimeString().slice(0, 8);
+
+  function renderAlarms() {
+    const list = alarms.slice().sort((a, b) => b.at - a.at).slice(0, 5);
+    rowsEl.innerHTML = list.map(a =>
+      '<div class="h3-row ' + (a.active ? 'act' : 'ack') + '"><span>' + hhmmss(a.at) + '</span><span>' + esc(tr(a.key)) +
+      '</span><span>' + esc(tr(a.active ? 'hmiActive' : 'hmiAcked')) + '</span></div>').join('');
+    const n = alarms.filter(a => a.active).length;
+    countEl.textContent = n ? tr('hmiActiveCount').replace('{n}', n) : tr('hmiNoAlarms');
+    ackBtn.disabled = !n;
+    box.classList.toggle('alarm', n > 0);
+    box.querySelectorAll('.h3-bell b, .h3-tab b').forEach(b => { b.textContent = n; });
+  }
+  // Hints: each pill goes away once the visitor has done that thing
+  const hintRot = stage.querySelector('.hint-rot'), hintTap = stage.querySelector('.hint-tap');
+  box.classList.add('tap-hint');
+  function hintDone(part) {
+    if (part.classList.contains('done')) return;
+    part.classList.add('done');
+    if (part === hintTap) box.classList.remove('tap-hint');
+    setTimeout(() => { part.hidden = true; }, 400);
+  }
+  function press(cmd, fromUser) {
+    if (fromUser) { lastUser = now; hintDone(hintTap); }
+    const btn = q('[data-cmd="' + cmd + '"]');
+    if (btn) { btn.classList.add('pressed'); setTimeout(() => btn.classList.remove('pressed'), 220); }
+    if (cmd === 'start') startUntil = now + 0.45;
+    if (cmd === 'stop') stopUntil = now + 0.45;
+    if (cmd === 'ack' && fault) {
+      alarms.forEach(a => { a.active = false; });
+      fault = false;
+      renderAlarms();
+    }
+  }
+  function trip() {
+    fault = true;
+    alarms.push({ at: new Date(), key: 'hmiAlmQ1', active: true });
+    renderAlarms();
+  }
+  function show(view, fromUser) {
+    if (fromUser) { lastUser = now; hintDone(hintTap); }
+    box.querySelectorAll('.h3-view').forEach(v => v.classList.toggle('on', v.dataset.view === view));
+    box.querySelectorAll('.h3-tab').forEach(t => t.classList.toggle('on', t.dataset.tab === view));
+  }
+  box.addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    if (b.dataset.cmd) press(b.dataset.cmd, true);
+    if (b.dataset.tab) show(b.dataset.tab, true);
+  });
+
+  // PLC scan, 10 times per second
+  function scan() {
+    const start = now < startUntil, stop = now < stopUntil, was = run;
+    run = (start || run) && !stop && !fault;
+    if (run && !was) amp = 44; // inrush current on a direct-on-line start
+    if (online) { setPills('run', run); setPills('start', start); setPills('stop', stop); setPills('fault', fault); }
+  }
+
+  // Demo when the panel is left alone for a while
+  const DEMO = [[1, () => press('start')], [7.5, () => press('stop')], [10, () => press('start')], [14, trip],
+    [15.2, () => show('alarm')], [18.5, () => press('ack')], [20.5, () => show('proc')]];
+  let demoT = 0, demoIdx = 0;
+  function demo(dt) {
+    if (reduceMotion || now - lastUser < 12) { demoT = 0; demoIdx = 0; return; }
+    demoT += dt;
+    while (demoIdx < DEMO.length && demoT >= DEMO[demoIdx][0]) DEMO[demoIdx++][1]();
+    if (demoT >= 24) { demoT = 0; demoIdx = 0; }
+  }
+
+  // Drag to rotate; clicks on the screen still work when the pointer barely moved
+  const DEF_YAW = -18, DEF_PITCH = 8;
+  let yaw = DEF_YAW, pitch = DEF_PITCH, down = null, dragged = false, lastDrag = -99;
+  const applyRot = () => { box.style.transform = 'rotateX(' + pitch.toFixed(2) + 'deg) rotateY(' + yaw.toFixed(2) + 'deg)'; };
+  stage.addEventListener('pointerdown', e => {
+    if (e.button !== 0 || e.target.closest('.plc-panel')) return;
+    down = { x: e.clientX, y: e.clientY, yaw, pitch };
+    dragged = false;
+  });
+  window.addEventListener('pointermove', e => {
+    if (!down) return;
+    const dx = e.clientX - down.x, dy = e.clientY - down.y;
+    if (!dragged) {
+      if (Math.hypot(dx, dy) < 6) return;
+      dragged = true;
+      stage.classList.add('dragging');
+      hintDone(hintRot);
+    }
+    yaw = down.yaw + dx * 0.45;
+    pitch = Math.max(-28, Math.min(32, down.pitch - dy * 0.3));
+    lastDrag = now;
+    applyRot();
+  });
+  const endDrag = () => { if (!down) return; down = null; stage.classList.remove('dragging'); lastDrag = now; };
+  window.addEventListener('pointerup', endDrag);
+  window.addEventListener('pointercancel', endDrag);
+  stage.addEventListener('click', e => { if (dragged) { e.stopPropagation(); e.preventDefault(); dragged = false; } }, true);
+  // Swing the panel once the first time it comes into view, so it is clear that it turns
+  let intro = -1;
+  if (!reduceMotion && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver(entries => {
+      if (entries[0].intersectionRatio < 0.5) return;
+      io.disconnect();
+      if (lastDrag < 0) intro = 0;
+    }, { threshold: 0.5 });
+    io.observe(stage);
+  }
+  function rotate(dt) {
+    if (down || reduceMotion || now - lastDrag < 2.5) return;
+    // Ease back towards the front (the nearest way round), with a gentle sway
+    let ty = DEF_YAW + Math.sin(now * 0.5) * 6;
+    if (intro >= 0 && intro < 3.5) { intro += dt; ty += 42 * Math.sin(intro * 2.4) * Math.exp(-intro * 0.75); }
+    const d = ((yaw - ty) % 360 + 540) % 360 - 180;
+    yaw = ty + d * Math.max(0, 1 - dt * 1.8);
+    pitch += (DEF_PITCH + Math.sin(now * 0.37) * 2 - pitch) * Math.min(1, dt * 1.8);
+    applyRot();
+  }
+
+  // Fit the panel to the space it has
+  const wrap = stage.querySelector('.h3-wrap');
+  const fit = () => stage.style.setProperty('--s', Math.max(0.5, Math.min(1, wrap.clientWidth / 520)).toFixed(3));
+  fit();
+  if ('ResizeObserver' in window) new ResizeObserver(fit).observe(stage);
+
+  let scanAcc = 0, lastLang = '', lastClock = '';
+  function frame(dt) {
+    now += dt;
+    if (currentLang !== lastLang) {
+      lastLang = currentLang;
+      renderAlarms();
+      hoursEl.textContent = (currentLang === 'no' ? '1 284' : '1,284') + ' h';
+      if (online) el.innerHTML = onlineHtml();
+    }
+    demo(dt);
+    for (scanAcc += dt; scanAcc >= 0.1; scanAcc -= 0.1) scan();
+    rpm = run ? rpm + (1460 - rpm) * Math.min(1, dt * 3.5) : Math.max(0, rpm - 700 * dt);
+    amp += ((run ? 7.4 + Math.sin(now * 7) * 0.08 : 0) - amp) * Math.min(1, dt * (run ? 4 : 12));
+    if (!reduceMotion) beltOff = (beltOff + 40 * (rpm / 1460) * dt) % 204;
+    rotate(dt);
+    box.classList.toggle('run', run);
+    box.classList.toggle('fault', fault);
+    ampEl.textContent = num(Math.max(0, amp), 1) + ' A';
+    rpmEl.textContent = Math.round(rpm) + ' rpm';
+    chipEl.textContent = tr(fault ? 'hmiFault' : run ? 'hmiRunning' : 'hmiStopped');
+    boxes.forEach((b, i) => b.setAttribute('x', (70 + (i * 68 + beltOff) % 204).toFixed(1)));
+    const c = hhmmss(new Date());
+    if (c !== lastClock) { lastClock = c; clockEl.textContent = c; }
+  }
+  frame(0);
+  animateWhileVisible(stage, frame);
+
+  if (reduceMotion) { goOnline(); return; }
+  const vis = watchVisible(stage);
+  const caretHtml = '<span class="caret"></span>';
+  let n = 0;
+  (function type() {
+    if (!vis.visible) { setTimeout(type, 300); return; }
+    const sg = segs(), total = sg.reduce((a, s) => a + s.t.length, 0);
+    el.innerHTML = typedHtml(sg, ++n) + caretHtml;
+    if (n < total) setTimeout(type, 22 + Math.random() * 28);
+    else setTimeout(goOnline, 600);
+  })();
 })();
 
 // AI task typing animation
@@ -1143,43 +1832,206 @@ function restartAiTyper() {
   aiTimer = setTimeout(tick, 520);
 }
 
-// Swift code typing animation (once, doesn't need re-run on lang switch)
-(function startSwiftTyper() {
+// App card: SwiftUI code is typed, and the preview on the phone builds up as each line lands
+let restartAppPreview = () => {};
+(function setupAppPreview() {
   const el = document.getElementById('swiftCode');
-  const K = '#C9A6FF', T = 'var(--accent)', S = '#F4B860', W = '#E4E4E7', P = '#71717A';
-  const segs = [
-    { c: K, t: 'struct' }, { c: W, t: ' ContentView' }, { c: P, t: ': ' }, { c: T, t: 'View' }, { c: W, t: ' {' }, { c: W, t: '\n    ' },
-    { c: K, t: 'var' }, { c: W, t: ' body' }, { c: P, t: ': ' }, { c: K, t: 'some' }, { c: T, t: ' View' }, { c: W, t: ' {' }, { c: W, t: '\n        ' },
-    { c: T, t: 'Text' }, { c: P, t: '(' }, { c: S, t: '"Walde"' }, { c: P, t: ')' }, { c: W, t: '\n    ' },
-    { c: W, t: '}' }, { c: W, t: '\n' },
-    { c: W, t: '}' }
+  const pv = document.getElementById('appPreview');
+  if (!el || !pv) return;
+  const T = 'var(--accent)', B = '#7FC8FF', W = '#E4E4E7', P = '#71717A', S = '#F4B860';
+  const segsFor = t => [
+    { c: T, t: 'VStack' }, { c: P, t: '(' }, { c: W, t: 'spacing' }, { c: P, t: ': ' }, { c: S, t: '12' }, { c: P, t: ') {' }, { c: W, t: '\n  ' },
+    { c: T, t: 'Image' }, { c: P, t: '(' }, { c: W, t: 'systemName' }, { c: P, t: ': ' }, { c: S, t: '"bolt.fill"' }, { c: P, t: ')', s: 'icon' }, { c: W, t: '\n    ' },
+    { c: B, t: '.font' }, { c: P, t: '(' }, { c: B, t: '.system' }, { c: P, t: '(' }, { c: W, t: 'size' }, { c: P, t: ': ' }, { c: S, t: '56' }, { c: P, t: '))', s: 'iconSize' }, { c: W, t: '\n    ' },
+    { c: B, t: '.foregroundStyle' }, { c: P, t: '(' }, { c: B, t: '.green' }, { c: P, t: ')', s: 'iconColor' }, { c: W, t: '\n  ' },
+    { c: T, t: 'Text' }, { c: P, t: '(' }, { c: S, t: '"' + t.appDone + '"' }, { c: P, t: ')', s: 'title' }, { c: W, t: '\n    ' },
+    { c: B, t: '.font' }, { c: P, t: '(' }, { c: B, t: '.title.bold()' }, { c: P, t: ')', s: 'titleFont' }, { c: W, t: '\n  ' },
+    { c: T, t: 'Text' }, { c: P, t: '(' }, { c: S, t: '"' + t.appDoneSub + '"' }, { c: P, t: ')', s: 'sub' }, { c: W, t: '\n    ' },
+    { c: B, t: '.foregroundStyle' }, { c: P, t: '(' }, { c: B, t: '.secondary' }, { c: P, t: ')', s: 'subColor' }, { c: W, t: '\n  ' },
+    { c: T, t: 'Button' }, { c: P, t: '(' }, { c: S, t: '"' + t.appNewTask + '"' }, { c: P, t: ') { }', s: 'btn' }, { c: W, t: '\n    ' },
+    { c: B, t: '.buttonStyle' }, { c: P, t: '(' }, { c: B, t: '.borderedProminent' }, { c: P, t: ')', s: 'btnStyle' }, { c: W, t: '\n}' }
   ];
   const caretHtml = '<span class="caret" style="width:6px;height:12px;"></span>';
-  const total = segs.reduce((a, s) => a + s.t.length, 0);
-  const build = (n) => {
-    let out = '', count = 0;
-    for (const sg of segs) {
-      if (count >= n) break;
-      const take = Math.min(sg.t.length, n - count);
-      out += '<span style="color:' + sg.c + '">' + esc(sg.t.slice(0, take)) + '</span>';
-      count += take;
-      if (take < sg.t.length) break;
-    }
-    return out;
-  };
-  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduce) { el.innerHTML = build(total) + caretHtml; return; }
-  let n = 0;
-  function tick() {
-    n++;
-    el.innerHTML = build(n) + caretHtml;
-    if (n >= total) {
-      setTimeout(() => { n = 0; el.innerHTML = caretHtml; setTimeout(tick, 700); }, 3400);
-      return;
-    }
-    setTimeout(tick, 26 + Math.random() * 30);
+  const vis = watchVisible(pv.closest('.app-stage'));
+  let timer = null, n = 0, segs = [], total = 0, marks = [];
+  function reset() {
+    const t = COPY[currentLang];
+    segs = segsFor(t);
+    total = segs.reduce((a, sg) => a + sg.t.length, 0);
+    marks = [];
+    let c = 0;
+    segs.forEach(sg => { c += sg.t.length; if (sg.s) marks.push([c, sg.s]); });
+    pv.className = 'pvw';
+    pv.querySelector('.pvw-title').textContent = t.appDone;
+    pv.querySelector('.pvw-sub').textContent = t.appDoneSub;
+    pv.querySelector('.pvw-btn').textContent = t.appNewTask;
+    n = 0;
   }
-  setTimeout(tick, 900);
+  const applySteps = () => marks.forEach(([c, s]) => { if (n >= c) pv.classList.add('s-' + s); });
+  function tick() {
+    if (!vis.visible) { timer = setTimeout(tick, 300); return; }
+    n++;
+    el.innerHTML = typedHtml(segs, n) + caretHtml;
+    applySteps();
+    if (n < total) { timer = setTimeout(tick, 14 + Math.random() * 22); return; }
+    timer = setTimeout(() => {
+      pv.classList.add('tap');
+      timer = setTimeout(() => {
+        pv.classList.add('fade');
+        timer = setTimeout(() => { reset(); el.innerHTML = caretHtml; timer = setTimeout(tick, 600); }, 450);
+      }, 3000);
+    }, 900);
+  }
+  restartAppPreview = () => {
+    clearTimeout(timer);
+    reset();
+    if (reduceMotion) { n = total; el.innerHTML = typedHtml(segs, total); applySteps(); return; }
+    el.innerHTML = caretHtml;
+    timer = setTimeout(tick, 700);
+  };
+  restartAppPreview();
+})();
+
+// Websites card: the same small site at desktop, tablet and phone width, with scores counting up
+(function setupWebDemo() {
+  const stage = document.getElementById('webStage');
+  if (!stage) return;
+  const browser = stage.querySelector('.web-browser');
+  const label = stage.querySelector('.web-device span'), px = stage.querySelector('.web-device em');
+  const rings = stage.querySelectorAll('.ring');
+  const STEPS = [
+    { w: 1, key: 'webDesktop', px: 1280, dev: 'desktop' },
+    { w: 0.68, key: 'webTablet', px: 768, dev: 'tablet' },
+    { w: 0.42, key: 'webMobile', px: 390, dev: 'phone' }
+  ];
+  const SCORES = [99, 100, 100];
+  function countTo(el, v) {
+    if (reduceMotion) { el.textContent = v; return; }
+    const from = +el.textContent || 0, t0 = performance.now();
+    (function f(t) {
+      const k = Math.min(1, (t - t0) / 1100);
+      el.textContent = Math.round(from + (v - from) * (1 - Math.pow(1 - k, 3)));
+      if (k < 1) requestAnimationFrame(f);
+    })(t0);
+  }
+  function setScores(on) {
+    rings.forEach((r, k) => {
+      const v = on ? SCORES[k] : 0;
+      r.querySelector('.fg').style.strokeDashoffset = (113.1 * (1 - v / 100)).toFixed(1);
+      countTo(r.querySelector('b'), v);
+    });
+  }
+  function show(step) {
+    browser.style.width = step.w * 100 + '%';
+    browser.classList.toggle('as-phone', step.dev === 'phone');
+    stage.dataset.device = step.dev;
+    label.textContent = COPY[currentLang][step.key];
+    px.textContent = step.px + ' px';
+  }
+  let i = 0, started = false;
+  const vis = watchVisible(stage, v => {
+    if (!v || started) return;
+    started = true;
+    setScores(true);
+    if (!reduceMotion) setTimeout(next, 2800);
+  });
+  function next() {
+    if (!vis.visible) { setTimeout(next, 400); return; }
+    i = (i + 1) % STEPS.length;
+    show(STEPS[i]);
+    if (i === 0) { setScores(false); setTimeout(() => setScores(true), 500); }
+    setTimeout(next, 2800);
+  }
+  show(STEPS[0]);
+})();
+
+// AI card: jobs travel from a trigger, through the AI agent, to where they belong
+(function setupAiFlow() {
+  const flow = document.getElementById('aiFlow');
+  if (!flow) return;
+  const svg = flow.querySelector('.flow-wires');
+  const NS = 'http://www.w3.org/2000/svg';
+  const node = k => flow.querySelector('[data-node="' + k + '"]');
+  const ai = node('ai');
+  const inputs = ['mail', 'form', 'cron'], outputs = ['ticket', 'crm', 'report'];
+  const routes = { mail: ['ticket', 'ticket', 'crm'], form: ['crm'], cron: ['report'] };
+  const order = ['mail', 'form', 'mail', 'cron', 'mail', 'form'];
+  const wires = {};
+  inputs.concat(outputs).forEach(k => {
+    const el = document.createElementNS(NS, 'path');
+    svg.appendChild(el);
+    wires[k] = { el, len: 0, busy: 0 };
+  });
+  function layout() {
+    const box = flow.getBoundingClientRect();
+    if (!box.width) return;
+    svg.setAttribute('viewBox', '0 0 ' + box.width + ' ' + box.height);
+    const at = el => { const b = el.getBoundingClientRect(); return { l: b.left - box.left, r: b.right - box.left, y: b.top - box.top + b.height / 2 }; };
+    const curve = (x1, y1, x2, y2) => { const m = (x2 - x1) / 2; return 'M' + x1 + ',' + y1 + ' C' + (x1 + m) + ',' + y1 + ' ' + (x2 - m) + ',' + y2 + ' ' + x2 + ',' + y2; };
+    const a = at(ai);
+    inputs.forEach(k => { const s = at(node(k)); wires[k].el.setAttribute('d', curve(s.r, s.y, a.l, a.y)); });
+    outputs.forEach(k => { const o = at(node(k)); wires[k].el.setAttribute('d', curve(a.r, a.y, o.l, o.y)); });
+    Object.values(wires).forEach(w => { w.len = w.el.getTotalLength(); });
+  }
+  layout();
+  if ('ResizeObserver' in window) {
+    const ro = new ResizeObserver(layout);
+    ro.observe(flow);
+    flow.querySelectorAll('.fnode').forEach(n => ro.observe(n));
+  }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
+  if (reduceMotion) return;
+
+  const IN = 0.9, THINK = 0.7, OUT = 0.9;
+  const ease = k => (k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2);
+  const jobs = [];
+  let t = 0, nextJob = 0.4, orderIdx = 0;
+  function ping(el) { el.classList.add('ping'); setTimeout(() => el.classList.remove('ping'), 90); }
+  function hold(k) { wires[k].busy++; wires[k].el.classList.add('hot'); }
+  function release(k) { if (--wires[k].busy <= 0) { wires[k].busy = 0; wires[k].el.classList.remove('hot'); } }
+  function place(dot, w, k) {
+    if (!w.len) return;
+    const p = w.el.getPointAtLength(w.len * k);
+    dot.setAttribute('cx', p.x.toFixed(1));
+    dot.setAttribute('cy', p.y.toFixed(1));
+  }
+  function spawn() {
+    const src = order[orderIdx++ % order.length];
+    const outs = routes[src];
+    const dot = document.createElementNS(NS, 'circle');
+    dot.setAttribute('r', '3');
+    svg.appendChild(dot);
+    jobs.push({ src, out: outs[Math.floor(Math.random() * outs.length)], t0: t, dot, stage: 0 });
+    place(dot, wires[src], 0);
+    ping(node(src));
+    hold(src);
+  }
+  animateWhileVisible(flow, dt => {
+    t += dt;
+    if (t >= nextJob) { spawn(); nextJob = t + 1.1 + Math.random() * 0.7; }
+    let thinking = 0;
+    for (let i = jobs.length - 1; i >= 0; i--) {
+      const j = jobs[i], e = t - j.t0;
+      if (e < IN) {
+        place(j.dot, wires[j.src], ease(e / IN));
+      } else if (e < IN + THINK) {
+        if (j.stage === 0) { j.stage = 1; release(j.src); j.dot.style.opacity = 0; }
+        thinking++;
+      } else if (e < IN + THINK + OUT) {
+        if (j.stage === 1) { j.stage = 2; j.dot.style.opacity = 1; hold(j.out); }
+        place(j.dot, wires[j.out], ease((e - IN - THINK) / OUT));
+      } else {
+        release(j.out);
+        const target = node(j.out);
+        ping(target);
+        const cnt = target.querySelector('.cnt');
+        cnt.textContent = +cnt.textContent + 1;
+        j.dot.remove();
+        jobs.splice(i, 1);
+      }
+    }
+    ai.classList.toggle('busy', thinking > 0);
+  });
 })();
 
 // Header background on scroll
