@@ -7,8 +7,13 @@ klar for å laste rett opp til GitHub.
 
 ```
 waldeautomation-site/
-├── index.html        (inkl. CSS og JS inline)
-├── personvern.html    (inkl. CSS og JS inline)
+├── index.html            (inkl. CSS og JS inline)
+├── personvern.html       (inkl. CSS og JS inline)
+├── favicon.png           (ikon i nettleserfanen)
+├── apple-touch-icon.png  (ikon på iPhone-hjemskjerm)
+├── og-image.jpg          (bilde når lenken deles)
+├── sitemap.xml           (sideoversikt for Google)
+├── robots.txt            (peker søkemotorer til sitemap.xml)
 ├── CNAME
 └── README.md
 ```
