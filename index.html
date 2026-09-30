@@ -317,7 +317,7 @@ h2.section-title {
 .schem .led { fill: #25352b; stroke: #3d5a47; stroke-width: 0.8; }
 .schem .target { fill: #9AA3AB; stroke: #C9D1CC; stroke-width: 0.8; }
 .schem .sig-on { fill: none; stroke: #7CF0A4; stroke-width: 2.4; stroke-linecap: round; opacity: 0; filter: drop-shadow(0 0 3px #62C27F); }
-.schem.go .rotor { animation: schSpin 2.4s linear 6.8s infinite; }
+.schem.go .rotor { animation: schSpin 1s linear 7s infinite, schRun 4.5s ease-in-out 7s infinite both; }
 .schem.go .target { animation: schTarget 4.5s ease-in-out 7s infinite both; }
 .schem.go .led { animation: schLed 4.5s ease-in-out 7s infinite both; }
 .schem.go .sig-on { animation: schSig 4.5s ease-in-out 7s infinite both; }
@@ -325,6 +325,22 @@ h2.section-title {
 @keyframes schTarget { 0%, 25% { transform: translateX(24px); } 40%, 75% { transform: translateX(0); } 90%, 100% { transform: translateX(24px); } }
 @keyframes schLed { 0%, 38% { fill: #25352b; } 42%, 74% { fill: #7CF0A4; } 78%, 100% { fill: #25352b; } }
 @keyframes schSig { 0%, 38% { opacity: 0; } 42%, 74% { opacity: 1; } 78%, 100% { opacity: 0; } }
+/* Sensor on -> I0.0 -> Q0.0 -> coil K1 pulls in -> main contacts close -> M1 runs, a beat apart */
+.schem .qled { fill: #25352b; stroke: #3d5a47; stroke-width: 0.8; }
+.schem .coil { fill: #7CF0A4; fill-opacity: 0; stroke: none; }
+.schem .q-on { fill: none; stroke: #7CF0A4; stroke-width: 2.4; stroke-linecap: round; opacity: 0; filter: drop-shadow(0 0 3px #62C27F); }
+.schem .kh { --c0: #C9D1CC; }
+.schem .kblade { transform: rotate(-30deg); }
+.schem.go .qled { animation: schQLed 4.5s ease-in-out 7s infinite both; }
+.schem.go .q-on { animation: schSig 4.5s ease-in-out 7.12s infinite both; }
+.schem.go .coil { animation: schCoil 4.5s ease-in-out 7s infinite both; }
+.schem.go .kh { animation: schHot 4.5s linear 7s infinite both; }
+.schem.go .kblade { animation: schK 4.5s ease-in-out 7s infinite both, schHot 4.5s linear 7s infinite both; }
+@keyframes schQLed { 0%, 43% { fill: #25352b; } 46%, 75% { fill: #7CF0A4; } 78%, 100% { fill: #25352b; } }
+@keyframes schCoil { 0%, 44% { fill-opacity: 0; } 47%, 75% { fill-opacity: 0.35; } 78%, 100% { fill-opacity: 0; } }
+@keyframes schK { 0%, 46% { transform: rotate(-30deg); } 49%, 76% { transform: none; } 79%, 100% { transform: rotate(-30deg); } }
+@keyframes schHot { 0%, 48% { stroke: var(--c0); } 50%, 76% { stroke: #8CE3A8; } 79%, 100% { stroke: var(--c0); } }
+@keyframes schRun { 0%, 48% { opacity: 0; } 53%, 78% { opacity: 1; } 86%, 100% { opacity: 0; } }
 .schem.reset, .schem.reset * { transition: none !important; animation: none !important; }
 @media (prefers-reduced-motion: reduce) {
   .schem .w, .schem .f, .schem .blade { transition: none !important; }
@@ -1111,7 +1127,7 @@ footer { border-top: 1px solid var(--line); position: relative; z-index: 1; }
 
         <article class="glass wide elec-card">
           <div class="schem-wrap">
-            <svg class="schem" viewBox="0 0 520 300" role="img" aria-label="Animert koblingsskjema: 3-fase 400 V inn, motorvernbryter Q1 som slår på motor M1, 24 V DC strømforsyning G1, PLS A1 og PNP-sensor B1 på inngang I0.0">
+            <svg class="schem" viewBox="0 0 520 300" role="img" aria-label="Animert koblingsskjema: 3-fase 400 V inn, motorvernbryter Q1 og kontaktor K1 foran motor M1, 24 V DC strømforsyning G1 og PLS A1. Når den induktive PNP-sensoren B1 på inngang I0.0 ser metall, slår utgang Q0.0 på kontaktoren og motoren går.">
               <text class="f ttl" x="40" y="20" style="--t:.1s">3~ 400 V AC · 50 Hz</text>
               <text class="f" x="12" y="39" style="--t:0.2s">L1</text>
               <path class="w ph" pathLength="1" style="--t:0.0s;--dur:1.1s" d="M40 36H506"/>
@@ -1151,11 +1167,22 @@ footer { border-top: 1px solid var(--line); position: relative; z-index: 1; }
               <text class="f tag" x="26" y="112" style="--t:1.8s">Q1</text>
               <text class="q-off" x="26" y="125">OFF</text>
               <text class="f on" x="26" y="125" style="--t:6.7s">ON</text>
-              <path class="w ph hot" pathLength="1" style="--t:1.9s;--dur:0.5s" d="M78 142V206"/>
-              <path class="w ph hot" pathLength="1" style="--t:1.95s;--dur:0.5s" d="M90 142V202"/>
-              <path class="w ph hot" pathLength="1" style="--t:2.0s;--dur:0.5s" d="M102 142V206"/>
+              <path class="w ph hot" pathLength="1" style="--t:1.90s;--dur:0.2s" d="M78 142V162"/>
+              <path class="w sym kblade kh" pathLength="1" style="--t:2.02s;--dur:0.2s;transform-origin:78px 182px" d="M78 182V162"/>
+              <circle class="f dot" cx="78" cy="182" r="1.6" style="--t:2.02s"/>
+              <path class="w ph kh" pathLength="1" style="--t:2.15s;--dur:0.25s" d="M78 182V206"/>
+              <path class="w ph hot" pathLength="1" style="--t:1.95s;--dur:0.2s" d="M90 142V162"/>
+              <path class="w sym kblade kh" pathLength="1" style="--t:2.07s;--dur:0.2s;transform-origin:90px 182px" d="M90 182V162"/>
+              <circle class="f dot" cx="90" cy="182" r="1.6" style="--t:2.07s"/>
+              <path class="w ph kh" pathLength="1" style="--t:2.20s;--dur:0.25s" d="M90 182V202"/>
+              <path class="w ph hot" pathLength="1" style="--t:2.00s;--dur:0.2s" d="M102 142V162"/>
+              <path class="w sym kblade kh" pathLength="1" style="--t:2.12s;--dur:0.2s;transform-origin:102px 182px" d="M102 182V162"/>
+              <circle class="f dot" cx="102" cy="182" r="1.6" style="--t:2.12s"/>
+              <path class="w ph kh" pathLength="1" style="--t:2.25s;--dur:0.25s" d="M102 182V206"/>
+              <path class="f link" style="--t:2.3s" d="M66 172H106"/>
+              <text class="f tag" x="36" y="176" style="--t:2.3s">K1</text>
               <path class="w pe" pathLength="1" style="--t:2.0s;--dur:0.8s" d="M122 84V222H110"/>
-              <path class="w sym hot" pathLength="1" style="--t:2.2s;--dur:0.7s" d="M70 222a20 20 0 1 0 40 0a20 20 0 1 0 -40 0"/>
+              <path class="w sym kh" pathLength="1" style="--t:2.3s;--dur:0.7s;--c0:#E4E9E6" d="M70 222a20 20 0 1 0 40 0a20 20 0 1 0 -40 0"/>
               <circle class="f rotor" cx="90" cy="222" r="26" style="--t:6.8s"/>
               <text class="f big" x="90" y="222" text-anchor="middle" style="--t:2.6s">M</text>
               <text class="f" x="90" y="234" text-anchor="middle" style="--t:2.6s">3~</text>
@@ -1184,11 +1211,20 @@ footer { border-top: 1px solid var(--line); position: relative; z-index: 1; }
               <text class="f tag" x="316" y="106" style="--t:4.9s">A1</text>
               <text class="f sm" x="330" y="170" text-anchor="middle" style="--t:5s">L+</text>
               <text class="f sm" x="346" y="170" text-anchor="middle" style="--t:5s">M</text>
+              <text class="f sm" x="366" y="170" text-anchor="middle" style="--t:5s">Q0.0</text>
               <text class="f sm" x="400" y="170" text-anchor="middle" style="--t:5s">I0.0</text>
+              <circle class="f qled" cx="366" cy="154" r="3.2" style="--t:5s"/>
               <circle class="f led" cx="400" cy="154" r="3.2" style="--t:5s"/>
               <path class="w p24" pathLength="1" style="--t:4.9s;--dur:0.3s" d="M330 176V210"/>
               <path class="w m0" pathLength="1" style="--t:5.0s;--dur:0.35s" d="M346 176V224"/>
               <g class="f" style="--t:5.3s"><circle class="dot" cx="330" cy="210" r="2.4"/><circle class="dot" cx="346" cy="224" r="2.4"/></g>
+              <path class="w sig" pathLength="1" style="--t:5.1s;--dur:0.15s" d="M366 176V186"/>
+              <path class="w sym" pathLength="1" style="--t:5.2s;--dur:0.35s" d="M358 186h16v12h-16Z"/>
+              <path class="f coil" d="M358 186h16v12h-16Z" style="--t:5.2s"/>
+              <path class="w m0" pathLength="1" style="--t:5.35s;--dur:0.3s" d="M366 198V224"/>
+              <circle class="f dot" cx="366" cy="224" r="2.4" style="--t:5.6s"/>
+              <text class="f tag" x="378" y="196" style="--t:5.4s">K1</text>
+              <path class="q-on" d="M366 176V186"/>
               <path class="w sym" pathLength="1" style="--t:5.3s;--dur:0.6s" d="M436 246h38v36h-38Z"/>
               <path class="w sym" pathLength="1" style="--t:5.6s;--dur:0.4s" d="M455 252l10 12l-10 12l-10-12Z"/>
               <path class="w p24" pathLength="1" style="--t:5.6s;--dur:0.3s" d="M446 246V210"/>
