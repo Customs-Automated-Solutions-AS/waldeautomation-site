@@ -237,11 +237,9 @@ h2.section-title {
 .marquee-track span::after { content: ''; width: 4px; height: 4px; background: var(--brand); opacity: 0.6; transform: rotate(45deg); }
 
 /* Om */
-.om-card { padding: 48px; display: grid; grid-template-columns: 1fr; gap: 30px; }
-.om-card h2.section-title { font-size: clamp(26px, 3vw, 36px); }
-.om-copy p { margin: 0 0 20px; font-size: 16px; line-height: 1.7; color: var(--muted); }
-.om-copy p:first-child { font-size: 18px; color: var(--text); }
-.om-copy p:last-child { margin-bottom: 0; }
+.om-card { padding: 48px; display: grid; grid-template-columns: 1fr; gap: 20px; align-items: start; }
+.om-card p { margin: 0; font-size: 16px; line-height: 1.7; color: var(--muted); }
+.om-card p:first-child { font-size: 18px; color: var(--text); }
 
 /* Teknologistack */
 .stack { display: grid; grid-template-columns: 1fr; padding: 6px 28px; }
@@ -790,7 +788,7 @@ footer { border-top: 1px solid var(--line); position: relative; z-index: 1; }
 .offscreen, .offscreen * { animation-play-state: paused !important; }
 
 @media (min-width: 900px) {
-  .om-card { grid-template-columns: 0.85fr 1.15fr; gap: 56px; }
+  .om-card { grid-template-columns: 1.15fr 0.85fr; gap: 56px; }
   .stack { grid-template-columns: 1fr 1fr; column-gap: 48px; }
   .stack-row:nth-child(2) { border-top: 0; }
   .tj-grid .wide { grid-template-columns: 1fr 1.02fr; gap: 40px; }
@@ -894,15 +892,11 @@ footer { border-top: 1px solid var(--line); position: relative; z-index: 1; }
 
   <section id="om">
     <div class="wrap">
+      <p class="eyebrow" data-i18n="omEyebrow">Om</p>
+      <h2 class="section-title" data-i18n="omTitle">Ingeniørarbeid i grensesnittet mellom fagene</h2>
       <div class="glass om-card">
-        <div>
-          <p class="eyebrow" data-i18n="omEyebrow">Om</p>
-          <h2 class="section-title" style="margin:0;" data-i18n="omTitle">Ingeniørarbeid i grensesnittet mellom fagene</h2>
-        </div>
-        <div class="om-copy">
-          <p data-i18n="omP1">Walde Automation er et enkeltpersonforetak drevet av Mikael Walde, med spesialkompetanse innen industriell automasjon og systemintegrasjon. Arbeidet ligger i grensesnittene mellom mekanikk, elektro, programvare, kommunikasjon og styring — der de vanskeligste og mest verdifulle integrasjonsutfordringene løses.</p>
-          <p data-i18n="omP2">Fokus på edge-cases, feilmodus og vedlikeholdbarhet gir systemer som ikke bare virker, men som oppfører seg forutsigbart og trygt under både normal drift og unormale forhold.</p>
-        </div>
+        <p data-i18n="omP1">Walde Automation er et enkeltpersonforetak drevet av Mikael Walde, med spesialkompetanse innen industriell automasjon og systemintegrasjon. Arbeidet ligger i grensesnittene mellom mekanikk, elektro, programvare, kommunikasjon og styring — der de vanskeligste og mest verdifulle integrasjonsutfordringene løses.</p>
+        <p data-i18n="omP2">Fokus på edge-cases, feilmodus og vedlikeholdbarhet gir systemer som ikke bare virker, men som oppfører seg forutsigbart og trygt under både normal drift og unormale forhold.</p>
       </div>
     </div>
   </section>
