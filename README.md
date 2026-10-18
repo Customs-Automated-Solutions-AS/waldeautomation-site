@@ -9,6 +9,7 @@ klar for å laste rett opp til GitHub.
 waldeautomation-site/
 ├── index.html            (inkl. CSS og JS inline)
 ├── personvern.html       (inkl. CSS og JS inline)
+├── logo.png              (logoen i toppmeny og kontaktkort)
 ├── favicon.png           (ikon i nettleserfanen)
 ├── apple-touch-icon.png  (ikon på iPhone-hjemskjerm)
 ├── og-image.jpg          (bilde når lenken deles)
@@ -65,8 +66,8 @@ er det ingenting som kan gå galt med filstrukturen ved opplasting.
 ## Neste steg
 
 - **Design:** Alt er ren struktur, ingen designbeslutninger – klart for Claude Design.
-- **Kontaktskjema:** Validerer i klienten, men sender ikke noe ennå. Koble til
-  f.eks. [Formspree](https://formspree.io).
+- **Kontaktskjema:** Sendes via [Web3Forms](https://web3forms.com) (access key ligger i
+  `index.html`; den er laget for å være offentlig).
 - **Innhold:** Bytt ut `[org.nr]`, `[dato]` og placeholder-prosjekttekster.
 - Hvis du senere vil dele opp CSS/JS i egne filer igjen (f.eks. når siden vokser),
   er det bare å be meg om det – nå er alt inline for å gjøre opplastingen enklest mulig.
