@@ -1562,6 +1562,8 @@ footer { border-top: 1px solid var(--line); position: relative; z-index: 1; }
 <script>
 const COPY = {
   no: {
+    metaTitle: 'PLS- og HMI-programmering i Bergen | Walde Automation',
+    metaDesc: 'PLS-, HMI- og displayprogrammering, industriell kommunikasjon og elektroteknisk rådgivning i Bergen og på Vestlandet. Også apper, nettsider og AI.',
     navOm: 'Om', navKompetanse: 'Kompetanse', navTjenester: 'Tjenester', navProsjekter: 'Prosjekter',
     cta: 'Ta kontakt', ctaSecondary: 'Se tjenester',
     heroEyebrow: 'Automasjon · Systemintegrasjon · Elektroteknikk',
@@ -1614,6 +1616,8 @@ const COPY = {
     statuses: { fill: 'Vennligst fyll ut alle feltene.', email: 'Vennligst oppgi en gyldig e-postadresse.', sending: 'Sender melding …', sent: 'Takk! Meldingen er sendt. Vi tar kontakt så snart som mulig.', error: 'Noe gikk galt. Prøv igjen, eller send e-post direkte til mikael@waldeautomation.no.' }
   },
   en: {
+    metaTitle: 'PLC and HMI Programming in Bergen | Walde Automation',
+    metaDesc: 'PLC, HMI and display programming, industrial communication and electrical engineering consultation in Bergen and Western Norway. Also apps, websites and AI.',
     navOm: 'About', navKompetanse: 'Expertise', navTjenester: 'Services', navProsjekter: 'Projects',
     cta: 'Get in touch', ctaSecondary: 'View services',
     heroEyebrow: 'Automation · Systems Integration · Electrical Engineering',
@@ -1681,6 +1685,8 @@ function applyLang(lang) {
   document.getElementById('langNo').classList.toggle('active', lang === 'no');
   document.getElementById('langEn').classList.toggle('active', lang === 'en');
   document.documentElement.lang = lang;
+  document.title = t.metaTitle;
+  document.querySelector('meta[name="description"]').content = t.metaDesc;
   restartAiTyper();
   restartAppPreview();
 }
