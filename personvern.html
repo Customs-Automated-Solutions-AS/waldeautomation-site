@@ -2,7 +2,8 @@
 <html lang="no">
 <head>
 <meta charset="UTF-8">
-<script>try { if (localStorage.getItem('walde-theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch (e) {}</script>
+<script>(function () { var t; try { t = localStorage.getItem('walde-theme'); } catch (e) {}
+  if (t === 'dark' || (t !== 'light' && window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.dataset.theme = 'dark'; })();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Personvernerklæring – Walde Automation</title>
 <meta name="description" content="Slik behandler Walde Automation personopplysninger du sender via kontaktskjemaet eller på e-post.">

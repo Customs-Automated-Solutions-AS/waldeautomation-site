@@ -2,7 +2,8 @@
 <html lang="no">
 <head>
 <meta charset="UTF-8">
-<script>try { if (localStorage.getItem('walde-theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch (e) {}</script>
+<script>(function () { var t; try { t = localStorage.getItem('walde-theme'); } catch (e) {}
+  if (t === 'dark' || (t !== 'light' && window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.dataset.theme = 'dark'; })();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PLS- og HMI-programmering i Bergen | Walde Automation</title>
 <meta name="theme-color" content="#F6F8F6">
@@ -2358,14 +2359,25 @@ function glideTo(target) {
   const meta = document.querySelector('meta[name="theme-color"]');
   const sync = () => { meta.content = root.dataset.theme === 'dark' ? '#0B0D0C' : '#F6F8F6'; };
   sync();
+  // Follows the device's light / dark setting until the visitor picks one with the toggle
+  const mq = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
+  const saved = () => { try { return localStorage.getItem('walde-theme'); } catch (e) { return null; } };
+  function apply(theme) {
+    root.classList.add('theme-anim');
+    if (theme === 'dark') root.dataset.theme = 'dark'; else delete root.dataset.theme;
+    sync();
+    setTimeout(() => root.classList.remove('theme-anim'), 450);
+  }
   document.getElementById('themeToggle').addEventListener('click', () => {
     const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
-    root.classList.add('theme-anim');
-    if (next === 'dark') root.dataset.theme = 'dark'; else delete root.dataset.theme;
-    sync();
-    try { localStorage.setItem('walde-theme', next); } catch (e) {}
-    setTimeout(() => root.classList.remove('theme-anim'), 450);
+    apply(next);
+    // Picking the same as the device goes back to following the device
+    try {
+      if (mq && (next === 'dark') === mq.matches) localStorage.removeItem('walde-theme');
+      else localStorage.setItem('walde-theme', next);
+    } catch (e) {}
   });
+  if (mq && mq.addEventListener) mq.addEventListener('change', e => { if (!saved()) apply(e.matches ? 'dark' : 'light'); });
 })();
 
 // Services: each card comes in step by step as you scroll to it, and only the card in focus
