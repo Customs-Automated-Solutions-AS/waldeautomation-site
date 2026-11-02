@@ -1596,7 +1596,7 @@ footer { border-top: 1px solid var(--line); position: relative; z-index: 1; }
           <div class="tj-text">
             <p class="tj-num">01</p>
             <h3 class="tj-title" data-i18n="svc7Title">Varmeovervåking av el-tavler</h3>
-            <p class="tj-desc" data-i18n="svc7Desc">Vi overvåker temperaturen i sikringsskap og el-tavler døgnet rundt, også i kritisk infrastruktur som kraftforsyning, vann og avløp, datasentre og industri. Med Omron K6PM-TH sitter små IR-sensorer på innsiden av tavledøra og dekker hele tavla, og én kontroller håndterer opptil 31 sensorer. Med et FLIR AX8-termokamera inne i skapet får du et skarpt varmebilde av de mest kritiske koblingene. Koblinger som begynner å bli varme gir forvarsel lenge før det blir brann eller driftsstans, og varselet går dit du ønsker.</p>
+            <p class="tj-desc" data-i18n="svc7Desc">Vi overvåker temperaturen i sikringsskap og el-tavler døgnet rundt, enten det er i industri, næringsbygg, datasentre eller annen kritisk drift. Med Omron K6PM-TH sitter små IR-sensorer på innsiden av tavledøra og dekker hele tavla, og én kontroller håndterer opptil 31 sensorer. Med et FLIR AX8-termokamera inne i skapet får du et skarpt varmebilde av de mest kritiske koblingene. Koblinger som begynner å bli varme gir forvarsel lenge før det blir brann eller driftsstans, og varselet går dit du ønsker.</p>
             <ul class="comm-legend">
               <li><i class="lg-cam"></i><span data-i18n="legendCam">FLIR AX8: 80×60 piksler, ser et utsnitt</span></li>
               <li><i class="lg-sens"></i><span data-i18n="legendSens">IR-sensorer: 32×32 piksler, RS-485 til én kontroller</span></li>
@@ -1721,8 +1721,8 @@ const COPY = {
     hmiActiveCount: '{n} aktiv alarm', hmiNoAlarms: 'Ingen aktive alarmer', hmiAlmQ1: 'Q1 motorvern utløst', hmiAlmEstop: 'Nødstopp aktivert',
     appDone: 'Alt klart!', appDoneSub: '3 av 3 fullført', appNewTask: 'Ny oppgave',
     flowMail: 'E-post', flowForm: 'Skjema', flowCron: 'Tir 14:00', flowTicket: 'Ticket', flowReport: 'Rapport',
-    tagRouter: '4G-ruter / VPN', tagVpn: 'VPN · 4G', tagCloud: 'Sky', tagServer: 'SCADA-server', tagRemote: 'Fjerntilgang',
-    svc7Title: 'Varmeovervåking av el-tavler', svc7Desc: 'Vi overvåker temperaturen i sikringsskap og el-tavler døgnet rundt, også i kritisk infrastruktur som kraftforsyning, vann og avløp, datasentre og industri. Med Omron K6PM-TH sitter små IR-sensorer på innsiden av tavledøra og dekker hele tavla, og én kontroller håndterer opptil 31 sensorer. Med et FLIR AX8-termokamera inne i skapet får du et skarpt varmebilde av de mest kritiske koblingene. Koblinger som begynner å bli varme gir forvarsel lenge før det blir brann eller driftsstans, og varselet går dit du ønsker.',
+    tagRouter: '4G-ruter / VPN', tagVpn: 'VPN · 4G', tagCloud: 'Sky', tagServer: 'Overvåkingsserver', tagRemote: 'Fjerntilgang',
+    svc7Title: 'Varmeovervåking av el-tavler', svc7Desc: 'Vi overvåker temperaturen i sikringsskap og el-tavler døgnet rundt, enten det er i industri, næringsbygg, datasentre eller annen kritisk drift. Med Omron K6PM-TH sitter små IR-sensorer på innsiden av tavledøra og dekker hele tavla, og én kontroller håndterer opptil 31 sensorer. Med et FLIR AX8-termokamera inne i skapet får du et skarpt varmebilde av de mest kritiske koblingene. Koblinger som begynner å bli varme gir forvarsel lenge før det blir brann eller driftsstans, og varselet går dit du ønsker.',
     legendCam: 'FLIR AX8: 80×60 piksler, ser et utsnitt', legendSens: 'IR-sensorer: 32×32 piksler, RS-485 til én kontroller', legendAlarm: 'Forvarsel ved 45 °C, alarm ved 60 °C', legendSms: 'Varsel dit du ønsker: Modbus TCP, EtherNet/IP, SMS, e-post',
     a11yHeat3d: '3D-nærbilde av et sikringsskap med to løsninger: et FLIR AX8-termokamera på innsiden av døra som ser et utsnitt, og Omron K6PM-TH med fire IR-sensorer koblet til én kontroller. I hver visning blir flere koblinger varme; først kommer forvarsel, så alarm, og varselet sendes ut over Modbus TCP, EtherNet/IP, SMS og e-post. Dra for å se inn i skapet.',
     heatCapCam: 'FLIR AX8 på innsiden av døra: 80×60 piksler og 48°×37° synsfelt. Vi legger et målefelt over hver kritisk kobling, og kameraet gir forvarsel når et felt blir varmere og alarm ved grensen. Det ser bare utsnittet det peker mot.',
@@ -1741,7 +1741,7 @@ const COPY = {
     prosjEyebrow: 'Referanseprosjekter', prosjTitle: 'Utvalgte prosjekter',
     projPhoto: 'Prosjektbilde',
     proj1Meta: 'Prosessindustri · Årstall', proj1Title: 'Pumpestyring',
-    proj2Meta: 'Vann & avløp · Årstall', proj2Title: 'Vannbehandling',
+    proj2Meta: 'Prosessanlegg · Årstall', proj2Title: 'Anleggsautomasjon',
     proj3Meta: 'Industri · Årstall', proj3Title: 'Styringssystem',
     projDesc: 'Kort beskrivelse av prosjektet kommer her.',
     kontaktEyebrow: 'Kontakt', kontaktTitle: 'Ta kontakt',
@@ -1797,8 +1797,8 @@ const COPY = {
     hmiActiveCount: '{n} active alarm', hmiNoAlarms: 'No active alarms', hmiAlmQ1: 'Q1 motor protection tripped', hmiAlmEstop: 'Emergency stop activated',
     appDone: 'All done!', appDoneSub: '3 of 3 completed', appNewTask: 'New task',
     flowMail: 'Email', flowForm: 'Form', flowCron: 'Tue 2 PM', flowTicket: 'Ticket', flowReport: 'Report',
-    tagRouter: '4G router / VPN', tagVpn: 'VPN · 4G', tagCloud: 'Cloud', tagServer: 'SCADA server', tagRemote: 'Remote access',
-    svc7Title: 'Thermal Monitoring of Switchboards', svc7Desc: 'We monitor the temperature in electrical cabinets and switchboards around the clock, including in critical infrastructure such as power supply, water and wastewater, data centres and industry. With Omron K6PM-TH, small IR sensors sit on the inside of the panel door and cover the whole board, and one controller handles up to 31 sensors. With a FLIR AX8 thermal camera inside the cabinet you get a sharp thermal image of the most critical connections. Connections that start to heat up trigger an early warning long before a fire or downtime, and the alert goes wherever you want it.',
+    tagRouter: '4G router / VPN', tagVpn: 'VPN · 4G', tagCloud: 'Cloud', tagServer: 'Monitoring server', tagRemote: 'Remote access',
+    svc7Title: 'Thermal Monitoring of Switchboards', svc7Desc: 'We monitor the temperature in electrical cabinets and switchboards around the clock, whether in industry, commercial buildings, data centres or other critical operations. With Omron K6PM-TH, small IR sensors sit on the inside of the panel door and cover the whole board, and one controller handles up to 31 sensors. With a FLIR AX8 thermal camera inside the cabinet you get a sharp thermal image of the most critical connections. Connections that start to heat up trigger an early warning long before a fire or downtime, and the alert goes wherever you want it.',
     legendCam: 'FLIR AX8: 80×60 pixels, sees one section', legendSens: 'IR sensors: 32×32 pixels, RS-485 to one controller', legendAlarm: 'Early warning at 45 °C, alarm at 60 °C', legendSms: 'Alerts wherever you want: Modbus TCP, EtherNet/IP, SMS, email',
     a11yHeat3d: '3D close-up of an electrical cabinet with two solutions: a FLIR AX8 thermal camera on the inside of the door that sees one section, and Omron K6PM-TH with four IR sensors wired to one controller. In each view several connections heat up; first comes an early warning, then an alarm, and the alert goes out over Modbus TCP, EtherNet/IP, SMS and email. Drag to look inside the cabinet.',
     heatCapCam: 'FLIR AX8 on the inside of the door: 80×60 pixels and a 48°×37° field of view. We place a measurement box over each critical connection, and the camera gives an early warning when a box warms up and an alarm at the limit. It only sees the section it points at.',
@@ -1817,7 +1817,7 @@ const COPY = {
     prosjEyebrow: 'Reference projects', prosjTitle: 'Selected projects',
     projPhoto: 'Project image',
     proj1Meta: 'Process industry · Year', proj1Title: 'Pump control',
-    proj2Meta: 'Water & wastewater · Year', proj2Title: 'Water treatment',
+    proj2Meta: 'Process plant · Year', proj2Title: 'Plant automation',
     proj3Meta: 'Industry · Year', proj3Title: 'Control system',
     projDesc: 'A short project description goes here.',
     kontaktEyebrow: 'Contact', kontaktTitle: 'Get in touch',
@@ -2630,7 +2630,7 @@ applyLang(currentLang);
 <script type="module">
 // Rotatable 3D view for "Industriell kommunikasjon" and "Systemintegrasjon & OT":
 // PLC 1 wired to field devices, PROFIBUS DP to PLC 2, Modbus TCP to PLC 3/4,
-// and PLC 2 reaching a SCADA server and a remote workstation through a 4G/VPN router.
+// and PLC 2 reaching a monitoring server and a remote workstation through a 4G/VPN router.
 // Three.js is only loaded when the card gets close to the viewport;
 // if WebGL or the CDN is unavailable the flat 2D diagram stays in place.
 const host = document.getElementById('comm3d');
@@ -2975,7 +2975,7 @@ async function initComm3d(host) {
   cable(roundedPath([pe, V(pe.x, pe.y, frontOut), V(pe.x, routerY, frontOut), V(routerX - 0.12, routerY, frontOut), V(routerX - 0.12, routerY, 0.14)].map(v => plc2.grp.localToWorld(v))),
     M.ethernet, 0.025, 0xbfe9ff, 2, 0.3, 'both', scene);
 
-  // Cloud, SCADA server and remote workstation (fade in with the cloud view)
+  // Cloud, monitoring server and remote workstation (fade in with the cloud view)
   const ot = new THREE.Group();
   scene.add(ot);
   const CLOUD = V(-7.6, 5.2, -7.4);
@@ -3770,7 +3770,7 @@ async function initHeat3d(host) {
   thsBig.add(leader(V(-1.02, 1.5, 0.6), V(QX[0] - 0.05, QY[0], DOOR_Z)));
 
   // ---- Network: an industrial switch (W4S1 style) and a 4G modem/router on the roof ----
-  // Devices -> switch over Ethernet; from the switch to PLC/SCADA and PC; from the modem out as
+  // Devices -> switch over Ethernet; from the switch to PLC/monitoring and PC; from the modem out as
   // SMS and email.
   const SWX = -0.22, SWY = TOP + 0.03;
   scene.add(at(box(0.22, 0.06, 0.14, M.device), SWX, SWY, 0));
@@ -3809,7 +3809,7 @@ async function initHeat3d(host) {
   [0, 0.5].forEach(o => packet(kPath, o, 'k6pm', 0.5));
   packet(swPath, 0, 'any', 1.2);
 
-  // Switch -> PLC/SCADA channels, modem -> SMS and email. Each has one cable over the roof to the
+  // Switch -> PLC/monitoring channels, modem -> SMS and email. Each has one cable over the roof to the
   // front right-hand corner, then a spine down with a short branch to each chip, so no lines cross
   // (animated dashes; packets while there is a warning or an alarm).
   const dashT = canvasTex(64, 4);
