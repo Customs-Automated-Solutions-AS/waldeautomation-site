@@ -116,6 +116,13 @@
         "@type": "Offer",
         "itemOffered": {
           "@type": "Service",
+          "name": "Varmeovervåking av el-tavler"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
           "name": "App- og programvareutvikling"
         }
       },
@@ -504,6 +511,70 @@ h2.section-title {
 .tag3d.vpn { color: #C8F5A0; border-color: rgba(184,240,154,0.5); }
 .tag3d { transition: opacity .5s; }
 .comm3d:not(.view-ot) .tag3d.ot { opacity: 0; }
+/* 3D view: thermal monitoring of switchboards */
+.tag3d.cam { color: #FFC58A; border-color: rgba(255,165,82,0.6); }
+.tag3d.sens { color: #9BE0B0; border-color: rgba(98,194,127,0.6); }
+.tag3d.dim { color: #9AA59F; border-style: dashed; }
+.tag3d.temp { font-weight: 600; color: #9BE0B0; border-color: rgba(98,194,127,0.6); transition: color .3s, background .3s, border-color .3s; }
+.tag3d.temp.warn { color: #fff; background: rgba(150,105,10,0.88); border-color: #F2C14E; }
+.tag3d.temp.hot { color: #fff; background: rgba(190,40,30,0.88); border-color: #FF6B5A; }
+.heat3d, .heat3d:active { cursor: default; }
+.comm3d.heat3d { min-height: 580px; }
+.heat3d .tag3d.temp { transition: opacity .5s, color .3s, background .3s, border-color .3s; }
+.heat3d .tag3d.temp:not(.warn):not(.hot) { opacity: 0; }
+.heat3d.compact .comm3d-hint { display: none; }
+.tag3d.call { font-weight: 600; }
+.heat3d.compact .tag3d.call { display: none; }
+.tag3d.chip {
+  translate: 50% 0; font-weight: 600; letter-spacing: 0.06em;
+  color: #CFD8D3; border-color: rgba(124,200,240,0.45); padding: 4px 9px;
+  transition: opacity .5s, background .3s, border-color .3s, color .3s;
+}
+.tag3d.chip.warn { background: rgba(110,80,8,0.9); border-color: #F2C14E; color: #fff; }
+.tag3d.chip.hot { background: rgba(120,24,18,0.9); border-color: #FF6B5A; color: #fff; }
+.heat3d[data-view="cam"] .tag3d[data-v]:not([data-v~="cam"]),
+.heat3d[data-view="k6pm"] .tag3d[data-v]:not([data-v~="k6pm"]) { opacity: 0; }
+.heat-card .heat-cap { margin: -12px 0 0; display: grid; }
+/* The monitoring software window under the 3D view: what the active sensor sees */
+.heat-app {
+  margin-top: -12px; border-radius: 14px; border: 1px solid var(--line-2); background: var(--panel);
+  box-shadow: var(--panel-shadow); overflow: hidden; color: #DDE5E0; font-family: var(--mono);
+}
+.heat-app[hidden] { display: none; }
+.heat-app-bar {
+  display: flex; align-items: center; gap: 8px; padding: 10px 14px; font-size: 12px; color: #9AA59F;
+  border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03);
+}
+.heat-app-bar i { width: 10px; height: 10px; border-radius: 50%; background: #3A403C; }
+.heat-app-title { margin-left: 4px; color: #E4EAE6; font-weight: 600; }
+.heat-app-src { margin-left: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.heat-app-live { display: inline-flex; align-items: center; gap: 6px; color: #62C27F; font-weight: 600; }
+.heat-app-live::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: #62C27F; animation: heatLive 1.6s ease-in-out infinite; }
+@keyframes heatLive { 50% { opacity: 0.25; } }
+.heat-app-body { display: block; }
+.heat-app-img { display: flex; justify-content: center; align-items: stretch; gap: 10px; padding: 14px; }
+.heat-app-img canvas { display: block; min-width: 0; max-width: 100%; max-height: 400px; width: auto; height: auto; border-radius: 6px; image-rendering: pixelated; }
+.heat-scale { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 10px; color: #9AA59F; }
+.heat-scale i { flex: 1; width: 10px; border-radius: 3px; background: linear-gradient(to top, #0B0B2E, #3B0F70 22%, #8C2981 42%, #DE4968 60%, #FE9F6D 78%, #FCFDBF); }
+@media (max-width: 760px) {
+  .heat-app-img canvas { max-height: 300px; }
+}
+.heat-cap span {
+  grid-area: 1 / 1; font-size: 14px; line-height: 1.6; color: var(--muted);
+  opacity: 0; visibility: hidden; transition: opacity .35s, visibility 0s .35s;
+}
+.heat-card[data-view="cam"] [data-cap="cam"], .heat-card[data-view="k6pm"] [data-cap="k6pm"] { opacity: 1; visibility: visible; transition: opacity .35s; }
+.heat3d.compact .tag3d { font-size: 9.5px; padding: 1px 5px; }
+.heat-fallback { display: flex; align-items: center; justify-content: center; gap: 14px; }
+.heat-fallback span {
+  width: 74px; height: 120px; display: grid; place-items: end center; padding-bottom: 8px; border-radius: 5px;
+  border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.04);
+  font-family: var(--mono); font-size: 11px; color: #C9D2CD;
+}
+.heat-fallback span:first-child { border-color: #FFA552; }
+.comm-legend .lg-cam { background: #FFA552; box-shadow: 0 0 6px rgba(255,165,82,0.5); }
+.comm-legend .lg-sens { background: #62C27F; }
+.comm-legend .lg-alarm { background: linear-gradient(90deg, #F2C14E 50%, #FF5A4F 50%); box-shadow: 0 0 6px rgba(255,90,79,0.5); }
 .comm3d.view-ot .tag3d:not(.ot):not(.keep) { opacity: 0; }
 .comm3d-badge {
   position: absolute; top: 12px; right: 12px; z-index: 3; pointer-events: none;
@@ -725,6 +796,7 @@ h2.section-title {
   .tj-text .tj-num { grid-column: 1; justify-self: start; }
   .tj-text .tj-title { grid-column: 1; margin: 0; }
   .tj-text .tj-desc { grid-column: 2; grid-row: 1 / span 2; }
+  .tj-text .comm-legend { grid-column: 2; margin-top: 14px; }
 }
 
 /* App card: SwiftUI code is typed while the preview on the phone builds up */
@@ -1000,6 +1072,7 @@ footer { border-top: 1px solid var(--line); position: relative; z-index: 1; }
   .stack { padding: 4px 20px; }
   .tj-grid .wide { padding: 24px; }
   .comm3d { min-height: 330px; }
+  .comm3d.heat3d { min-height: 440px; }
   .tj-grid, .prosj-grid, .kontakt-grid { grid-template-columns: 1fr; }
   .header-inner { padding: 8px 8px 8px 16px; }
 }
@@ -1031,6 +1104,7 @@ footer { border-top: 1px solid var(--line); position: relative; z-index: 1; }
         <a href="#om" data-i18n="navOm">Om</a>
         <a href="#kompetanse" data-i18n="navKompetanse">Kompetanse</a>
         <a href="#tjenester" data-i18n="navTjenester">Tjenester</a>
+        <a href="#nye-tjenester" data-i18n="navNye">Nye tjenester</a>
         <div class="nav-tools">
           <button class="theme-toggle" id="themeToggle" type="button" data-i18n-label="a11yTheme" aria-label="Lys / mørk modus" title="Lys / mørk modus">
             <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
@@ -1491,6 +1565,51 @@ footer { border-top: 1px solid var(--line); position: relative; z-index: 1; }
     </div>
   </section>
 
+  <section id="nye-tjenester">
+    <div class="wrap">
+      <p class="eyebrow" data-i18n="nyEyebrow">Nye tjenester</p>
+      <h2 class="section-title" data-i18n="nyTitle">Tilstandsovervåking av el-tavler</h2>
+      <div class="tj-grid">
+
+        <article class="glass wide heat-card" data-view="cam">
+          <div class="comm3d heat3d" id="heat3d" data-view="cam" role="group" data-i18n-label="a11yHeat3d" aria-label="3D-nærbilde av et sikringsskap med to løsninger: et FLIR AX8-termokamera på innsiden av døra som ser et utsnitt, og Omron K6PM-TH med fire IR-sensorer koblet til én kontroller. I hver visning blir flere koblinger varme; først kommer forvarsel, så alarm, og varselet sendes ut over Modbus TCP, EtherNet/IP, SMS og e-post. Dra for å se inn i skapet.">
+            <div class="comm3d-fallback heat-fallback" aria-hidden="true"><span>AX8</span><span>K6PM</span></div>
+            <div class="comm3d-views heat-views" role="group" data-i18n-label="a11yView" aria-label="Visning">
+              <button type="button" class="on" data-view="cam" aria-pressed="true"><span>FLIR AX8</span></button>
+              <button type="button" data-view="k6pm" aria-pressed="false"><span>Omron K6PM</span></button>
+            </div>
+            <span class="comm3d-hint" data-i18n="heatDragHint">Dra for å se inn i skapet</span>
+          </div>
+          <div class="heat-app" hidden>
+            <div class="heat-app-bar"><i></i><i></i><i></i><span class="heat-app-title" data-i18n="heatAppTitle">Overvåkingsprogram</span><span class="heat-app-src">FLIR AX8 · 80×60 px</span><span class="heat-app-live">LIVE</span></div>
+            <div class="heat-app-body">
+              <div class="heat-app-img">
+                <canvas width="640" height="480" role="img" data-i18n-label="a11yHeatApp" aria-label="Varmebildet sensoren ser, med måleområder. Et område som blir for varmt får en gul ramme (forvarsel) eller en rød ramme (alarm)."></canvas>
+                <div class="heat-scale" aria-hidden="true"><span>72 °C</span><i></i><span>24 °C</span></div>
+              </div>
+            </div>
+          </div>
+          <p class="heat-cap" aria-live="polite">
+            <span data-cap="cam" data-i18n="heatCapCam">FLIR AX8 på innsiden av døra: 80×60 piksler og 48°×37° synsfelt. Vi legger et målefelt over hver kritisk kobling, og kameraet gir forvarsel når et felt blir varmere og alarm ved grensen. Det ser bare utsnittet det peker mot.</span>
+            <span data-cap="k6pm" data-i18n="heatCapK6pm">Omron K6PM-TH: fire IR-sensorer (K6PM-THS) på innsiden av døra, 32×32 piksler og 90° synsfelt, på én RS-485-buss til kontrolleren (K6PM-THMD). Kontrolleren kobles via en industriell switch til PC, PLS og modem, og varsler når en av de 16 sonene i et bilde blir varmere eller passerer grensen.</span>
+          </p>
+          <div class="tj-text">
+            <p class="tj-num">01</p>
+            <h3 class="tj-title" data-i18n="svc7Title">Varmeovervåking av el-tavler</h3>
+            <p class="tj-desc" data-i18n="svc7Desc">Vi overvåker temperaturen i sikringsskap og el-tavler døgnet rundt, også i kritisk infrastruktur som kraftforsyning, vann og avløp, datasentre og industri. Med Omron K6PM-TH sitter små IR-sensorer på innsiden av tavledøra og dekker hele tavla, og én kontroller håndterer opptil 31 sensorer. Med et FLIR AX8-termokamera inne i skapet får du et skarpt varmebilde av de mest kritiske koblingene. Koblinger som begynner å bli varme gir forvarsel lenge før det blir brann eller driftsstans, og varselet går dit du ønsker.</p>
+            <ul class="comm-legend">
+              <li><i class="lg-cam"></i><span data-i18n="legendCam">FLIR AX8: 80×60 piksler, ser et utsnitt</span></li>
+              <li><i class="lg-sens"></i><span data-i18n="legendSens">IR-sensorer: 32×32 piksler, RS-485 til én kontroller</span></li>
+              <li><i class="lg-alarm"></i><span data-i18n="legendAlarm">Forvarsel ved 45 °C, alarm ved 60 °C</span></li>
+              <li><i class="lg-vpn"></i><span data-i18n="legendSms">Varsel dit du ønsker: Modbus TCP, EtherNet/IP, SMS, e-post</span></li>
+            </ul>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
   <section id="kontakt">
     <div class="wrap">
       <div class="kontakt-grid">
@@ -1570,7 +1689,8 @@ const COPY = {
     a11yView: 'Visning',
     a11ySchem: 'Animert koblingsskjema: 3-fase 400 V inn, motorvernbryter Q1 og kontaktor K1 foran motor M1, 24 V DC strømforsyning G1 og PLS A1. Når den induktive PNP-sensoren B1 på inngang I0.0 ser metall, slår utgang Q0.0 på kontaktoren og motoren går.',
     a11yPhone: 'iPhone som viser en SwiftUI-forhåndsvisning som bygges opp mens koden skrives',
-    navOm: 'Om', navKompetanse: 'Kompetanse', navTjenester: 'Tjenester', navProsjekter: 'Prosjekter',
+    navOm: 'Om', navKompetanse: 'Kompetanse', navTjenester: 'Tjenester', navNye: 'Nye tjenester', navProsjekter: 'Prosjekter',
+    nyEyebrow: 'Nye tjenester', nyTitle: 'Tilstandsovervåking av el-tavler',
     cta: 'Ta kontakt', ctaSecondary: 'Se tjenester',
     heroEyebrow: 'Automasjon · Systemintegrasjon · Elektroteknikk',
     heroTitleA: 'Styring og automasjon –', heroTitleB: 'fra felt til sky',
@@ -1602,6 +1722,21 @@ const COPY = {
     appDone: 'Alt klart!', appDoneSub: '3 av 3 fullført', appNewTask: 'Ny oppgave',
     flowMail: 'E-post', flowForm: 'Skjema', flowCron: 'Tir 14:00', flowTicket: 'Ticket', flowReport: 'Rapport',
     tagRouter: '4G-ruter / VPN', tagVpn: 'VPN · 4G', tagCloud: 'Sky', tagServer: 'SCADA-server', tagRemote: 'Fjerntilgang',
+    svc7Title: 'Varmeovervåking av el-tavler', svc7Desc: 'Vi overvåker temperaturen i sikringsskap og el-tavler døgnet rundt, også i kritisk infrastruktur som kraftforsyning, vann og avløp, datasentre og industri. Med Omron K6PM-TH sitter små IR-sensorer på innsiden av tavledøra og dekker hele tavla, og én kontroller håndterer opptil 31 sensorer. Med et FLIR AX8-termokamera inne i skapet får du et skarpt varmebilde av de mest kritiske koblingene. Koblinger som begynner å bli varme gir forvarsel lenge før det blir brann eller driftsstans, og varselet går dit du ønsker.',
+    legendCam: 'FLIR AX8: 80×60 piksler, ser et utsnitt', legendSens: 'IR-sensorer: 32×32 piksler, RS-485 til én kontroller', legendAlarm: 'Forvarsel ved 45 °C, alarm ved 60 °C', legendSms: 'Varsel dit du ønsker: Modbus TCP, EtherNet/IP, SMS, e-post',
+    a11yHeat3d: '3D-nærbilde av et sikringsskap med to løsninger: et FLIR AX8-termokamera på innsiden av døra som ser et utsnitt, og Omron K6PM-TH med fire IR-sensorer koblet til én kontroller. I hver visning blir flere koblinger varme; først kommer forvarsel, så alarm, og varselet sendes ut over Modbus TCP, EtherNet/IP, SMS og e-post. Dra for å se inn i skapet.',
+    heatCapCam: 'FLIR AX8 på innsiden av døra: 80×60 piksler og 48°×37° synsfelt. Vi legger et målefelt over hver kritisk kobling, og kameraet gir forvarsel når et felt blir varmere og alarm ved grensen. Det ser bare utsnittet det peker mot.',
+    heatCapK6pm: 'Omron K6PM-TH: fire IR-sensorer (K6PM-THS) på innsiden av døra, 32×32 piksler og 90° synsfelt, på én RS-485-buss til kontrolleren (K6PM-THMD). Kontrolleren kobles via en industriell switch til PC, PLS og modem, og varsler når en av de 16 sonene i et bilde blir varmere eller passerer grensen.',
+    heatDragHint: 'Dra for å se inn i skapet', heatRouter: 'Modem / 4G-ruter', heatSwitch: 'Industriell switch',
+    heatCallAx8: 'FLIR AX8 · forstørret', heatCallThs: 'K6PM-THS · forstørret',
+    heatAppTitle: 'Overvåkingsprogram', heatAppZone: 'sone',
+    heatStOk: 'OK', heatStWarn: 'FORVARSEL', heatStAlarm: 'ALARM',
+   
+    a11yHeatApp: 'Varmebildet sensoren ser, med måleområder. Et område som blir for varmt får en gul ramme (forvarsel) eller en rød ramme (alarm).',
+    heatChipMailName: 'E-POST',
+   
+   
+   
    
     prosjEyebrow: 'Referanseprosjekter', prosjTitle: 'Utvalgte prosjekter',
     projPhoto: 'Prosjektbilde',
@@ -1630,7 +1765,8 @@ const COPY = {
     a11yView: 'View',
     a11ySchem: 'Animated circuit diagram: 3-phase 400 V supply, motor protection switch Q1 and contactor K1 ahead of motor M1, 24 V DC power supply G1 and PLC A1. When the inductive PNP sensor B1 on input I0.0 detects metal, output Q0.0 switches on the contactor and the motor runs.',
     a11yPhone: 'iPhone showing a SwiftUI preview that builds up as the code is typed',
-    navOm: 'About', navKompetanse: 'Expertise', navTjenester: 'Services', navProsjekter: 'Projects',
+    navOm: 'About', navKompetanse: 'Expertise', navTjenester: 'Services', navNye: 'New services', navProsjekter: 'Projects',
+    nyEyebrow: 'New services', nyTitle: 'Condition monitoring of switchboards',
     cta: 'Get in touch', ctaSecondary: 'View services',
     heroEyebrow: 'Automation · Systems Integration · Electrical Engineering',
     heroTitleA: 'Control and automation –', heroTitleB: 'from field to cloud',
@@ -1662,6 +1798,21 @@ const COPY = {
     appDone: 'All done!', appDoneSub: '3 of 3 completed', appNewTask: 'New task',
     flowMail: 'Email', flowForm: 'Form', flowCron: 'Tue 2 PM', flowTicket: 'Ticket', flowReport: 'Report',
     tagRouter: '4G router / VPN', tagVpn: 'VPN · 4G', tagCloud: 'Cloud', tagServer: 'SCADA server', tagRemote: 'Remote access',
+    svc7Title: 'Thermal Monitoring of Switchboards', svc7Desc: 'We monitor the temperature in electrical cabinets and switchboards around the clock, including in critical infrastructure such as power supply, water and wastewater, data centres and industry. With Omron K6PM-TH, small IR sensors sit on the inside of the panel door and cover the whole board, and one controller handles up to 31 sensors. With a FLIR AX8 thermal camera inside the cabinet you get a sharp thermal image of the most critical connections. Connections that start to heat up trigger an early warning long before a fire or downtime, and the alert goes wherever you want it.',
+    legendCam: 'FLIR AX8: 80×60 pixels, sees one section', legendSens: 'IR sensors: 32×32 pixels, RS-485 to one controller', legendAlarm: 'Early warning at 45 °C, alarm at 60 °C', legendSms: 'Alerts wherever you want: Modbus TCP, EtherNet/IP, SMS, email',
+    a11yHeat3d: '3D close-up of an electrical cabinet with two solutions: a FLIR AX8 thermal camera on the inside of the door that sees one section, and Omron K6PM-TH with four IR sensors wired to one controller. In each view several connections heat up; first comes an early warning, then an alarm, and the alert goes out over Modbus TCP, EtherNet/IP, SMS and email. Drag to look inside the cabinet.',
+    heatCapCam: 'FLIR AX8 on the inside of the door: 80×60 pixels and a 48°×37° field of view. We place a measurement box over each critical connection, and the camera gives an early warning when a box warms up and an alarm at the limit. It only sees the section it points at.',
+    heatCapK6pm: 'Omron K6PM-TH: four IR sensors (K6PM-THS) on the inside of the door, 32×32 pixels and a 90° field of view, on one RS-485 bus to the controller (K6PM-THMD). The controller connects through an industrial switch to a PC, PLC and modem, and raises an alert when one of the 16 zones in an image warms up or passes its limit.',
+    heatDragHint: 'Drag to look inside', heatRouter: 'Modem / 4G router', heatSwitch: 'Industrial switch',
+    heatCallAx8: 'FLIR AX8 · enlarged', heatCallThs: 'K6PM-THS · enlarged',
+    heatAppTitle: 'Monitoring software', heatAppZone: 'zone',
+    heatStOk: 'OK', heatStWarn: 'WARNING', heatStAlarm: 'ALARM',
+   
+    a11yHeatApp: 'The thermal image the sensor sees, with measurement areas. An area that gets too hot gets a yellow frame (early warning) or a red frame (alarm).',
+    heatChipMailName: 'EMAIL',
+   
+   
+   
    
     prosjEyebrow: 'Reference projects', prosjTitle: 'Selected projects',
     projPhoto: 'Project image',
@@ -2416,7 +2567,6 @@ function glideTo(target) {
 (function setupServiceFocus() {
   const cards = [...document.querySelectorAll('.tj-grid > .wide')];
   if (!cards.length) return;
-  const host = cards[0].offsetParent;
   const clamp01 = v => Math.min(1, Math.max(0, v));
   let focus = null;
   function setFocus(best) {
@@ -2430,11 +2580,12 @@ function glideTo(target) {
     });
   }
   function update() {
-    const vh = window.innerHeight, mid = vh / 2, base = host.getBoundingClientRect().top;
+    const vh = window.innerHeight, mid = vh / 2;
     let best = -1, bestD = Infinity;
     cards.forEach((c, i) => {
       // Layout position, unaffected by the card's own lift and scale
-      const top = base + c.offsetTop, bottom = top + c.offsetHeight;
+      // (cards can sit in different sections, so measure from each card's own offset parent)
+      const top = c.offsetParent.getBoundingClientRect().top + c.offsetTop, bottom = top + c.offsetHeight;
       if (!reduceMotion) {
         // 0 while the card is below the screen, 1 once its top is a little above the middle
         c.style.setProperty('--p', clamp01((vh - top) / (vh * 0.6)).toFixed(3));
@@ -3085,6 +3236,969 @@ async function initComm3d(host) {
   renderer.render(scene, camera);
   labels.render(scene, camera);
   host.classList.add('ready');
+}
+</script>
+<script type="module">
+// 3D close-up for "Varmeovervåking av el-tavler": one switchboard (1 m deep, see-through door),
+// two solutions picked with the buttons (stepped through automatically until someone clicks or drags):
+//  cam  – a thermal camera modelled on a FLIR AX8 (80 × 60 px, 48° × 37°) on the inside of the door,
+//         with one measurement box per critical breaker; it only sees the section it points at
+//  k6pm – Omron K6PM-TH style: four small IR sensors (32 × 32 px, 90°) on the inside of the door,
+//         chained on RS-485 to the main unit, each image split into 16 zones
+// In each view several connections warm up at different rates: early warning at 45 °C, alarm at 60 °C.
+// The alert goes from the modem/router out to the chosen channels (Modbus TCP, EtherNet/IP, SMS,
+// email, PC log). Dragging turns the view a little (never all the way round) to look inside.
+// Loaded lazily, like the communication model above.
+const heatHost = document.getElementById('heat3d');
+if (heatHost && 'IntersectionObserver' in window) {
+  const loader = new IntersectionObserver(entries => {
+    if (!entries.some(e => e.isIntersecting)) return;
+    loader.disconnect();
+    initHeat3d(heatHost).catch(() => {});
+  }, { rootMargin: '400px 0px' });
+  loader.observe(heatHost);
+}
+
+async function initHeat3d(host) {
+  const THREE = await import('three');
+  const { CSS2DRenderer, CSS2DObject } = await import('three/addons/renderers/CSS2DRenderer.js');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const V = (x, y, z) => new THREE.Vector3(x, y, z);
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const t9n = key => (typeof COPY !== 'undefined' && typeof currentLang !== 'undefined' && COPY[currentLang][key]) || key;
+  const lang = () => (typeof currentLang !== 'undefined' ? currentLang : 'no');
+
+  // Renderer, labels, scene, camera
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setClearColor(0x000000, 0);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  host.appendChild(renderer.domElement);
+  const labels = new CSS2DRenderer();
+  labels.domElement.className = 'comm3d-labels';
+  host.appendChild(labels.domElement);
+
+  const scene = new THREE.Scene();
+  const FOV = 30;
+  const camera = new THREE.PerspectiveCamera(FOV, 1, 0.05, 80);
+  scene.add(new THREE.HemisphereLight(0xe6efe9, 0x0b100d, 1.6));
+  const sun = new THREE.DirectionalLight(0xffffff, 2.3);
+  sun.position.set(3, 8, 7);
+  sun.castShadow = true;
+  sun.shadow.mapSize.set(2048, 2048);
+  Object.assign(sun.shadow.camera, { left: -4, right: 4, top: 4, bottom: -4, near: 1, far: 25 });
+  sun.shadow.bias = -0.0005;
+  sun.shadow.normalBias = 0.02;
+  scene.add(sun);
+  const fillLight = new THREE.DirectionalLight(0xdfe9e3, 0.9);
+  fillLight.position.set(-2, 2, 6);
+  scene.add(fillLight);
+
+  // Materials
+  const std = (color, metalness, roughness, extra = {}) =>
+    new THREE.MeshStandardMaterial({ color, metalness, roughness, ...extra });
+  const M = {
+    cabinet: std(0xcfd5da, 0.25, 0.55),
+    plinth: std(0x3a4148, 0.3, 0.6),
+    plate: std(0xb4bcc3, 0.55, 0.45),
+    rail: std(0x8d969e, 0.8, 0.3),
+    duct: std(0x9aa3ab, 0.1, 0.7),
+    mcb: std(0xeceff1, 0.05, 0.55),
+    toggle: std(0x2a3036, 0.2, 0.5),
+    screw: std(0x8d969e, 0.8, 0.35),
+    wire: std(0x2f5f8f, 0.1, 0.6),
+    copper: std(0xc8773a, 0.85, 0.3),
+    post: std(0x3a4148, 0.2, 0.6),
+    main: std(0x2c3238, 0.2, 0.6),
+    handle: std(0xd23b2f, 0.1, 0.5),
+    omron: std(0xd5d9dc, 0.1, 0.55),
+    sensor: std(0x2b3036, 0.3, 0.5),
+    flir: std(0x17191b, 0.35, 0.5),
+    lens: std(0x050607, 0.9, 0.12),
+    window: std(0x1c2024, 0.3, 0.3),
+    steel: std(0xb4bcc3, 0.7, 0.3),
+    device: std(0x2a3036, 0.3, 0.5),
+    glass: std(0xd8ecf5, 0.1, 0.1, { transparent: true, opacity: 0.06, depthWrite: false }),
+    sensorCable: std(0x55606a, 0.1, 0.6),
+    ethernet: std(0x3fa9e0, 0.1, 0.4, { emissive: 0x1b6e99, emissiveIntensity: 0.45 }),
+  };
+  const mesh = (geo, mat) => { const m = new THREE.Mesh(geo, mat); m.castShadow = true; m.receiveShadow = true; return m; };
+  const flat = (geo, mat) => new THREE.Mesh(geo, mat);
+  const box = (w, h, d, mat) => mesh(new THREE.BoxGeometry(w, h, d), mat);
+  const cyl = (r, h, mat, axis = 'y', seg = 24) => {
+    const m = mesh(new THREE.CylinderGeometry(r, r, h, seg), mat);
+    if (axis === 'x') m.rotation.z = Math.PI / 2;
+    if (axis === 'z') m.rotation.x = Math.PI / 2;
+    return m;
+  };
+  const at = (obj, x, y, z) => { obj.position.set(x, y, z); return obj; };
+  const canvasTex = (w, h) => {
+    const c = document.createElement('canvas');
+    c.width = w; c.height = h;
+    const tex = new THREE.CanvasTexture(c);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    return { c, ctx: c.getContext('2d'), tex };
+  };
+  // Tubes that follow a polyline with rounded corners
+  function roundedPath(raw, r = 0.04) {
+    const pts = raw.filter((p, i) => i === 0 || p.distanceTo(raw[i - 1]) > 1e-4);
+    const path = new THREE.CurvePath();
+    let start = pts[0].clone();
+    for (let i = 1; i < pts.length - 1; i++) {
+      const a = pts[i - 1], p = pts[i], b = pts[i + 1];
+      const d1 = p.clone().sub(a), d2 = b.clone().sub(p);
+      const rr = Math.min(r, d1.length() / 2, d2.length() / 2);
+      const p1 = p.clone().sub(d1.normalize().multiplyScalar(rr));
+      const p2 = p.clone().add(d2.normalize().multiplyScalar(rr));
+      if (start.distanceTo(p1) > 1e-4) path.add(new THREE.LineCurve3(start, p1));
+      path.add(new THREE.QuadraticBezierCurve3(p1, p.clone(), p2));
+      start = p2;
+    }
+    path.add(new THREE.LineCurve3(start, pts[pts.length - 1].clone()));
+    return path;
+  }
+  const smooth = pts => new THREE.CatmullRomCurve3(pts, false, 'centripetal');
+
+  // Floor: faded grid plus a shadow catcher
+  const gridT = canvasTex(1024, 1024), g = gridT.ctx;
+  g.strokeStyle = 'rgba(160,190,172,0.4)';
+  g.lineWidth = 1.5;
+  for (let i = 0; i <= 1024; i += 48) {
+    g.beginPath(); g.moveTo(i, 0); g.lineTo(i, 1024); g.stroke();
+    g.beginPath(); g.moveTo(0, i); g.lineTo(1024, i); g.stroke();
+  }
+  g.globalCompositeOperation = 'destination-in';
+  const fade = g.createRadialGradient(512, 512, 100, 512, 512, 512);
+  fade.addColorStop(0, 'rgba(0,0,0,1)');
+  fade.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = fade;
+  g.fillRect(0, 0, 1024, 1024);
+  const grid = new THREE.Mesh(new THREE.PlaneGeometry(10, 10), new THREE.MeshBasicMaterial({ map: gridT.tex, transparent: true, depthWrite: false }));
+  grid.rotation.x = -Math.PI / 2;
+  grid.position.set(0.3, 0.002, 0);
+  scene.add(grid);
+  const shadowFloor = new THREE.Mesh(new THREE.PlaneGeometry(10, 10), new THREE.ShadowMaterial({ opacity: 0.35 }));
+  shadowFloor.rotation.x = -Math.PI / 2;
+  shadowFloor.position.set(0.3, 0, 0);
+  shadowFloor.receiveShadow = true;
+  scene.add(shadowFloor);
+
+  // Status LEDs (blinking unless fixed)
+  const leds = [];
+  const led = (color, x, y, z, parent, fixed = false) => {
+    const m = at(new THREE.Mesh(new THREE.BoxGeometry(0.022, 0.022, 0.01), new THREE.MeshBasicMaterial({ color: 0x1d2a22, toneMapped: false })), x, y, z);
+    parent.add(m);
+    const l = { m, on: new THREE.Color(color), off: new THREE.Color(0x1d2a22), next: 0, fixed };
+    if (fixed) m.material.color.copy(l.on);
+    leds.push(l);
+    return l;
+  };
+
+  // Objects that belong to one solution fade in and out with the view
+  const layers = { cam: new THREE.Group(), k6pm: new THREE.Group() };
+  Object.values(layers).forEach(grp => scene.add(grp));
+
+  // The switchboard: busbars, main switch and three rows of breakers, door shown see-through
+  const CW = 1.4, CH = 2.0, CD = 1.0, BASE = 0.1, T = 0.04, TOP = BASE + CH;
+  const plateZ = -CD / 2 + 0.07, railZ = plateZ + 0.02, MCB_D = 0.16, frontZ = railZ + 0.02 + MCB_D;
+  const DOOR_Z = CD / 2, IMG_Z = frontZ + 0.04;
+  const ROWS = [1.36, 0.96, 0.56], PER_ROW = 12, PITCH = 0.085;
+  const mcbX = i => -((PER_ROW - 1) * PITCH) / 2 + i * PITCH;
+  const BARS = [1.70, 1.78, 1.86];
+  scene.add(at(box(CW, BASE, CD, M.plinth), 0, BASE / 2, 0));
+  scene.add(at(box(CW, CH, T, M.cabinet), 0, BASE + CH / 2, -CD / 2 + T / 2));
+  [-1, 1].forEach(s => scene.add(at(box(T, CH, CD, M.cabinet), s * (CW / 2 - T / 2), BASE + CH / 2, 0)));
+  scene.add(at(box(CW, T, CD, M.cabinet), 0, TOP - T / 2, 0));
+  scene.add(at(box(CW, T, CD, M.cabinet), 0, BASE + T / 2, 0));
+  scene.add(at(box(CW - 0.2, CH - 0.16, 0.02, M.plate), 0, BASE + CH / 2, plateZ - 0.01));
+  BARS.forEach(y => scene.add(at(box(0.8, 0.025, 0.012, M.copper), 0.12, y, plateZ + 0.08)));
+  [-0.3, 0.54].forEach(x => scene.add(at(box(0.05, 0.24, 0.07, M.post), x, 1.78, plateZ + 0.035)));
+  scene.add(at(box(0.18, 0.26, 0.14, M.main), -0.46, 1.78, plateZ + 0.07));
+  scene.add(at(box(0.05, 0.1, 0.05, M.handle), -0.46, 1.78, plateZ + 0.165));
+  ROWS.forEach(y => scene.add(at(box(1.1, 0.035, 0.04, M.rail), 0, y, railZ)));
+  [...ROWS.map(y => y + 0.2), ROWS[2] - 0.2].forEach(y => scene.add(at(box(1.15, 0.1, 0.1, M.duct), 0, y, plateZ + 0.05)));
+  scene.add(at(flat(new THREE.BoxGeometry(CW, CH, 0.02), M.glass), 0, BASE + CH / 2, DOOR_Z + 0.01));
+  scene.add(at(new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(CW, CH, 0.02)),
+    new THREE.LineBasicMaterial({ color: 0xcfd5da, transparent: true, opacity: 0.45 })), 0, BASE + CH / 2, DOOR_Z + 0.01));
+  scene.add(at(box(0.03, 0.18, 0.03, M.post), CW / 2 - 0.08, 1.1, DOOR_Z + 0.035));
+
+  // Connections that warm up: several per solution, each at its own pace and peak
+  // (rows count from the top; Q numbers run left to right, row by row)
+  const FAULTS = {
+    cam: [
+      { row: 0, i: 7, q: 'Q8', peak: 53, delay: 0 },
+      { row: 0, i: 9, q: 'Q10', peak: 74, delay: 1.4 },
+    ],
+    k6pm: [
+      { row: 0, i: 10, q: 'Q11', peak: 52, delay: 0 },
+      { row: 1, i: 4, q: 'Q17', peak: 74, delay: 1.2 },
+      { row: 2, i: 2, q: 'Q27', peak: 57, delay: 2.6 },
+    ],
+  };
+  const allFaults = [...FAULTS.cam, ...FAULTS.k6pm];
+  const isFault = (r, i) => allFaults.some(f => f.row === r && f.i === i);
+
+  // Breakers and their outgoing wires as instanced meshes (the controller takes the last three
+  // places on the bottom rail)
+  const spots = [];
+  ROWS.forEach((y, r) => { for (let i = 0; i < PER_ROW; i++) if (!(r === 2 && i >= 9)) spots.push({ x: mcbX(i), y, r, i }); });
+  const mtx = new THREE.Matrix4();
+  const inst = (geo, mat, n) => { const m = new THREE.InstancedMesh(geo, mat, n); m.castShadow = true; m.receiveShadow = true; scene.add(m); return m; };
+  const bodies = inst(new THREE.BoxGeometry(0.078, 0.2, MCB_D), M.mcb, spots.length);
+  const toggles = inst(new THREE.BoxGeometry(0.026, 0.05, 0.03), M.toggle, spots.length);
+  const screws = inst(new THREE.BoxGeometry(0.05, 0.018, 0.01), M.screw, spots.length * 2);
+  const wired = spots.filter(p => !isFault(p.r, p.i));
+  const wires = inst(new THREE.BoxGeometry(0.016, 0.07, 0.016), M.wire, wired.length);
+  spots.forEach((p, k) => {
+    bodies.setMatrixAt(k, mtx.makeTranslation(p.x, p.y, railZ + 0.02 + MCB_D / 2));
+    toggles.setMatrixAt(k, mtx.makeTranslation(p.x, p.y + 0.01, frontZ + 0.015));
+    screws.setMatrixAt(2 * k, mtx.makeTranslation(p.x, p.y + 0.08, frontZ + 0.005));
+    screws.setMatrixAt(2 * k + 1, mtx.makeTranslation(p.x, p.y - 0.08, frontZ + 0.005));
+  });
+  wired.forEach((p, k) => wires.setMatrixAt(k, mtx.makeTranslation(p.x, p.y + 0.125, frontZ - 0.03)));
+
+  // Each fault: glowing screw, a cable that heats up, and an additive glow
+  const glowT = canvasTex(64, 64);
+  const gg = glowT.ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+  gg.addColorStop(0, 'rgba(255,255,255,1)');
+  gg.addColorStop(0.35, 'rgba(255,255,255,0.45)');
+  gg.addColorStop(1, 'rgba(255,255,255,0)');
+  glowT.ctx.fillStyle = gg;
+  glowT.ctx.fillRect(0, 0, 64, 64);
+  const warmColor = new THREE.Color(0xffc04d), hotColor = new THREE.Color(0xff3b2f);
+  const LIMIT = 60, WARN = 45, COOL = 34, PEAK = 74;
+  allFaults.forEach(f => {
+    f.pos = V(mcbX(f.i), ROWS[f.row] + 0.08, frontZ + 0.008);
+    f.screwMat = std(0x8d969e, 0.6, 0.4, { emissive: 0xff3b1f, emissiveIntensity: 0 });
+    f.cableMat = std(0x2f5f8f, 0.1, 0.6, { emissive: 0xff4a1f, emissiveIntensity: 0 });
+    scene.add(at(box(0.052, 0.02, 0.012, f.screwMat), f.pos.x, f.pos.y, frontZ + 0.006));
+    scene.add(at(box(0.02, 0.07, 0.02, f.cableMat), f.pos.x, ROWS[f.row] + 0.125, frontZ - 0.03));
+    f.glow = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowT.tex, color: warmColor, blending: THREE.AdditiveBlending, transparent: true, depthWrite: false, toneMapped: false }));
+    f.glow.position.set(f.pos.x, f.pos.y + 0.02, frontZ + 0.03);
+    scene.add(f.glow);
+    f.temp = COOL;
+  });
+  const stageOf = temp => (temp >= LIMIT ? 2 : temp >= WARN ? 1 : 0);
+  const STAGE_COL = ['#ffffff', '#f2c14e', '#ff5a4f'];
+
+  // Temperature field of the board (used by both thermal images)
+  const staticT = (x, y) => {
+    let v = 25;
+    if (x > -0.3 && x < 0.54) BARS.forEach(b => { v += 8 * Math.exp(-((y - b) ** 2) / 0.0004); });
+    if (Math.abs(x + 0.46) < 0.09 && Math.abs(y - 1.78) < 0.13) v += 4;
+    ROWS.forEach((ry, r) => {
+      const xMax = r === 2 ? mcbX(8) + 0.04 : 0.51;
+      if (x < -0.51 || x > xMax) return;
+      v += 5 * Math.exp(-((y - ry - 0.08) ** 2) / 0.0006) * (0.55 + 0.45 * Math.abs(Math.sin(x * 37)));
+      v += 2.5 * Math.exp(-((y - ry) ** 2) / 0.006);
+    });
+    if (x > mcbX(9) - 0.04 && x < mcbX(11) + 0.04 && Math.abs(y - ROWS[2]) < 0.11) v += 5;
+    return v;
+  };
+  // How much a fault's heat reaches a point (terminal plus the cable above it)
+  const faultWeight = (f, x, y) => {
+    const dy = y < f.pos.y ? y - f.pos.y : y > f.pos.y + 0.08 ? y - f.pos.y - 0.08 : 0;
+    return Math.exp(-((x - f.pos.x) ** 2 + dy * dy) / 0.0018);
+  };
+  // Iron-style palette (dark blue, purple, red, orange, yellow, white)
+  const stops = [[0, [11, 11, 46]], [0.22, [59, 15, 112]], [0.42, [140, 41, 129]], [0.6, [222, 73, 104]], [0.78, [254, 159, 109]], [1, [252, 253, 191]]];
+  const LUT = [];
+  for (let i = 0; i < 256; i++) {
+    const k = i / 255;
+    let j = 0;
+    while (j < stops.length - 2 && k > stops[j + 1][0]) j++;
+    const [k0, c0] = stops[j], [k1, c1] = stops[j + 1], f = (k - k0) / (k1 - k0);
+    LUT.push(`rgb(${c0.map((v, n) => Math.round(v + (c1[n] - v) * f)).join(',')})`);
+  }
+  const colour = v => LUT[clamp(Math.round((v - 24) / 48 * 255), 0, 255)];
+  const pixelTex = (w, h) => {
+    const t = canvasTex(w, h);
+    t.tex.magFilter = THREE.NearestFilter;
+    t.tex.minFilter = THREE.LinearFilter;
+    t.tex.generateMipmaps = false;
+    return t;
+  };
+  const cellTemp = (c, faults) => faults.reduce((v, f, k) => v + (f.temp - COOL) * c.w[k], c.base);
+
+  // ---- Solution 1: FLIR AX8 on the inside of the door, pointing straight in ----
+  const camL = layers.cam;
+  // Shaped like the real AX8: an upright black box (54 × 95 × 25 mm) with a silver strip holding the
+  // small visual camera above the larger IR lens, the FLIR logo below and two M12 connectors at the
+  // bottom. Built with its front (lenses) towards local +z.
+  const logoT = canvasTex(160, 48);
+  logoT.ctx.fillStyle = '#ffffff';
+  logoT.ctx.font = '800 38px system-ui, sans-serif';
+  logoT.ctx.textAlign = 'center';
+  logoT.ctx.textBaseline = 'middle';
+  logoT.ctx.fillText('FLIR', 92, 26);
+  logoT.ctx.save();
+  logoT.ctx.translate(28, 25);
+  logoT.ctx.rotate(Math.PI / 4);
+  logoT.ctx.fillRect(-8, -8, 16, 16);
+  logoT.ctx.restore();
+  const AX8_LENS = V(0, 0.019, 0.017);
+  function buildAX8() {
+    const g = new THREE.Group();
+    g.add(box(0.054, 0.095, 0.025, M.flir));
+    g.add(at(box(0.05, 0.091, 0.002, M.flir), 0, 0, 0.0128));
+    g.add(at(box(0.017, 0.038, 0.003, M.steel), 0, 0.025, 0.0142));
+    g.add(at(cyl(0.0034, 0.003, M.lens, 'z'), 0, 0.036, 0.0158));
+    g.add(at(cyl(0.0072, 0.004, M.lens, 'z'), 0, 0.019, 0.016));
+    g.add(at(flat(new THREE.PlaneGeometry(0.03, 0.009), new THREE.MeshBasicMaterial({ map: logoT.tex, transparent: true, toneMapped: false })), 0, -0.02, 0.0141));
+    [-0.012, 0.012].forEach(dx => {
+      g.add(at(cyl(0.0048, 0.008, M.steel, 'y', 16), dx, -0.0515, 0));
+      g.add(at(cyl(0.004, 0.01, M.post, 'y', 16), dx, -0.059, 0));
+    });
+    return g;
+  }
+  // Mounted flat on a bracket on the door (drawn 1.4× life size so it reads), aimed straight at the
+  // plate so its image is a true rectangle. About 60 cm away, its 48° × 37° view covers roughly
+  // 52 × 39 cm. From the front of the cabinet you see its back; the enlarged copy shows its face.
+  const AXS = 1.4;
+  const camAim = V(0.15, 1.5, IMG_Z);
+  const ax8 = buildAX8();
+  ax8.scale.setScalar(AXS);
+  ax8.position.set(camAim.x, camAim.y - AX8_LENS.y * AXS, DOOR_Z - 0.012 - 0.0125 * AXS);
+  camL.add(ax8);
+  ax8.lookAt(V(ax8.position.x, ax8.position.y, IMG_Z));
+  camL.add(at(box(0.09, 0.16, 0.012, M.steel), ax8.position.x, ax8.position.y, DOOR_Z - 0.006));
+  scene.updateMatrixWorld(true);
+  const camLens = ax8.localToWorld(AX8_LENS.clone());
+  const camPos = ax8.position.clone();
+
+  // Enlarged copy beside the cabinet, turned towards the viewer, with a leader line to the real one
+  const ax8Big = new THREE.Group();
+  camL.add(ax8Big);
+  const ax8Show = buildAX8();
+  ax8Show.scale.setScalar(4.2);
+  ax8Show.position.set(-1.12, 1.62, 0.6);
+  ax8Show.rotation.y = 0.34;
+  ax8Big.add(ax8Show);
+  const leader = (from, to) => {
+    const l = new THREE.Line(new THREE.BufferGeometry().setFromPoints([from, to]),
+      new THREE.LineDashedMaterial({ color: 0xcfd5da, dashSize: 0.03, gapSize: 0.025, transparent: true, opacity: 0.7 }));
+    l.computeLineDistances();
+    return l;
+  };
+  ax8Big.add(leader(V(-0.98, 1.62, 0.6), camPos.clone().add(V(-0.05, 0, 0))));
+
+  // Projection of its 48° × 37° view onto the breakers (80 × 60 pixels)
+  const fwd = camAim.clone().sub(camLens).normalize();
+  const right = fwd.clone().cross(V(0, 1, 0)).normalize(), up = right.clone().cross(fwd);
+  const TX = Math.tan(THREE.MathUtils.degToRad(24)), TY = Math.tan(THREE.MathUtils.degToRad(18.5));
+  const hit = (xn, yn) => {
+    const d = fwd.clone().addScaledVector(right, xn * TX).addScaledVector(up, yn * TY);
+    return camLens.clone().addScaledVector(d, (IMG_Z - camLens.z) / d.z);
+  };
+  const toImg = p => {
+    const v = p.clone().sub(camLens), z = v.dot(fwd);
+    return [v.dot(right) / z / TX, v.dot(up) / z / TY];
+  };
+  const corners = [hit(-1, -1), hit(1, -1), hit(1, 1), hit(-1, 1)];
+  const segs = [], faces = [];
+  corners.forEach((c, i) => { const nx = corners[(i + 1) % 4]; segs.push(camLens, c, c, nx); faces.push(camLens, c, nx); });
+  camL.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(segs),
+    new THREE.LineBasicMaterial({ color: 0xffa552, transparent: true, opacity: 0.45, toneMapped: false })));
+  camL.add(flat(new THREE.BufferGeometry().setFromPoints(faces),
+    new THREE.MeshBasicMaterial({ color: 0xffa552, transparent: true, opacity: 0.06, side: THREE.DoubleSide, depthWrite: false, toneMapped: false })));
+
+  const AW = 80, AH = 60, AC = 4;
+  const axImg = pixelTex(AW * AC, AH * AC), ac = axImg.ctx;
+  const axCells = [];
+  for (let py = 0; py < AH; py++) for (let px = 0; px < AW; px++) {
+    const w = hit((px + 0.5) / AW * 2 - 1, 1 - (py + 0.5) / AH * 2);
+    axCells.push({ X: px * AC, Y: py * AC, base: staticT(w.x, w.y), w: FAULTS.cam.map(f => faultWeight(f, w.x, w.y)) });
+  }
+  // One measurement box per watched breaker, in image pixels
+  const toPx = (x, y) => { const [xn, yn] = toImg(V(x, y, IMG_Z)); return [(xn + 1) / 2 * AW * AC, (1 - yn) / 2 * AH * AC]; };
+  FAULTS.cam.forEach(f => {
+    const [x0, y0] = toPx(f.pos.x - 0.038, f.pos.y + 0.09), [x1, y1] = toPx(f.pos.x + 0.038, f.pos.y - 0.05);
+    f.box = [x0, y0, x1 - x0, y1 - y0];
+  });
+  function drawAx8() {
+    const faults = FAULTS.cam;
+    axCells.forEach(c => { ac.fillStyle = colour(cellTemp(c, faults)); ac.fillRect(c.X, c.Y, AC, AC); });
+    ac.font = '600 13px ui-monospace, monospace';
+    ac.textBaseline = 'middle';
+    faults.forEach((f, k) => {
+      const st = stageOf(f.temp), [x, y, w, h] = f.box;
+      ac.lineWidth = 3;
+      ac.strokeStyle = STAGE_COL[st];
+      ac.strokeRect(x, y, w, h);
+      const label = `Bx${k + 1} ${f.temp.toFixed(1)}`;
+      const lw = ac.measureText(label).width + 8, lx = clamp(x + w / 2 - lw / 2, 0, AW * AC - lw), ly = y + 3;
+      ac.fillStyle = st === 2 ? 'rgba(200,40,30,0.92)' : st === 1 ? 'rgba(170,120,10,0.92)' : 'rgba(0,0,0,0.6)';
+      ac.fillRect(lx, ly, lw, 17);
+      ac.fillStyle = '#fff';
+      ac.fillText(label, lx + 4, ly + 9);
+    });
+    axImg.tex.needsUpdate = true;
+  }
+  // The image laid onto the breakers as a fine grid, so the perspective stays correct
+  const GX = 20, GY = 15, pos = [], uv = [], idx = [];
+  for (let j = 0; j <= GY; j++) for (let i = 0; i <= GX; i++) {
+    const xn = i / GX * 2 - 1, yn = j / GY * 2 - 1, w = hit(xn, yn);
+    pos.push(w.x, w.y, w.z);
+    uv.push(i / GX, j / GY);
+  }
+  for (let j = 0; j < GY; j++) for (let i = 0; i < GX; i++) {
+    const a = j * (GX + 1) + i, b = a + 1, c = a + GX + 1, d = c + 1;
+    idx.push(a, b, d, a, d, c);
+  }
+  const axGeo = new THREE.BufferGeometry();
+  axGeo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  axGeo.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+  axGeo.setIndex(idx);
+  camL.add(flat(axGeo, new THREE.MeshBasicMaterial({ map: axImg.tex, transparent: true, opacity: 0.72, depthWrite: false, side: THREE.DoubleSide, toneMapped: false })));
+
+  // ---- Solution 2: four IR sensors on the inside of the door, on one RS-485 bus to the main unit ----
+  const kL = layers.k6pm;
+  const LENS_Z = DOOR_Z - 0.045;
+  // Each sensor watches one quarter of the board (its 90° view covers it from about 45 cm)
+  const QX = [-0.3, 0.3], QY = [1.56, 0.64], QW = 0.6, QH = 0.92, PXN = 32;
+  const sensors = [];
+  QY.forEach(sy => QX.forEach(sx => sensors.push(V(sx, sy, 0))));
+  // K6PM-THS: small light-grey housing, dark window with the IR lens, cable out at the bottom
+  // (front towards local +z)
+  function buildTHS() {
+    const g = new THREE.Group();
+    g.add(box(0.045, 0.07, 0.03, M.omron));
+    g.add(at(box(0.034, 0.044, 0.003, M.window), 0, 0.007, 0.0158));
+    g.add(at(cyl(0.008, 0.003, M.lens, 'z'), 0, 0.01, 0.0178));
+    g.add(at(box(0.006, 0.004, 0.002, M.handle), 0.011, -0.022, 0.0158));
+    g.add(at(cyl(0.004, 0.012, M.post, 'y', 12), 0, -0.04, 0));
+    return g;
+  }
+  const fovSegs = [];
+  sensors.forEach(s => {
+    const ths = buildTHS();
+    ths.scale.setScalar(1.3);
+    ths.position.set(s.x, s.y, DOOR_Z - 0.004 - 0.015 * 1.3);
+    kL.add(ths);
+    ths.lookAt(V(s.x, s.y, IMG_Z));
+    const apex = V(s.x, s.y, LENS_Z);
+    [V(s.x - QW / 2, s.y - QH / 2, IMG_Z), V(s.x + QW / 2, s.y - QH / 2, IMG_Z), V(s.x + QW / 2, s.y + QH / 2, IMG_Z), V(s.x - QW / 2, s.y + QH / 2, IMG_Z)]
+      .forEach(p => fovSegs.push(apex, p));
+  });
+  kL.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(fovSegs),
+    new THREE.LineBasicMaterial({ color: 0x62c27f, transparent: true, opacity: 0.3, toneMapped: false })));
+
+  // Their combined image: 32 × 32 pixels per sensor, split into 16 zones (4 × 4)
+  const CELL = 4, SIDE = PXN * CELL;
+  const kImg = pixelTex(QX.length * SIDE, QY.length * SIDE), kc = kImg.ctx;
+  const kCells = [];
+  QY.forEach((sy, r) => QX.forEach((sx, c) => {
+    for (let py = 0; py < PXN; py++) for (let px = 0; px < PXN; px++) {
+      const x = sx - QW / 2 + (px + 0.5) * (QW / PXN), y = sy + QH / 2 - (py + 0.5) * (QH / PXN);
+      kCells.push({ X: c * SIDE + px * CELL, Y: r * SIDE + py * CELL, base: staticT(x, y), w: FAULTS.k6pm.map(f => faultWeight(f, x, y)) });
+    }
+  }));
+  const zone = SIDE / 4;
+  // Marker around each hot area (terminal plus cable), in image pixels
+  const kPx = (x, y) => {
+    const c = x < 0 ? 0 : 1, r = y > QY[0] - QH / 2 ? 0 : 1;
+    return [c * SIDE + (x - (QX[c] - QW / 2)) / QW * SIDE, r * SIDE + ((QY[r] + QH / 2) - y) / QH * SIDE];
+  };
+  FAULTS.k6pm.forEach(f => {
+    const [x0, y0] = kPx(f.pos.x - 0.038, f.pos.y + 0.09), [x1, y1] = kPx(f.pos.x + 0.038, f.pos.y - 0.04);
+    f.mark = [x0, y0, x1 - x0, y1 - y0];
+  });
+  function drawK6pm() {
+    const faults = FAULTS.k6pm;
+    kCells.forEach(c => { kc.fillStyle = colour(cellTemp(c, faults)); kc.fillRect(c.X, c.Y, CELL, CELL); });
+    const W = kImg.c.width, H = kImg.c.height;
+    kc.lineWidth = 1;
+    kc.strokeStyle = 'rgba(0,0,0,0.35)';
+    for (let x = 0; x <= W; x += zone) { kc.beginPath(); kc.moveTo(x + 0.5, 0); kc.lineTo(x + 0.5, H); kc.stroke(); }
+    for (let y = 0; y <= H; y += zone) { kc.beginPath(); kc.moveTo(0, y + 0.5); kc.lineTo(W, y + 0.5); kc.stroke(); }
+    kc.strokeStyle = 'rgba(155,224,176,0.7)';
+    kc.lineWidth = 2;
+    for (let x = 0; x <= W; x += SIDE) { kc.beginPath(); kc.moveTo(x, 0); kc.lineTo(x, H); kc.stroke(); }
+    for (let y = 0; y <= H; y += SIDE) { kc.beginPath(); kc.moveTo(0, y); kc.lineTo(W, y); kc.stroke(); }
+    faults.forEach(f => {
+      const st = stageOf(f.temp);
+      if (!st) return;
+      kc.strokeStyle = STAGE_COL[st];
+      kc.lineWidth = 5;
+      kc.strokeRect(...f.mark);
+    });
+    kImg.tex.needsUpdate = true;
+  }
+  kL.add(at(flat(new THREE.PlaneGeometry(QX.length * QW, QY.length * QH),
+    new THREE.MeshBasicMaterial({ map: kImg.tex, transparent: true, opacity: 0.6, depthWrite: false, toneMapped: false })),
+    0, (QY[0] + QY[1]) / 2, IMG_Z));
+
+  // Main unit (K6PM-THMD style) on the bottom rail: 45 mm DIN housing with an LCD
+  const CX = mcbX(10), CY = ROWS[2];
+  kL.add(at(box(0.24, 0.22, 0.16, M.omron), CX, CY, railZ + 0.1));
+  const lcd = canvasTex(128, 56);
+  kL.add(at(flat(new THREE.PlaneGeometry(0.17, 0.075), new THREE.MeshBasicMaterial({ map: lcd.tex, toneMapped: false })), CX, CY + 0.04, frontZ + 0.002));
+  led(0x62e08e, CX - 0.07, CY - 0.055, frontZ + 0.004, kL, true);
+  led(0xf2c14e, CX - 0.035, CY - 0.055, frontZ + 0.004, kL);
+  const alarmLed = led(0xff4b3e, CX, CY - 0.055, frontZ + 0.004, kL, true);
+  function drawLcd(temp) {
+    const st = stageOf(temp), l = lcd.ctx;
+    l.fillStyle = ['#0d1a12', '#2e2408', '#3a0d0a'][st]; l.fillRect(0, 0, 128, 56);
+    l.fillStyle = ['#9be0b0', '#f2c14e', '#ff8a7d'][st];
+    l.font = 'bold 30px ui-monospace, monospace'; l.textAlign = 'center'; l.textBaseline = 'middle';
+    l.fillText(`${Math.round(temp)}°C`, 64, 30);
+    lcd.tex.needsUpdate = true;
+  }
+
+  // RS-485 as one bus (as in Omron's system configuration): a trunk down the middle of the door
+  // with a short drop to each sensor, then into the cabinet to the main unit
+  const zD = DOOR_Z - 0.008;
+  const trunk = roundedPath([
+    V(0, QY[0] + 0.06, zD), V(0, 0.3, zD), V(0, 0.3, frontZ + 0.05), V(CX, 0.3, frontZ + 0.05),
+    V(CX, 0.3, frontZ - 0.02), V(CX, CY - 0.11, frontZ - 0.02),
+  ], 0.06);
+  kL.add(mesh(new THREE.TubeGeometry(trunk, 220, 0.008, 6, false), M.sensorCable));
+  sensors.forEach(s => {
+    const drop = roundedPath([V(0, s.y + 0.06, zD), V(s.x * 0.85, s.y + 0.06, zD), V(s.x, s.y - 0.06, zD)], 0.05);
+    kL.add(mesh(new THREE.TubeGeometry(drop, 60, 0.005, 6, false), M.sensorCable));
+  });
+
+  // Enlarged K6PM-THS beside the cabinet, turned towards the viewer, with a leader line
+  const thsBig = new THREE.Group();
+  kL.add(thsBig);
+  const thsShow = buildTHS();
+  thsShow.scale.setScalar(4.2);
+  thsShow.position.set(-1.12, 1.5, 0.6);
+  thsShow.rotation.y = -0.3;
+  thsBig.add(thsShow);
+  thsBig.add(leader(V(-1.02, 1.5, 0.6), V(QX[0] - 0.05, QY[0], DOOR_Z)));
+
+  // ---- Network: an industrial switch (W4S1 style) and a 4G modem/router on the roof ----
+  // Devices -> switch over Ethernet; from the switch to PLC/SCADA and PC; from the modem out as
+  // SMS and email.
+  const SWX = -0.22, SWY = TOP + 0.03;
+  scene.add(at(box(0.22, 0.06, 0.14, M.device), SWX, SWY, 0));
+  for (let k = 0; k < 5; k++) {
+    scene.add(at(box(0.026, 0.022, 0.006, M.window), SWX - 0.08 + k * 0.04, SWY - 0.004, 0.071));
+    led(0x62e08e, SWX - 0.08 + k * 0.04, SWY + 0.018, 0.071, scene);
+  }
+  const RX = 0.35, RY = TOP + 0.035;
+  scene.add(at(box(0.3, 0.07, 0.2, M.device), RX, RY, 0));
+  [-0.11, 0.11].forEach(dx => scene.add(at(cyl(0.01, 0.34, M.device, 'y', 8), RX + dx, RY + 0.2, -0.06)));
+  [-0.09, -0.05, -0.01].forEach(dx => led(0x62e08e, RX + dx, RY, 0.102, scene));
+
+  const packets = [];
+  const packet = (path, offset, view, speed) => {
+    const m = flat(new THREE.SphereGeometry(0.02, 12, 12), new THREE.MeshBasicMaterial({ color: 0xff6b5a, toneMapped: false }));
+    m.visible = false;
+    scene.add(m);
+    packets.push({ m, path, offset, view, speed });
+  };
+  // AX8 -> switch: one PoE Ethernet cable from its M12 connector, along the door to the hinge side
+  // and up over the roof
+  const conn = ax8.localToWorld(V(0.012, -0.064, 0));
+  const hingeX = -CW / 2 + 0.08, dz = DOOR_Z - 0.012;
+  const axPath = roundedPath([conn, V(conn.x, 1.3, conn.z), V(conn.x, 1.3, dz), V(hingeX, 1.3, dz), V(hingeX, TOP - 0.06, dz),
+    V(hingeX, TOP + 0.03, DOOR_Z - 0.12), V(hingeX, TOP + 0.03, 0.04), V(SWX - 0.11, SWY, 0.04)], 0.06);
+  camL.add(mesh(new THREE.TubeGeometry(axPath, 200, 0.009, 8, false), M.ethernet));
+  // Main unit -> switch: Ethernet up the right-hand wall and across the roof behind the modem
+  const ethX = CW / 2 - 0.06;
+  const kPath = roundedPath([V(CX + 0.08, CY - 0.06, frontZ), V(CX + 0.08, CY - 0.06, frontZ + 0.03),
+    V(ethX, CY - 0.06, frontZ + 0.03), V(ethX, SWY, frontZ + 0.03), V(SWX + 0.06, SWY, frontZ + 0.03), V(SWX + 0.06, SWY, -0.07)]);
+  kL.add(mesh(new THREE.TubeGeometry(kPath, 200, 0.012, 8, false), M.ethernet));
+  // Switch -> modem
+  const swPath = roundedPath([V(SWX + 0.11, SWY, 0.03), V(RX - 0.15, RY, 0.03)]);
+  scene.add(mesh(new THREE.TubeGeometry(swPath, 20, 0.01, 8, false), M.ethernet));
+  [0, 0.5].forEach(o => packet(axPath, o, 'cam', 0.5));
+  [0, 0.5].forEach(o => packet(kPath, o, 'k6pm', 0.5));
+  packet(swPath, 0, 'any', 1.2);
+
+  // Switch -> PLC/SCADA channels, modem -> SMS and email. Each has one cable over the roof to the
+  // front right-hand corner, then a spine down with a short branch to each chip, so no lines cross
+  // (animated dashes; packets while there is a warning or an alarm).
+  const dashT = canvasTex(64, 4);
+  dashT.ctx.fillStyle = '#fff'; dashT.ctx.fillRect(0, 0, 36, 4);
+  dashT.tex.wrapS = THREE.RepeatWrapping;
+  dashT.tex.repeat.set(8, 1);
+  const CHIP_X = 0.98, CHIP_Z = 0.55;
+  const SPINES = {
+    sw: { color: 0x7cc8f0, x: 0.9, start: [V(SWX - 0.05, SWY, -0.07), V(SWX - 0.05, SWY + 0.05, -0.22), V(0.9, SWY + 0.05, -0.22)] },
+    modem: { color: 0xb8f09a, x: 0.82, start: [V(RX + 0.15, RY, 0.04), V(0.82, RY, 0.04)] },
+  };
+  const CHANNELS = [
+    { name: 'MODBUS TCP', y: 2.0, from: 'sw' },
+    { name: 'ETHERNET/IP', y: 1.76, from: 'sw' },
+    { name: 'SMS', y: 1.52, from: 'modem' },
+    { key: 'heatChipMailName', y: 1.28, from: 'modem' },
+  ];
+  const dashMat = color => new THREE.MeshBasicMaterial({ color, alphaMap: dashT.tex, transparent: true, toneMapped: false });
+  CHANNELS.forEach((ch, i) => {
+    const sp = SPINES[ch.from], top = sp.start[sp.start.length - 1];
+    ch.path = roundedPath([...sp.start, V(sp.x, top.y, CHIP_Z), V(sp.x, ch.y, CHIP_Z), V(CHIP_X, ch.y, CHIP_Z)], 0.05);
+    scene.add(flat(new THREE.TubeGeometry(ch.path, 120, 0.008, 6, false), dashMat(sp.color)));
+    packet(ch.path, i * 0.15, 'any', 0.6);
+  });
+
+  // Each layer gets its own copies of its materials so it can fade on its own
+  const faders = Object.entries(layers).map(([name, grp]) => {
+    const map = new Map();
+    grp.traverse(o => {
+      if (!o.material) return;
+      if (!map.has(o.material)) {
+        const c = o.material.clone();
+        c.userData = { base: o.material.opacity, bt: o.material.transparent, bdw: o.material.depthWrite };
+        map.set(o.material, c);
+      }
+      o.material = map.get(o.material);
+    });
+    return { name, grp, map, level: 1, target: 1 };
+  });
+  const applyFade = f => {
+    const solid = f.level >= 0.999;
+    f.map.forEach(m => {
+      const transparent = !solid || m.userData.bt;
+      if (m.transparent !== transparent) { m.transparent = transparent; m.needsUpdate = true; }
+      m.depthWrite = solid ? m.userData.bdw : false;
+      m.opacity = m.userData.base * f.level;
+    });
+    f.grp.visible = f.level > 0.01;
+  };
+  const levelOf = name => faders.find(f => f.name === name).level;
+
+  // Labels (texts with a data-i18n key follow the language switch; data-v = views it shows in)
+  const tag = (text, pos, cls, key, views) => {
+    const el = document.createElement('div');
+    el.className = 'tag3d ' + cls;
+    el.textContent = key ? t9n(key) : text;
+    if (key) el.dataset.i18n = key;
+    el.dataset.v = views;
+    const o = new CSS2DObject(el);
+    o.position.copy(pos);
+    scene.add(o);
+    return el;
+  };
+  tag('', V(-1.12, 1.92, 0.6), 'cam call', 'heatCallAx8', 'cam');
+  tag('', V(-1.12, 1.73, 0.6), 'sens call', 'heatCallThs', 'k6pm');
+  tag('Omron K6PM-THMD', V(CX, CY - 0.23, frontZ + 0.1), 'sens', null, 'k6pm');
+  tag('', V(RX, RY + 0.42, -0.06), '', 'heatRouter', 'cam k6pm');
+  tag('', V(SWX, SWY + 0.12, 0.05), '', 'heatSwitch', 'cam k6pm');
+  // Alternate heights so labels of neighbouring breakers do not overlap
+  Object.entries(FAULTS).forEach(([name, list]) => list.forEach((f, k) => {
+    f.tag = tag('', V(f.pos.x, f.pos.y + 0.13 + (k % 2) * 0.1, frontZ + 0.1), 'temp', null, name);
+  }));
+  CHANNELS.forEach(ch => { ch.el = tag('', V(CHIP_X, ch.y, CHIP_Z), 'chip', null, 'cam k6pm'); });
+  function drawChips(st) {
+    CHANNELS.forEach(ch => {
+      ch.el.classList.toggle('warn', st === 1);
+      ch.el.classList.toggle('hot', st === 2);
+      ch.el.textContent = ch.key ? t9n(ch.key) : ch.name;
+    });
+  }
+
+  // ---- The monitoring software: what the active sensor sees ----
+  // The image is drawn from the same temperatures as the 3D model. A configured AX8 measurement
+  // box is a thin dashed frame; when an area gets hot, a solid frame with its class appears around
+  // it (yellow = early warning, red = alarm). K6PM shows each sensor's own 32 × 32 image with its
+  // 16 zones; the zone with the hot spot is tinted. A crosshair marks the hottest pixel.
+  const app = host.parentElement.querySelector('.heat-app');
+  const appCv = app && app.querySelector('canvas'), apc = appCv && appCv.getContext('2d');
+  const appSrc = app && app.querySelector('.heat-app-src');
+  const STAGE_KEY = ['heatStOk', 'heatStWarn', 'heatStAlarm'];
+  const STAGE_BG = ['rgba(0,0,0,0.6)', 'rgba(160,112,8,0.95)', 'rgba(196,38,28,0.95)'];
+  const T_SIDE = 240, T_GAP = 12, AX_S = 8;
+  // K6PM image space -> the software's 2 × 2 grid of square sensor images
+  const kToApp = (x, y) => {
+    const c = Math.min(1, Math.floor(x / SIDE)), r = Math.min(1, Math.floor(y / SIDE)), k = T_SIDE / SIDE;
+    return [c * (T_SIDE + T_GAP) + (x - c * SIDE) * k, r * (T_SIDE + T_GAP) + (y - r * SIDE) * k];
+  };
+  // Which sensor and which of its 16 zones each K6PM fault falls in
+  FAULTS.k6pm.forEach(f => {
+    const [cx, cy] = kPx(f.pos.x, f.pos.y);
+    const c = Math.min(1, Math.floor(cx / SIDE)), r = Math.min(1, Math.floor(cy / SIDE));
+    const zc = Math.floor((cx - c * SIDE) / zone), zr = Math.floor((cy - r * SIDE) / zone);
+    f.sensorNo = r * 2 + c + 1;
+    f.zoneNo = zr * 4 + zc + 1;
+    f.zoneRect = [c * (T_SIDE + T_GAP) + zc * T_SIDE / 4, r * (T_SIDE + T_GAP) + zr * T_SIDE / 4, T_SIDE / 4, T_SIDE / 4];
+  });
+  let appKey = '';
+
+  function drawApp() {
+    if (!apc) return;
+    const cam = view === 'cam', faults = FAULTS[view];
+    const W = cam ? AW * AX_S : 2 * T_SIDE + T_GAP, H = cam ? AH * AX_S : W;
+    if (appCv.width !== W || appCv.height !== H) { appCv.width = W; appCv.height = H; }
+    appSrc.textContent = cam ? 'FLIR AX8 · 80×60 px' : 'Omron K6PM-TH · 4 × 32×32 px';
+    apc.setLineDash([]);
+    apc.fillStyle = '#0b0d0c';
+    apc.fillRect(0, 0, W, H);
+    let hot = null;
+    (cam ? axCells : kCells).forEach(c => {
+      const v = cellTemp(c, faults);
+      let x, y, sz;
+      if (cam) { sz = AX_S; x = c.X / AC * sz; y = c.Y / AC * sz; }
+      else { sz = T_SIDE / PXN; [x, y] = kToApp(c.X, c.Y); }
+      apc.fillStyle = colour(v);
+      apc.fillRect(x, y, sz + 0.5, sz + 0.5);
+      if (!hot || v > hot.v) hot = { v, x: x + sz / 2, y: y + sz / 2 };
+    });
+    const label = (text, x, y, bg) => {
+      apc.font = '600 14px ui-monospace, monospace';
+      apc.textBaseline = 'middle';
+      const w = apc.measureText(text).width + 12, lx = clamp(x, 2, W - w - 2), ly = clamp(y, 2, H - 22);
+      apc.fillStyle = bg;
+      apc.fillRect(lx, ly, w, 20);
+      apc.fillStyle = '#fff';
+      apc.fillText(text, lx + 6, ly + 10.5);
+    };
+    // K6PM: each sensor's image with its 4 × 4 zones
+    if (!cam) for (let r = 0; r < 2; r++) for (let c = 0; c < 2; c++) {
+      const ox = c * (T_SIDE + T_GAP), oy = r * (T_SIDE + T_GAP), z = T_SIDE / 4;
+      apc.strokeStyle = 'rgba(255,255,255,0.16)';
+      apc.lineWidth = 1;
+      for (let i = 1; i < 4; i++) {
+        apc.beginPath(); apc.moveTo(ox + i * z + 0.5, oy); apc.lineTo(ox + i * z + 0.5, oy + T_SIDE); apc.stroke();
+        apc.beginPath(); apc.moveTo(ox, oy + i * z + 0.5); apc.lineTo(ox + T_SIDE, oy + i * z + 0.5); apc.stroke();
+      }
+      apc.strokeStyle = 'rgba(155,224,176,0.65)';
+      apc.strokeRect(ox + 0.5, oy + 0.5, T_SIDE - 1, T_SIDE - 1);
+      label(`S${r * 2 + c + 1}`, ox + 6, oy + 6, 'rgba(0,0,0,0.6)');
+    }
+    // Areas: a frame and its class appear when an area gets hot
+    faults.forEach((f, k) => {
+      const st = stageOf(f.temp);
+      let x, y, w, h;
+      if (cam) [x, y, w, h] = f.box.map(v => v / AC * AX_S);
+      else {
+        const [a, b] = kToApp(f.mark[0], f.mark[1]), [c2, d] = kToApp(f.mark[0] + f.mark[2], f.mark[1] + f.mark[3]);
+        [x, y, w, h] = [a, b, c2 - a, d - b];
+      }
+      if (!st) {
+        if (!cam) return;
+        apc.setLineDash([6, 5]);
+        apc.lineWidth = 1.5;
+        apc.strokeStyle = 'rgba(255,255,255,0.75)';
+        apc.strokeRect(x, y, w, h);
+        apc.setLineDash([]);
+        label(`Bx${k + 1}`, x, y - 22, 'rgba(0,0,0,0.6)');
+        return;
+      }
+      if (!cam) {
+        apc.fillStyle = st === 2 ? 'rgba(255,90,79,0.22)' : 'rgba(242,193,78,0.2)';
+        apc.fillRect(...f.zoneRect);
+      }
+      apc.lineWidth = st === 2 ? 4 : 3;
+      apc.strokeStyle = STAGE_COL[st];
+      apc.strokeRect(x - 4, y - 4, w + 8, h + 8);
+      const name = cam ? `Bx${k + 1}` : `S${f.sensorNo}·${t9n('heatAppZone')} ${f.zoneNo}`;
+      // every other label goes under its frame, so labels of neighbouring areas do not overlap
+      label(`${t9n(STAGE_KEY[st])} · ${name} · ${f.temp.toFixed(1)} °C`, x - 4, k % 2 ? y + h + 8 : y - 28, STAGE_BG[st]);
+    });
+    // Hottest pixel in the image
+    apc.strokeStyle = '#fff';
+    apc.lineWidth = 2;
+    apc.beginPath();
+    apc.moveTo(hot.x - 9, hot.y); apc.lineTo(hot.x + 9, hot.y);
+    apc.moveTo(hot.x, hot.y - 9); apc.lineTo(hot.x, hot.y + 9);
+    apc.stroke();
+  }
+
+  // The heating cycle restarts with each view (14 s loop; each fault starts a little later and
+  // stops at its own peak). With reduced motion every fault is held at its peak.
+  const shape = u => {
+    if (u <= 0) return 0;
+    u %= 14;
+    if (u < 7) { const k = u / 7; return k * k * (3 - 2 * k); }
+    if (u < 11) return 1;
+    const k = (u - 11) / 3;
+    return 1 - k * k * (3 - 2 * k);
+  };
+  let imgKey = '', chipKey = '';
+  function updateHeat(t) {
+    let worst = null;
+    Object.entries(FAULTS).forEach(([name, list]) => list.forEach(f => {
+      const on = name === view;
+      // the faults of the other view cool down quickly
+      f.temp = on ? (reduce ? f.peak : COOL + (f.peak - COOL) * shape(t - viewStart - f.delay) + (f.peak > LIMIT ? Math.sin(t * 3) * 0.3 : 0))
+        : Math.max(COOL, f.temp - 0.6);
+      const st = stageOf(f.temp), heat = clamp((f.temp - COOL) / (PEAK - COOL), 0, 1);
+      f.glow.material.color.lerpColors(warmColor, hotColor, heat);
+      f.glow.material.opacity = (0.15 + heat * 0.6) * heat;
+      f.glow.scale.setScalar(0.05 + heat * 0.28);
+      f.screwMat.emissiveIntensity = heat * 2.4;
+      f.cableMat.emissiveIntensity = heat * 1.6;
+      const txt = `${f.q} · ${Math.round(f.temp)} °C`;
+      if (f.tag.textContent !== txt) f.tag.textContent = txt;
+      f.tag.classList.toggle('warn', st === 1);
+      f.tag.classList.toggle('hot', st === 2);
+      if (on && (!worst || f.temp > worst.temp)) worst = f;
+    }));
+    const st = stageOf(worst.temp);
+    alarmLed.m.material.color.copy(st === 2 && view === 'k6pm' && (reduce || Math.sin(t * 10) > 0) ? alarmLed.on : alarmLed.off);
+    packets.forEach(p => { p.m.visible = st > 0 && !reduce && (p.view === 'any' || p.view === view); });
+    packets.forEach(p => p.m.material.color.set(st === 2 ? 0xff6b5a : 0xf2c14e));
+    const key = allFaults.map(f => Math.round(f.temp * 2)).join('|');
+    if (key !== imgKey) {
+      imgKey = key;
+      if (levelOf('cam') > 0.01) drawAx8();
+      if (levelOf('k6pm') > 0.01) { drawK6pm(); drawLcd(Math.max(...FAULTS.k6pm.map(f => f.temp))); }
+    }
+    const ck = `${st}|${lang()}`;
+    if (ck !== chipKey) { chipKey = ck; drawChips(st); }
+    const ak = `${key}|${view}|${lang()}`;
+    if (ak !== appKey) { appKey = ak; drawApp(); }
+  }
+
+  // Camera: two views of the whole scene, flown between with a short arc. Dragging turns the view a little
+  // (sideways ±0.75 rad, a bit up and down) but never all the way round.
+  const VIEWS = {
+    cam: { target: V(0.08, 1.64, 0.25), az: 0.34, polar: 1.32, fit: [3.3, 2.15], fitC: [2.5, 1.95], layers: { cam: 1, k6pm: 0 } },
+    k6pm: { target: V(0.08, 1.36, 0.25), az: -0.3, polar: 1.32, fit: [3.3, 2.65], fitC: [2.5, 2.55], layers: { cam: 0, k6pm: 1 } },
+  };
+  const ORDER = ['cam', 'k6pm'];
+  const tanH = Math.tan(THREE.MathUtils.degToRad(FOV / 2));
+  const compact = () => host.clientWidth < 520;
+  const paramsFor = name => {
+    const v = VIEWS[name];
+    // Narrow screens leave out the enlarged parts on the left, so frame a little tighter
+    const [fw, fh] = compact() ? v.fitC : v.fit;
+    const d = Math.max(fh / (2 * tanH), fw / (2 * tanH * camera.aspect));
+    const p = { target: v.target.clone(), az: v.az, polar: v.polar, dist: d };
+    if (compact()) p.target.x += 0.3;
+    return p;
+  };
+  const clock = new THREE.Clock();
+  let cur = null, from = null, to = null, tweenStart = 0, view = null, viewStart = 0, auto = !reduce;
+  let dragAz = 0, dragPol = 0, drag = null, touched = false;
+  const buttons = host.querySelectorAll('.heat-views button');
+  function goTo(name, instant = false) {
+    if (!VIEWS[name]) return;
+    view = name;
+    viewStart = clock.elapsedTime;
+    host.dataset.view = name;
+    host.parentElement.dataset.view = name; // the caption below the view follows it too
+    buttons.forEach(b => {
+      const on = b.dataset.view === name;
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    faders.forEach(f => { f.target = VIEWS[name].layers[f.name]; });
+    const dest = paramsFor(name);
+    if (cur) { cur.az += dragAz; cur.polar += dragPol; }
+    dragAz = dragPol = 0;
+    if (instant || reduce || !cur) {
+      cur = dest; from = null;
+      faders.forEach(f => { f.level = f.target; applyFade(f); });
+      imgKey = '';
+    } else {
+      from = { target: cur.target.clone(), az: cur.az, polar: cur.polar, dist: cur.dist };
+      to = dest;
+      tweenStart = clock.elapsedTime;
+    }
+  }
+  buttons.forEach(b => b.addEventListener('click', () => { auto = false; goTo(b.dataset.view); start(); }));
+
+  const el = renderer.domElement;
+  el.style.touchAction = 'pan-y';
+  el.style.cursor = 'grab';
+  el.addEventListener('pointerdown', e => {
+    drag = { x: e.clientX, y: e.clientY, az: dragAz, pol: dragPol };
+    el.setPointerCapture(e.pointerId);
+    el.style.cursor = 'grabbing';
+    touched = true;
+    auto = false;
+    host.classList.add('touched');
+  });
+  el.addEventListener('pointermove', e => {
+    if (!drag) return;
+    dragAz = clamp(drag.az - (e.clientX - drag.x) * 0.006, -0.75, 0.75);
+    dragPol = clamp(drag.pol - (e.clientY - drag.y) * 0.004, -0.32, 0.12);
+    if (!running) render(clock.elapsedTime);
+  });
+  ['pointerup', 'pointercancel'].forEach(ev => el.addEventListener(ev, () => { drag = null; el.style.cursor = 'grab'; }));
+
+  function placeCamera(t) {
+    const az = cur.az + dragAz + (reduce || touched ? 0 : Math.sin(t * 0.3) * 0.06);
+    const polar = cur.polar + dragPol;
+    camera.position.set(Math.sin(az) * Math.sin(polar), Math.cos(polar), Math.cos(az) * Math.sin(polar))
+      .multiplyScalar(cur.dist).add(cur.target);
+    camera.lookAt(cur.target);
+  }
+  function render(t) {
+    placeCamera(t);
+    renderer.render(scene, camera);
+    labels.render(scene, camera);
+  }
+
+  function resize() {
+    const w = host.clientWidth, h = host.clientHeight;
+    if (!w || !h) return;
+    renderer.setSize(w, h);
+    labels.setSize(w, h);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    host.classList.toggle('compact', compact());
+    ax8Big.visible = thsBig.visible = !compact();
+    if (from) to = paramsFor(view);
+    else if (cur) cur = paramsFor(view);
+  }
+  camera.aspect = (host.clientWidth || 1) / (host.clientHeight || 1);
+  goTo('cam', true);
+  resize();
+  new ResizeObserver(() => { resize(); if (!running) render(clock.elapsedTime); }).observe(host);
+
+  // Render loop, only while the card is on screen and in focus
+  let visible = false, running = false;
+  const card = host.closest('.wide');
+  const idle = () => card && cardIdle(card);
+  function frame() {
+    if (!visible || document.hidden || idle()) { running = false; return; }
+    requestAnimationFrame(frame);
+    const dt = Math.min(clock.getDelta(), 0.05);
+    const t = clock.elapsedTime;
+    // Step to the next solution after one full warm-up, alarm and cool-down
+    if (auto && !from && t - viewStart > 16.5) goTo(ORDER[(ORDER.indexOf(view) + 1) % ORDER.length]);
+    if (from) {
+      const k = Math.min(1, (t - tweenStart) / 1.6);
+      const e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+      cur.target.lerpVectors(from.target, to.target, e);
+      cur.az = from.az + (to.az - from.az) * e;
+      cur.polar = from.polar + (to.polar - from.polar) * e;
+      cur.dist = from.dist + (to.dist - from.dist) * e + Math.sin(Math.PI * e) * 0.6;
+      if (k >= 1) { cur = to; from = null; }
+    }
+    faders.forEach(f => {
+      if (f.level === f.target) return;
+      f.level += Math.sign(f.target - f.level) * Math.min(Math.abs(f.target - f.level), dt * 1.8);
+      applyFade(f);
+      imgKey = '';
+    });
+    updateHeat(t);
+    if (!reduce) {
+      packets.forEach(p => { if (p.m.visible) p.path.getPointAt((t * p.speed + p.offset) % 1, p.m.position); });
+      dashT.tex.offset.x -= dt * 0.8;
+      ax8Show.rotation.y = 0.34 + Math.sin(t * 0.5) * 0.45;
+      thsShow.rotation.y = -0.3 + Math.sin(t * 0.5) * 0.45;
+      leds.forEach(l => {
+        if (l.fixed || t < l.next) return;
+        l.next = t + 0.12 + Math.random() * 0.5;
+        l.m.material.color.copy(Math.random() > 0.45 ? l.on : l.off);
+      });
+    }
+    render(t);
+  }
+  function start() {
+    if (running || !visible || document.hidden || idle()) return;
+    running = true;
+    clock.getDelta();
+    requestAnimationFrame(frame);
+  }
+  new IntersectionObserver(entries => {
+    visible = entries[0].isIntersecting;
+    start();
+  }).observe(host);
+  document.addEventListener('visibilitychange', start);
+  if (card) card.addEventListener('wake', start);
+
+  updateHeat(0);
+  render(0);
+  host.classList.add('ready');
+  if (app) app.hidden = false;
 }
 </script>
 </body>
