@@ -1,13 +1,24 @@
 # Walde Automation – nettside
 
-Enkel statisk nettside. CSS og JS ligger inline i hver HTML-fil (ingen mapper),
-klar for å laste rett opp til GitHub.
+Enkel statisk nettside. Alle filer ligger flatt i rotmappen (ingen undermapper).
+Forsiden har en kort oversikt over tjenestene, og hver tjeneste har sin egen side
+med den interaktive demoen.
 
 ## Struktur
 
 ```
 waldeautomation-site/
-├── index.html            (inkl. CSS og JS inline)
+├── index.html                       (forside: om, kompetanse, tjenesteoversikt, kontakt)
+├── pls-hmi-programmering.html       (tjenesteside)
+├── industriell-kommunikasjon.html   (tjenesteside, 3D-modell i comm3d.js)
+├── elektroteknisk-radgivning.html   (tjenesteside)
+├── app-utvikling.html               (tjenesteside)
+├── nettsider.html                   (tjenesteside)
+├── ai-integrasjon.html              (tjenesteside)
+├── varmeovervaking.html             (tjenesteside, 3D-modell i heat3d.js)
+├── site.css                         (felles stil for alle sidene over)
+├── site.js                          (felles skript: språk, tema, meny, skjema, demoer)
+├── comm3d.js / heat3d.js            (3D-modellene, lastes bare på sin side)
 ├── personvern.html       (inkl. CSS og JS inline)
 ├── logo.png              (logoen i toppmeny og kontaktkort)
 ├── favicon.png           (ikon i nettleserfanen)
@@ -19,11 +30,16 @@ waldeautomation-site/
 └── README.md
 ```
 
+Alle tekster (norsk og engelsk) ligger i `COPY` øverst i `site.js`. Hver side har
+`data-page` på `<html>`, som velger sidetittel og beskrivelse (f.eks. `plsMetaTitle`).
+Toppmeny og bunntekst er kopiert inn i hver side, så endringer der må gjøres i alle.
+
 ## 1. Last opp til GitHub
 
 Bruk **Add file → Upload files** på repo-siden, eller dra filene inn i
 GitHub Desktop og commit + publish. Siden alt ligger flatt (ingen undermapper),
-er det ingenting som kan gå galt med filstrukturen ved opplasting.
+er det ingenting som kan gå galt med filstrukturen ved opplasting. Husk å laste opp
+alle filene, også `site.css`, `site.js`, `comm3d.js` og `heat3d.js`.
 
 ## 2. Skru på GitHub Pages
 
@@ -67,7 +83,5 @@ er det ingenting som kan gå galt med filstrukturen ved opplasting.
 
 - **Design:** Alt er ren struktur, ingen designbeslutninger – klart for Claude Design.
 - **Kontaktskjema:** Sendes via [Web3Forms](https://web3forms.com) (access key ligger i
-  `index.html`; den er laget for å være offentlig).
+  `site.js`; den er laget for å være offentlig).
 - **Innhold:** Bytt ut `[org.nr]`, `[dato]` og placeholder-prosjekttekster.
-- Hvis du senere vil dele opp CSS/JS i egne filer igjen (f.eks. når siden vokser),
-  er det bare å be meg om det – nå er alt inline for å gjøre opplastingen enklest mulig.
